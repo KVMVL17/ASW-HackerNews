@@ -1,7 +1,7 @@
 # ASW-HackerNews
 Projecte ASW FIB UPC, HackerNews RoR
 
-## Membres:
+## Membres de l'equip:
   - Alejandro Gallego
   - Anas Infad
   - Isaac Muñoz
