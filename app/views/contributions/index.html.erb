@@ -1,31 +1,46 @@
+	<center>
+		<table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+        	<tr>
+        		<td bgcolor="#ff6600">
+        			<table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
+        				<tr>
+                  			<td style="line-height:12pt; height:10px;">
+                  				<span class="pagetop">
+                  					<b class="hnname">
+                  						<a href="news">Hacker News</a>
+                  					</b>
+              						<a href="newest">new</a> |
+              						<%= link_to 'Submit', new_contribution_path %>
+              					</span>
+              				</td>
+              			</tr>
+              		</table>
+              	</td>
+            </tr>
+            <tr id="pagespace" title="" style="height:10px"></tr>
+            
+            <tr>
+              <td>
+                <%counter = 1%>
+                <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
+                  <% @contributions.each do |contribution| %>
+                    <tr>
+                      <td><%=counter%>.</td>
+                      <td><%= link_to contribution.title, contribution %></td>
+                      <td><%= link_to 'Edit', edit_contribution_path(contribution) %></td>
+                      <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                      <%counter = counter + 1%>
+                    </tr>
+                  <% end %>
+                </table>
+              </td>
+            </tr>
+        </table>
+    </center>
+
 <p id="notice"><%= notice %></p>
 
-<h1>Contributions</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Url</th>
-      <th>Text</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
   <tbody>
-    <% @contributions.each do |contribution| %>
-      <tr>
-        <td><%= contribution.title %></td>
-        <td><%= contribution.url %></td>
-        <td><%= contribution.text %></td>
-        <td><%= link_to 'Show', contribution %></td>
-        <td><%= link_to 'Edit', edit_contribution_path(contribution) %></td>
-        <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
+    
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Contribution', new_contribution_path %>
