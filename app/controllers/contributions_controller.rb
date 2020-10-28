@@ -1,5 +1,5 @@
 class ContributionsController < ApplicationController
-  before_action :set_contribution, only: [:show, :edit, :update, :destroy]
+  before_action :set_contribution, only: [:show, :edit, :update, :destroy, :newest, :submit]
 
   # GET /contributions
   # GET /contributions.json
@@ -10,9 +10,10 @@ class ContributionsController < ApplicationController
   # GET /contributions/1
   # GET /contributions/1.json
   def show
+    @contribution = Contribution.find(params[:id])
   end
 
-  # GET /contributions/new
+  # GET /contributions/submit
   def new
     @contribution = Contribution.new
   end
@@ -49,7 +50,7 @@ class ContributionsController < ApplicationController
         format.json { render json: @contribution.errors, status: :unprocessable_entity }
       end
     end
-  end
+  end 
 
   # DELETE /contributions/1
   # DELETE /contributions/1.json

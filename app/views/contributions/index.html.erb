@@ -7,10 +7,10 @@
                   			<td style="line-height:12pt; height:10px;">
                   				<span class="pagetop">
                   					<b class="hnname">
-                  						<a href="news">Hacker News</a>
-                  					</b>
-              						<a href="newest">new</a> |
-              						<%= link_to 'Submit', new_contribution_path %>
+                  						<a href="contributions">Hacker News</a>
+                  					</b> | 
+              						<a href="contributions/newest">new</a> |
+              						<a href="contributions/new">submit</a>
               					</span>
               				</td>
               			</tr>
@@ -26,7 +26,9 @@
                   <% @contributions.each do |contribution| %>
                     <tr>
                       <td><%=counter%>.</td>
-                      <td><%= link_to contribution.title, contribution %></td>
+                      <td><%= contribution.title%></td>
+                      <td><%=contribution.text%></td>
+                      <td><%= link_to contribution.url, contribution.url %></td>
                       <td><%= link_to 'Edit', edit_contribution_path(contribution) %></td>
                       <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
                       <%counter = counter + 1%>
