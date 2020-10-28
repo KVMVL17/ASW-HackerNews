@@ -21,6 +21,9 @@ class ContributionsController < ApplicationController
   # GET /contributions/1/edit
   def edit
   end
+  
+  def newest
+  end
 
   # POST /contributions
   # POST /contributions.json
