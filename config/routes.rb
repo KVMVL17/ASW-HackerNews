@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   
-  get 'newest', to: 'contributions#index'
+  get 'newest', to: 'contributions#newest'
   get 'submit', to: 'contributions#new'
   
   resources :contributions, :path => "/"

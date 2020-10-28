@@ -23,6 +23,8 @@ class ContributionsController < ApplicationController
   end
   
   def newest
+    @contributions = Contribution.all.order(created_at: :desc)
+
   end
 
   # POST /contributions

@@ -20,25 +20,14 @@
             <tr id="pagespace" title="" style="height:10px"></tr>
             
             <tr>
-              <td>
-                <%counter = 1%>
-                <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
-                  <% @contributions.each do |contribution| %>
-                    <tr>
-                      <% if contribution.text_is_blank? %>
-                       <td><%=counter%>.</td>
-                       <td><%= contribution.title%></td>
-                       <td><%= link_to contribution.url, contribution.url %></td>
-                       <td><%= link_to 'Edit', edit_contribution_path(contribution) %></td>
-                       <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-                       <%counter = counter + 1%>
-                      <%end%>
-                    </tr>
-                  <% end %>
-                </table>
-              </td>
+
             </tr>
         </table>
     </center>
 
 <p id="notice"><%= notice %></p>
+
+  <tbody>
+    
+  </tbody>
+</table>
