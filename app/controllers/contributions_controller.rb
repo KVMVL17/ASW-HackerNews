@@ -4,7 +4,7 @@ class ContributionsController < ApplicationController
   # GET /contributions
   # GET /contributions.json
   def index
-    @contributions = Contribution.all
+    @contributions = Contribution.all.order(points: :desc)
   end
 
   # GET /contributions/1
@@ -65,6 +65,21 @@ class ContributionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def like
+    @contribution = Contribution.find(params[:id])
+    @contribution.points += 1
+    @contribution.save
+    redirect_to contributions_path
+  end
+  
+  def like_from_newest
+    @contribution = Contribution.find(params[:id])
+    @contribution.points += 1
+    @contribution.save
+    redirect_to "/newest"
+  end
+    
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -74,6 +89,6 @@ class ContributionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def contribution_params
-      params.require(:contribution).permit(:title, :url, :text)
+      params.require(:contribution).permit(:title, :url, :text, :points)
     end
 end

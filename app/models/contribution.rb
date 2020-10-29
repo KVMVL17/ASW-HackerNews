@@ -9,5 +9,5 @@ class Contribution < ApplicationRecord
   def text_is_blank?
     text.blank?
   end
-  
+
 end
