@@ -4,44 +4,39 @@
         		<td bgcolor="#ff6600">
         			<table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
         				<tr>
-                  			<td style="line-height:12pt; height:10px;">
-                  				<span class="pagetop">
-                  					<b class="hnname">
-                  						<a href="/">Hacker News</a>
-                  					</b> | 
-              						<a href="newest">new</a> |
-              						<a href="submit">submit</a>
-              					</span>
-              				</td>
-              			</tr>
-              		</table>
-              	</td>
-            </tr>
-            <tr id="pagespace" title="" style="height:10px"></tr>
-            
-            <tr>
-              <td>
-                <%counter = 1%>
-                <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
-                  <% @contributions.each do |contribution| %>
-                    <tr>
-                       <td><%=counter%>.</td>
-                       <td><%= contribution.title%></td>
-                       <% if contribution.text_is_blank? %>
-                       <td><%= link_to contribution.url, contribution.url %></td>
-                       <% else %>
-                       <td><%= contribution.text%></td>
-                       <% end %>
-                       <td><%= link_to 'Edit', edit_contribution_path(contribution) %></td>
-                       <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-                       <%counter = counter + 1%>
-                      <%end%>
-                    </tr>
-                  <% end %>
-                </table>
-              </td>
-            </tr>
-        </table>
+                  <td style="line-height:12pt; height:10px;">
+                  	<span class="pagetop">
+                  		<b class="hnname">
+                  			<a href="/">Hacker News</a>
+                  		</b> | 
+              				<a href="newest">new</a> |
+              				<a href="submit">submit</a>
+              			</span>
+              		</td>
+              	</tr>
+              </table>
+            </td>
+          </tr>
+          <tr id="pagespace" title="" style="height:10px"></tr>
+          <tr>
+            <td>
+              <% counter = 1 %>
+              <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
+                <% @contributions.each do |contribution| %>
+                  <tr>
+                    <td><%= counter %>.</td>
+                    <td><%= contribution.title%></td>
+                    <td><%= link_to contribution.url, contribution.url %></td>
+                    <td><%= contribution.text%></td>
+                    <td><%= link_to 'Edit', edit_contribution_path(contribution) %></td>
+                    <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                    <%counter = counter + 1%>
+                  </tr>
+                <% end %>
+              </table>
+          </td>
+        </tr>
+      </table>
     </center>
 
 <p id="notice"><%= notice %></p>

@@ -1,5 +1,5 @@
 class ContributionsController < ApplicationController
-  before_action :set_contribution, only: [:show, :edit, :update, :destroy, :newest, :submit]
+  before_action :set_contribution, only: [:show, :edit, :update, :destroy]
 
   # GET /contributions
   # GET /contributions.json
@@ -13,18 +13,17 @@ class ContributionsController < ApplicationController
     @contribution = Contribution.find(params[:id])
   end
 
-  # GET /contributions/submit
+  # GET /contributions/new
   def new
     @contribution = Contribution.new
-  end
-
-  # GET /contributions/1/edit
-  def edit
   end
   
   def newest
     @contributions = Contribution.all.order(created_at: :desc)
+  end
 
+  # GET /contributions/1/edit
+  def edit
   end
 
   # POST /contributions
