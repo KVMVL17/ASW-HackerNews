@@ -21,6 +21,10 @@ class ContributionsController < ApplicationController
   def newest
     @contributions = Contribution.all.order(created_at: :desc)
   end
+  
+  def orderbypoints
+    @contribution = Contribution.all.order(points: :asc)
+  end
 
   # GET /contributions/1/edit
   def edit
@@ -65,6 +69,11 @@ class ContributionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def like
+    @contribution = Contribution.find(params[:id])
+    @contribution.points += 1
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -74,6 +83,6 @@ class ContributionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def contribution_params
-      params.require(:contribution).permit(:title, :url, :text)
+      params.require(:contribution).permit(:title, :url, :text, :points)
     end
 end

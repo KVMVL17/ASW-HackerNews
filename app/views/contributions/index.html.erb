@@ -7,7 +7,7 @@
                   			<td style="line-height:12pt; height:10px;">
                   				<span class="pagetop">
                   					<b class="hnname">
-                  						<a href="/">Hacker News</a>
+                  						<%= link_to 'Hacker News',"/" %>
                   					</b> | 
               						<a href="newest">new</a> |
               						<a href="submit">submit</a>
@@ -30,7 +30,10 @@
                        <td><%= contribution.title%></td>
                        <td>(<%= link_to contribution.url, contribution.url %>)</td>
                        <%= render 'timer', contribution: contribution %>
-                       <td><%= link_to 'Edit', edit_contribution_path(contribution) %></td>
+                       <td><%=contribution.points%> points</td>
+                      
+                       <td><%= link_to 'Like','/:id' , method: :put%></td>
+                       <td><%= link_to 'Edit', edit_contribution_path(contribution)%></td>
                        <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
                        <%counter = counter + 1%>
                       <%end%>
