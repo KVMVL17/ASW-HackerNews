@@ -28,7 +28,7 @@
                       <% if contribution.text_is_blank? %>
                        <td><%=counter%>.</td>
                        <td><%= contribution.title%></td>
-                       <td>(<%= link_to contribution.url, contribution.url %>)</td>
+                       <td>(<%= link_to contribution.url, contribution.url, {:style => 'text-decoration:none;'} %>)</td>
                        <%= render 'timer', contribution: contribution %>
                        <td><%=contribution.points%> points</td>
                       

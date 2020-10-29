@@ -61,7 +61,8 @@ class ContributionsController < ApplicationController
   def destroy
     @contribution.destroy
     respond_to do |format|
-      format.html { redirect_to contributions_url, notice: 'Contribution was successfully destroyed.' }
+      format.html { redirect_back(fallback_location: root_path) }
+      format.html { notice 'Contribution was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -70,14 +71,11 @@ class ContributionsController < ApplicationController
     @contribution = Contribution.find(params[:id])
     @contribution.points += 1
     @contribution.save
-    redirect_to contributions_path
-  end
-  
-  def like_from_newest
-    @contribution = Contribution.find(params[:id])
-    @contribution.points += 1
-    @contribution.save
-    redirect_to "/newest"
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path) }
+      format.html { notice 'Contribution was successfully liked' }
+      format.json { head :no_content }
+    end
   end
     
 
