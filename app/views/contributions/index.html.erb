@@ -9,8 +9,9 @@
                   					<b class="hnname">
                   						<%= link_to 'Hacker News',"/" %>
                   					</b> | 
-              						<a href="newest">new</a> |
-              						<a href="submit">submit</a>
+              						<%= link_to 'newest', "/newest"%> |
+              					  <%= link_to 'submit', "/submit"%> |
+              					  <%= link_to "Sign in with Facebook", user_facebook_omniauth_authorize_path %>
               					</span>
               				</td>
               			</tr>
