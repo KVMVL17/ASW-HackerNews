@@ -4,7 +4,7 @@ class ContributionsController < ApplicationController
   # GET /contributions
   # GET /contributions.json
   def index
-    @contributions = Contribution.all.order(points: :desc)
+    @contributions = Contribution.all#.order(points: :desc)
   end
 
   # GET /contributions/1
