@@ -1,5 +1,10 @@
-<h1>New User</h1>
+<h1>Login</h1>
 
-<%= render 'form', user: @user %>
-
-<%= link_to 'Back', users_path %>
+<%= form_for @user do |f|%>
+  <%= f.label :username%><br>
+  <%= f.text_field :username%><br>
+  <%= f.label :password%><br>
+  <%= f.password_field :password%><br>
+  <%= f.submit %>
+  <%= link_to "Sign in with Facebook", user_facebook_omniauth_authorize_path %> %>
+<%end%>

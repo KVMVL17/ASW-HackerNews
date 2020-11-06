@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   
+  devise_for :users
+  get 'login', to: 'users#new'
+  post 'login', to: 'users#create'
   get 'newest', to: 'contributions#newest', as: 'newest'
   get 'submit', to: 'contributions#new'
   get ':id', to: 'contributions#newest'

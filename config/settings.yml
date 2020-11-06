@@ -1,0 +1,5 @@
+default: &default
+  project_id: asw-hackernews-294712
+  oauth2:
+    client_id: 525441701811-5f23rfao07u4u457mdf6eob3a9jn7co0.apps.googleusercontent.com
+    client_secret: YLEdUZGerIMJwsEujKUEqCqq
