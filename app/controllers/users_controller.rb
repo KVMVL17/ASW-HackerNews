@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-
+  
   # GET /users
   # GET /users.json
   def index
@@ -25,9 +25,9 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
+        
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
@@ -36,12 +36,17 @@ class UsersController < ApplicationController
       end
     end
   end
+  
+  def getUserProfile
+    @user = User.find(params[:id])
+    format.html {render :userProfile , @user}
+  end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(edit_params)
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
@@ -70,5 +75,9 @@ class UsersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def user_params
       params.require(:user).permit(:username, :password)
+    end
+    
+    def edit_params
+      params.require(:user).permit(:about, :email)
     end
 end

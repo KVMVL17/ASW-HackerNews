@@ -1,14 +1,71 @@
-<p id="notice"><%= notice %></p>
+<center>
+		<table width="85%" bgcolor="#f6f6ef">
+			<tbody>
+				<tr bgcolor="#ff6600">
+				<td>
+					<table style="padding:2px" width="100%" cellspacing="0" cellpadding="0" border="0">
+						<tbody>
+							<td width="21.5px">
+								<img src="https://news.ycombinator.com/y18.gif">
+							</td>
+							<td>
+								<span>
+									<b>Hacker News</b> |
+									<b>Submit</b> |
+									<b>loquesea</b> |
+								</span>
+							</td>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr id="pagespace" title="Profile: jbegley" style="height:10px"></tr>
+			<tr>
+				<td>
+					<table border="0">
+					<tbody>
+						<tr>
+							<td>
+								user:
+							</td>
+							<td>
+								<%= @user.username %>
+							</td>
 
-<p>
-  <strong>Username:</strong>
-  <%= @user.username %>
-</p>
-
-<p>
-  <strong>Password:</strong>
-  <%= @user.password %>
-</p>
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+						</tr>
+						<tr>
+							<td>
+								created: 
+							</td>
+							<td>
+								<%= @user.created_at.strftime("%B, %d, %Y") %>
+							</td>
+							
+						</tr>
+						<tr>
+							<td>
+								karma: 
+							</td>
+							<td>
+								<%= @user.karma %>
+							</td>
+							
+						</tr>
+						<tr>
+							<td>
+								about:
+							</td>
+							<td>
+								<%= @user.about %>
+							</td>
+							
+						</tr>
+					</tbody>
+				</table>
+				<br>
+				<br>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</center>
