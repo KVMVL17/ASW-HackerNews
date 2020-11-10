@@ -15,7 +15,11 @@ class ContributionsController < ApplicationController
 
   # GET /contributions/new
   def new
-    @contribution = Contribution.new
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @contribution = Contribution.new
+    end 
   end
   
   def newest
@@ -29,14 +33,21 @@ class ContributionsController < ApplicationController
   # POST /contributions
   # POST /contributions.json
   def create
-    @contribution = Contribution.new(contribution_params)
-
-    respond_to do |format|
-      if @contribution.save
-        format.html { redirect_to @contribution, notice: 'Contribution was successfully created.' }
-        format.json { render :show, status: :created, location: @contribution }
-      else
-        format.html { render :new }
+    if Contribution.find_by_url(contribution_params[:url]).nil?
+      @contribution = Contribution.new(contribution_params)
+  
+      respond_to do |format|
+        if @contribution.save
+          format.html { redirect_to :newest }
+          format.html { notice 'Contribution was successfully created.' }
+        else
+          format.html { render :new }
+          format.json { render json: @contribution.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to :submit, notice: 'Url already exists' }
         format.json { render json: @contribution.errors, status: :unprocessable_entity }
       end
     end

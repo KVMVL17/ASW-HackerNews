@@ -11,7 +11,13 @@
                   					</b> | 
               						<%= link_to 'newest', "/newest"%> |
               					  <%= link_to 'submit', "/submit"%> |
-              					  <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
+              					  <% if current_user.nil? %>
+              					    <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
+              					  <% else %>
+              					    <%= link_to "sign out", "/sign_out" %> |
+              					    <%= current_user.email %>(<%= current_user.karma %>)
+              					    
+              					  <% end %>
               					</span>
               				</td>
               			</tr>

@@ -9,8 +9,14 @@
                   		<b class="hnname">
                   			<%= link_to 'Hacker News',"/" %>
                   		</b> | 
-              				<a href="newest">new</a> |
-              				<a href="submit">submit</a>
+              				<a href="newest">newest</a> |
+              				<a href="submit">submit</a> |
+              				<% if current_user.nil? %>
+              					 <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
+              				<% else %>
+              					 <%= link_to "sign out", "/sign_out" %> |
+              					 <%= current_user.email %>(<%= current_user.karma %>)
+              				<% end %>
               			</span>
               		</td>
               	</tr>

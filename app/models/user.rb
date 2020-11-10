@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: [:google_oauth2]
   
   def self.from_google(email:, full_name:, uid:, avatar_url:)
-    create_with(uid: uid).find_or_create_by!(email: email)
+    create_with(uid: uid, name: full_name).find_or_create_by!(email: email[0..email.index('@')-1])
   end
   
 end
