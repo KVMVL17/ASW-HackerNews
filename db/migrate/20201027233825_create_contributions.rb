@@ -4,7 +4,8 @@ class CreateContributions < ActiveRecord::Migration[6.0]
       t.string :title
       t.string :url
       t.string :text
-
+      t.string :creator
+      
       t.timestamps
     end
   end

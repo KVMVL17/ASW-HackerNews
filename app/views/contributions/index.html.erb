@@ -38,10 +38,13 @@
                        <td>(<%= link_to contribution.url, contribution.url, {:style => 'text-decoration:none;'} %>)</td>
                        <%= render 'timer', contribution: contribution %>
                        <td><%=contribution.points%> points</td>
+                       <td><%=contribution.creator%></td>
                       
                        <td><%= link_to 'Like','/'+contribution.id.to_s , method: :put%></td>
-                       <td><%= link_to 'Edit', edit_contribution_path(contribution)%></td>
-                       <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                       <% if !current_user.nil? && contribution.checkIfMine(current_user.email) %>
+                         <td><%= link_to 'Edit', edit_contribution_path(contribution)%></td>
+                         <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                       <% end %>
                        <%counter = counter + 1%>
                       <%end%>
                     </tr>
