@@ -33,7 +33,7 @@ class ContributionsController < ApplicationController
   # POST /contributions
   # POST /contributions.json
   def create
-    if Contribution.find_by_url(contribution_params[:url]).nil?
+    if Contribution.find_by_url(contribution_params[:url]).nil? || contribution_params[:url].blank?
       @contribution = Contribution.new(contribution_params)
   
       respond_to do |format|
