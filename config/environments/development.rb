@@ -63,7 +63,7 @@ Rails.application.configure do
   config.hosts.clear
   
   
-ENV['GOOGLE_OAUTH_CLIENT_ID'] = '775822501676-j5o6u3brssqkfirabkfvsudgh8s38mm3.apps.googleusercontent.com'
-ENV['GOOGLE_OAUTH_CLIENT_SECRET'] = 'vU3nROGJAchYEgzA8opWwz3e'
+ENV['GOOGLE_OAUTH_CLIENT_ID'] = '775822501676-dp2dl4qarb0970puj2pf895dlfbtaa57.apps.googleusercontent.com'
+ENV['GOOGLE_OAUTH_CLIENT_SECRET'] = 'dTQOg6ZwwInfx3dzMFHAPS-i'
   
 end
