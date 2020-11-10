@@ -1,6 +1,3 @@
 class ApplicationController < ActionController::Base
-
-  def hello
-    render html: "hello, world!"
-  end
+  before_action :authenticate_user!
 end
