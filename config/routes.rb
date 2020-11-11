@@ -2,7 +2,10 @@ Rails.application.routes.draw do
   
   
   resources :comments
+  
   root 'contributions#index'
+  
+  post 'add_comment', to: 'comments#create', as: 'add_comment'
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   

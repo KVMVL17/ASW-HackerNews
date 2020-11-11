@@ -24,10 +24,18 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
-    @comment = Comment.new(create_new_params)
-
+    @comment = Comment.new
+    @comment.content = params[:content]
+    @comment.contribution_id = params[:contribution_id]
+    @comment.creator = current_user.email
+    logger.debug "este es el user: #{current_user.email.inspect}"
+    logger.debug "este es el user: #{current_user.email.inspect}"
+    
+    puts "------------------------------------------------------"
+    logger.debug "este es el comment: #{@comment.inspect}"
+    
     respond_to do |format|
-      if @comment.save
+      if @comment.save!
         format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else

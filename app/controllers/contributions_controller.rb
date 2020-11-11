@@ -11,6 +11,7 @@ class ContributionsController < ApplicationController
   # GET /contributions/1.json
   def show
     @contribution = Contribution.find(params[:id])
+    @comment = Comment.new
   end
 
   # GET /contributions/new
@@ -35,7 +36,7 @@ class ContributionsController < ApplicationController
   def create
     if Contribution.find_by_url(contribution_params[:url]).nil? || contribution_params[:url].blank?
       @contribution = Contribution.new(contribution_params)
-      @contribution.creator = current_user.email
+      @contribution.creator = current_user.id
   
       respond_to do |format|
         if @contribution.save

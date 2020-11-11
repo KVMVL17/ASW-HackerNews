@@ -45,12 +45,12 @@
                   <%= @contribution.text %>
                 </p>
                 
-                <%= form_with(model: @comment, local: true) do |form| %>
+                <%= form_with(model: @comment, url: 'add_comment' ) do |form| %>
                   <div class="field">
                     <%= form.label :content %>
                     <%= form.text_area :content %>
                   </div>
-                  <%= form.hidden_field :contribution_id, @contribution.id %>
+                  <%= form.hidden_field :contribution_id, :value => @contribution.id %>
                   <div class="actions">
                     <%= form.submit "Add comment" %>
                   </div>
