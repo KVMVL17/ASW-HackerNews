@@ -12,8 +12,8 @@ class ContributionsController < ApplicationController
   def show
     @contribution = Contribution.find(params[:id])
     @comment = Comment.new
+    
   end
-
   # GET /contributions/new
   def new
     if current_user.nil?

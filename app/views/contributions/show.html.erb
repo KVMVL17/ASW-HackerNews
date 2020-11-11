@@ -45,21 +45,21 @@
                   <%= @contribution.text %>
                 </p>
                 
+                <%= link_to 'Edit', edit_contribution_path(@contribution) %> |
+                <%= link_to 'Back', contributions_path %>
+              </td>
+            </tr>
+            <td>
                 <%= form_with(model: @comment, url: 'add_comment' ) do |form| %>
                   <div class="field">
-                    <%= form.label :content %>
-                    <%= form.text_area :content %>
+                    <%= form.text_area(:content, size: '60x6') %>
                   </div>
                   <%= form.hidden_field :contribution_id, :value => @contribution.id %>
                   <div class="actions">
                     <%= form.submit "Add comment" %>
                   </div>
                 <% end %>
-                
-                <%= link_to 'Edit', edit_contribution_path(@contribution) %> |
-                <%= link_to 'Back', contributions_path %>
-              </td>
-            </tr>
+            </td>
         </table>
     </center>
 
