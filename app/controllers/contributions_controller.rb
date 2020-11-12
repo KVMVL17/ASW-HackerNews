@@ -4,15 +4,21 @@ class ContributionsController < ApplicationController
   # GET /contributions
   # GET /contributions.json
   def index
-    @contributions = Contribution.all#.order(points: :desc)
+    @contributions = Contribution.where(text:"").order(points: :desc)
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
   end
 
   # GET /contributions/1
   # GET /contributions/1.json
   def show
     @contribution = Contribution.find(params[:id])
+    @comment = Comment.new
+    
   end
-
   # GET /contributions/new
   def new
     if current_user.nil?
@@ -80,12 +86,30 @@ class ContributionsController < ApplicationController
   end
   
   def like
+    @like = Like.new
+    @like.contribution_id = params[:id]
+    @like.user_id = current_user.id
     @contribution = Contribution.find(params[:id])
     @contribution.points += 1
     @contribution.save
+    @like.save
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
       format.html { notice 'Contribution was successfully liked' }
+      format.json { head :no_content }
+    end
+  end
+  
+  
+  def dislike
+    @contribution = Contribution.find(params[:id])
+    @like = Like.where(contribution_id: @contribution.id, user_id: current_user.id).first
+    @like.delete
+    @contribution.points -= 1
+    @contribution.save
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path) }
+      format.html { notice 'Contribution was successfully disliked' }
       format.json { head :no_content }
     end
   end
