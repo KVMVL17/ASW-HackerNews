@@ -32,8 +32,8 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @comment.save
         logger.debug "este es el comment: #{@comment.inspect}"
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-        format.json { render :show, status: :created, location: @comment }
+        format.html { redirect_back(fallback_location: root_path)}
+        #format.json { render :show, status: :created, location: @comment }
       else
         format.html { render :new }
         format.json { render json: @comment.errors, status: :unprocessable_entity }

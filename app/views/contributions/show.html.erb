@@ -4,7 +4,15 @@
     <p id="notice"><%= notice %></p>
     <div class="inline">
       <small>
-        <%= link_to '▲','/'+ @contribution.id.to_s , method: :put%>
+        <% if !current_user.nil? %>
+          <% if @likes.find_by_contribution_id(@contribution.id).blank?%>
+            <%= link_to '▲','/like/'+ @contribution.id.to_s, method: :put%>
+          <%else %> 
+            <%= link_to '▼','/dislike/'+ @contribution.id.to_s, method: :put%>
+          <%end%>
+        <%else%>
+          <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+        <%end%>
       </small>
       <a href="<%= @contribution.url %>"><%= @contribution.title %>
         <small>(<%= @contribution.url %>)</small>
@@ -24,4 +32,17 @@
         <% end %>
       </small>
     </div>
+    <div>
+      <%= render "comments/form" %>
+    </div>
+    <br>
+     <tbody>
+    <% @coments.each do |comment| %>
+      <tr>
+        <td><%= comment.content %></td>
+        <td><%= comment.creator %></td>
+      </tr>
+      <br>
+    <% end %>
+  </tbody>
 </div>

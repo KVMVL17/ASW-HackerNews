@@ -17,6 +17,14 @@ class ContributionsController < ApplicationController
   def show
     @contribution = Contribution.find(params[:id])
     @comment = Comment.new
+    @coments = Comment.where(contribution_id: @contribution.id)
+    
+    
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
     
   end
   # GET /contributions/new
