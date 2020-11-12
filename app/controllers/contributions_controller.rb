@@ -91,13 +91,16 @@ class ContributionsController < ApplicationController
   end
   
   def like
-    @like = Like.new
-    @like.contribution_id = params[:id]
-    @like.user_id = current_user.id
     @contribution = Contribution.find(params[:id])
-    @contribution.points += 1
-    @contribution.save
-    @like.save
+    @like = Like.where(contribution_id: @contribution.id, user_id: current_user.id).first
+    if @like.nil?
+      @like = Like.new
+      @like.contribution_id = params[:id]
+      @like.user_id = current_user.id
+      @contribution.points += 1
+      @contribution.save
+      @like.save
+    end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
       format.html { notice 'Contribution was successfully liked' }
@@ -109,9 +112,11 @@ class ContributionsController < ApplicationController
   def dislike
     @contribution = Contribution.find(params[:id])
     @like = Like.where(contribution_id: @contribution.id, user_id: current_user.id).first
-    @like.delete
-    @contribution.points -= 1
-    @contribution.save
+    if !@like.nil?
+      @like.delete
+      @contribution.points -= 1
+      @contribution.save
+    end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
       format.html { notice 'Contribution was successfully disliked' }
