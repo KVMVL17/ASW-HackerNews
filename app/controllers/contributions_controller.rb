@@ -30,6 +30,11 @@ class ContributionsController < ApplicationController
   
   def newest
     @contributions = Contribution.all.order(created_at: :desc)
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
   end
 
   # GET /contributions/1/edit

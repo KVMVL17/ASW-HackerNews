@@ -9,7 +9,15 @@
       <li>
         <div class="url-link">
            <small>
-            <%= link_to '▲','/'+contribution.id.to_s , method: :put%>
+            <% if !current_user.nil? %>
+              <% if @likes.find_by_contribution_id(contribution.id).blank?%>
+                <%= link_to '▲','/like/'+contribution.id.to_s, method: :put%>
+              <%else %> 
+                <%= link_to '▼','/dislike/'+contribution.id.to_s, method: :put%>
+              <%end%>
+            <%else%>
+              <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+            <%end%>
            </small>
            <% if contribution.text_is_blank? %>
              <a href="<%= contribution.url %>"><%= contribution.title %>
