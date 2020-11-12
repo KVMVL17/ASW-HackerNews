@@ -6,11 +6,18 @@
 
   <ol class="inline gap">
     <% @contributions.each do |contribution| %>
-     <% if contribution.text_is_blank? %>
       <li>
         <div class="url-link">
            <small>
-            <%= link_to '▲','/'+contribution.id.to_s , method: :put%>
+            <% if !current_user.nil? %>
+              <% if @likes.find_by_contribution_id(contribution.id).blank?%>
+                <%= link_to '▲','/like/'+contribution.id.to_s, method: :put%>
+              <%else %> 
+                <%= link_to '▼','/dislike/'+contribution.id.to_s, method: :put%>
+              <%end%>
+            <%else%>
+              <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+            <%end%>
            </small>
            <a href="<%= contribution.url %>"><%= contribution.title %>
             <small>(<%= contribution.url %>)</small>
@@ -32,6 +39,5 @@
         </div>
       </li>
       <% end %>
-    <% end %>
   </ol>
 </div>
