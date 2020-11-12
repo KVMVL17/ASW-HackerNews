@@ -1,60 +1,39 @@
-	<center>
-		<table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
-        	<tr>
-        		<td bgcolor="#ff6600">
-        			<table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
-        				<tr>
-                  <td style="line-height:12pt; height:10px;">
-                  	<span class="pagetop">
-                  		<b class="hnname">
-                  			<%= link_to 'Hacker News',"/" %>
-                  		</b> | 
-              				<a href="newest">newest</a> |
-              				<a href="submit">submit</a> |
-              				<% if current_user.nil? %>
-              					 <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
-              				<% else %>
-              					 <%= link_to "sign out", "/sign_out" %> |
-              					 <%= current_user.email %>(<%= current_user.karma %>)
-              				<% end %>
-              			</span>
-              		</td>
-              	</tr>
-              </table>
-            </td>
-          </tr>
-          <tr id="pagespace" title="" style="height:10px"></tr>
-          <tr>
-            <td>
-              <% counter = 1 %>
-              <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
-                <% @contributions.each do |contribution| %>
-                  <tr>
-                    <td><%= counter %>.</td>
-                    <td><%= contribution.title%></td>
-                    <% if contribution.text_is_blank? %>
-                    <td>(<%= link_to contribution.url, contribution.url, {:style => 'text-decoration:none;'}%>)</td>
-                    <%= render 'timer', contribution: contribution %>
-                    <% else %>
-                    <td><%= contribution.text%></td>
-                    <%= render 'timer', contribution: contribution %>
-                    <% end %>
-                    <td><%=contribution.points%> points</td>
-                    <td><%=contribution.creator%></td>
-                    
-        
-                    <td><%= link_to 'Like','/'+contribution.id.to_s , method: :put%></td>
-                    <% if !current_user.nil? && contribution.checkIfMine(current_user.email) %>
-                      <td><%= link_to 'Edit', edit_contribution_path(contribution) %></td>
-                      <td><%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-                    <% end %>
-                    <%counter = counter + 1%>
-                  </tr>
-                <% end %>
-              </table>
-          </td>
-        </tr>
-      </table>
-    </center>
+<%= render "layouts/header" %>
 
-<p id="notice"><%= notice %></p>
+<div class="content">
+
+  <p id="notice"><%= notice %></p>
+
+  <ol class="inline gap">
+    <% @contributions.each do |contribution| %>
+      <li>
+        <div class="url-link">
+           <small>
+            <%= link_to '▲','/'+contribution.id.to_s , method: :put%>
+           </small>
+           <% if contribution.text_is_blank? %>
+             <a href="<%= contribution.url %>"><%= contribution.title %>
+              <small>(<%= contribution.url %>)</small>
+             </a>
+           <% else %>
+             <%= link_to contribution.title, contribution%>
+           <% end %>
+        </div>
+        <div>
+            <small>
+              <%=contribution.points%> points by <%=contribution.creator%> 
+              <%= render 'timer', contribution: contribution %> 
+              |
+              <%= link_to 'comments', contribution%>
+              |
+              <% if !current_user.nil? && contribution.checkIfMine(current_user.email) %>
+                 <%= link_to 'Edit', edit_contribution_path(contribution)%></td> 
+                 |
+                 <%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <% end %>
+            </small>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+</div>

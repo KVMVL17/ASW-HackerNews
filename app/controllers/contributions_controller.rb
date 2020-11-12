@@ -36,7 +36,7 @@ class ContributionsController < ApplicationController
   def create
     if Contribution.find_by_url(contribution_params[:url]).nil? || contribution_params[:url].blank?
       @contribution = Contribution.new(contribution_params)
-      @contribution.creator = current_user.id
+      @contribution.creator = current_user.email
   
       respond_to do |format|
         if @contribution.save

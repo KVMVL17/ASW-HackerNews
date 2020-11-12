@@ -1,33 +1,47 @@
-<%= form_with(model: contribution, local: true) do |form| %>
-  <% if contribution.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(contribution.errors.count, "error") %> prohibited this contribution from being saved:</h2>
+<div style="padding: 6px; padding-top: 20px;">
+  
+  <%= form_with(model: contribution, local: true) do |form| %>
+    <% if contribution.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(contribution.errors.count, "error") %> prohibited this contribution from being saved:</h2>
+  
+        <ul>
+          <% contribution.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+      <div class="field">
+        <div class="label-container">
+          <%= form.label :title %>
+        </div>
+        <%= form.text_field :title, size: 60 %>
+      </div>
+      
+      <div class="field">
+        <div class="label-container">
+          <%= form.label :url %>
+        </div>
+        <%= form.text_field :url,  size: 60 %>
+      </div>
+      
+      <p class="note"><b>or</b></p>
+      
+      <div class="field">
+        <div class="content-title">
+          <%= form.label :content %>
+        </div>
+        <div class="content-text"><%= form.text_area :content, cols: "60", rows: "5" %></div>
+      </div>
+      
+      <div class="actions button-container">
+        <%= form.submit %>
+      </div>
 
-      <ul>
-        <% contribution.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+      <p class="note">Leave url blank to submit a question for discussion. If there is no url, the text (if any) will appear at the top of the thread.</p>
+      
   <% end %>
-
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title %>
-  </div>
-
-  <div class="field">
-    <%= form.label :url %>
-    <%= form.text_field :url %>
-  </div>
-
-  <div class="field">
-    <%= form.label :text %>
-    <%= form.text_field :text %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
-<p id="notice"><%= notice %></p>
+  
+</div>
