@@ -1,19 +1,27 @@
-<p id="notice"><%= notice %></p>
+<%= render "layouts/header" %>
 
-<p>
-  <strong>Title:</strong>
-  <%= @contribution.title %>
-</p>
-
-<p>
-  <strong>Url:</strong>
-  <%= @contribution.url %>
-</p>
-
-<p>
-  <strong>Text:</strong>
-  <%= @contribution.text %>
-</p>
-
-<%= link_to 'Edit', edit_contribution_path(@contribution) %> |
-<%= link_to 'Back', contributions_path %>
+<div class="content">
+    <p id="notice"><%= notice %></p>
+    <div class="inline">
+      <small>
+        <%= link_to '▲','/'+ @contribution.id.to_s , method: :put%>
+      </small>
+      <a href="<%= @contribution.url %>"><%= @contribution.title %>
+        <small>(<%= @contribution.url %>)</small>
+      </a>
+    </div>
+    <div>
+      <small>
+        <%=@contribution.points%> points by <%=@contribution.creator%> 
+        <%= render 'timer', contribution: @contribution %> 
+        |
+        <%= link_to 'comments', @contribution%>
+        <% if !current_user.nil? && @contribution.checkIfMine(current_user.email) %>
+           |
+           <%= link_to 'edit', edit_contribution_path(@contribution)%></td> 
+           |
+           <%= link_to 'delete', @contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </small>
+    </div>
+</div>
