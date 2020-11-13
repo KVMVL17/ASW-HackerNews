@@ -2,60 +2,63 @@
 
 <div class="content">
     <p id="notice"><%= notice %></p>
-    <div class="inline">
-      <small>
-        <% if !current_user.nil? %>
-          <% if @likes.find_by_contribution_id(@contribution.id).blank?%>
-            <%= link_to '▲','/like/'+ @contribution.id.to_s, method: :put%>
-          <%else %> 
-            <%= link_to '▼','/dislike/'+ @contribution.id.to_s, method: :put%>
-          <%end%>
-        <%else%>
-          <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
-        <%end%>
-      </small>
-      <a href="<%= @contribution.url %>"><%= @contribution.title %>
-        <small>(<%= @contribution.url %>)</small>
-      </a>
-    </div>
-    <div>
-      <small>
-        <%=@contribution.points%> points by <%=@contribution.creator%> 
-        <%= render 'timer', contribution: @contribution %> 
-        |
-        <%= link_to 'comments', @contribution%>
-        <% if !current_user.nil? && @contribution.checkIfMine(current_user.email) %>
-           |
-           <%= link_to 'edit', edit_contribution_path(@contribution)%></td> 
-           |
-           <%= link_to 'delete', @contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% end %>
-      </small>
-    </div>
-    <div>
-      <%= render "comments/form" %>
-    </div>
-    <br>
-    <p>
-      <strong>Comment:</strong>
-    </p>
-    
-    <div style="margin-top: 10px;">
-      <% @coments.each do |comment| %>
-         <div> 
-           <small> <%= link_to '▲' %>
-             <a><%= comment.creator %></a>
-           </small>
-         </div>
-        <div class="pad-comment">
-          <%= comment.content %>
+    <div class="marginleft20">
+        <div class="inline">
+          <small>
+            <% if !current_user.nil? %>
+              <% if @likes.find_by_contribution_id(@contribution.id).blank?%>
+                <%= link_to '▲','/like/'+ @contribution.id.to_s, method: :put%>
+              <%else %> 
+                <%= link_to '▼','/dislike/'+ @contribution.id.to_s, method: :put%>
+              <%end%>
+            <%else%>
+              <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+            <%end%>
+          </small>
+          <a href="<%= @contribution.url %>"><%= @contribution.title %>
+            <small>(<%= @contribution.url %>)</small>
+          </a>
         </div>
-        <div><small>
-          <div class="pad-comment">
-            <%= link_to 'Reply' %></small>
-          </div>
+        <div>
+          <small>
+            <%=@contribution.points%> points by <%=@contribution.creator%> 
+            <%= render 'timer', contribution: @contribution %> 
+            |
+            <%= link_to 'comments', @contribution%>
+            <% if !current_user.nil? && @contribution.checkIfMine(current_user.email) %>
+               |
+               <%= link_to 'edit', edit_contribution_path(@contribution)%></td> 
+               |
+               <%= link_to 'delete', @contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% end %>
+          </small>
+        </div>
+        <%= @contribution.text %>
+        <div>
+          <%= render "comments/form" %>
         </div>
         <br>
-    <% end %>
-  </div>
+        <p>
+          <strong>Comment:</strong>
+        </p>
+        
+        <div style="margin-top: 10px;">
+          <% @coments.each do |comment| %>
+             <div> 
+               <small> <%= link_to '▲' %>
+                 <a><%= comment.creator %></a> about _timer render comment
+               </small>
+             </div>
+            <div class="pad-comment">
+              <%= comment.content %>
+            </div>
+            <div><small>
+              <div class="pad-comment">
+                <%= link_to 'Reply' %></small>
+              </div>
+            </div>
+            <br>
+        <% end %>
+      </div>
+    </div>
 </div>

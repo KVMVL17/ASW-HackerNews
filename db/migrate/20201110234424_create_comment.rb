@@ -4,6 +4,8 @@ class CreateComment < ActiveRecord::Migration[6.0]
       t.string :content
       t.string :creator
       t.string :contribution_id
+      
+      t.timestamps
     end
   end
 end

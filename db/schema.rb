@@ -16,6 +16,8 @@ ActiveRecord::Schema.define(version: 2020_11_12_161048) do
     t.string "content"
     t.string "creator"
     t.string "contribution_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "contributions", force: :cascade do |t|
