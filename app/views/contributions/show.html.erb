@@ -36,13 +36,26 @@
       <%= render "comments/form" %>
     </div>
     <br>
-     <tbody>
-    <% @coments.each do |comment| %>
-      <tr>
-        <td><%= comment.content %></td>
-        <td><%= comment.creator %></td>
-      </tr>
-      <br>
+    <p>
+      <strong>Comment:</strong>
+    </p>
+    
+    <div style="margin-top: 10px;">
+      <% @coments.each do |comment| %>
+         <div> 
+           <small> <%= link_to '▲' %>
+             <a><%= comment.creator %></a>
+           </small>
+         </div>
+        <div class="pad-comment">
+          <%= comment.content %>
+        </div>
+        <div><small>
+          <div class="pad-comment">
+            <%= link_to 'Reply' %></small>
+          </div>
+        </div>
+        <br>
     <% end %>
-  </tbody>
+  </div>
 </div>

@@ -25,9 +25,7 @@ class CommentsController < ApplicationController
   # POST /comments.json
   def create
     @comment = Comment.new(create_new_params)
-    @comment.creator = current_user.id
-    logger.debug "este es el user: #{current_user.email.inspect}"
-    puts "------------------------------------------------------"
+    @comment.creator = current_user.email
     
     respond_to do |format|
       if @comment.save
