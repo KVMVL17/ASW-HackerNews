@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   
   
+  resources :replies
   resources :comments
   
   root 'contributions#index'
@@ -18,6 +19,7 @@ Rails.application.routes.draw do
   get 'submit', to: 'contributions#new', as: 'submit'
   put 'like/:id', to: 'contributions#like', as: 'like'
   put 'dislike/:id', to: 'contributions#dislike', as: 'dislike'
+
   resources :contributions, :path => "/"
   resources :users
   

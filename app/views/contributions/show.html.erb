@@ -46,15 +46,19 @@
           <% @coments.each do |comment| %>
              <div> 
                <small> <%= link_to '▲' %>
-                 <a><%= comment.creator %></a> about _timer render comment
+                 <a><%= comment.creator %></a>
+                 <%= render 'comments/timer', comment: comment %> 
                </small>
              </div>
             <div class="pad-comment">
               <%= comment.content %>
+              <%= comment.replies.each do |reply|%>
+                <%reply.content%>
+              <%end%>
             </div>
             <div><small>
               <div class="pad-comment">
-                <%= link_to 'Reply' %></small>
+                <%= link_to 'Reply', new_reply_path(:comment_id => comment.id) %></small>
               </div>
             </div>
             <br>
