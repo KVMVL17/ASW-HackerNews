@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2020_11_15_165129) do
     t.string "content"
     t.string "creator"
     t.string "comment_id"
-    t.string "parent_id"
+    t.string "reply_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

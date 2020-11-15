@@ -63,6 +63,14 @@
                    <div class="reply">
                      <%= rep.content %>
                      <%= link_to 'Reply', rep %>
+                     <div>
+                       <% rep.replies.each do |repChild| %>
+                         <div class="reply">
+                           <%= repChild.content %>
+                           <%= link_to 'Reply', repChild %>
+                         </div>
+                       <% end %>
+                     </div>
                    </div>
                  <% end %>
               </div>

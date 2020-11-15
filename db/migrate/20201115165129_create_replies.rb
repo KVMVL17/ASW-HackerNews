@@ -4,7 +4,7 @@ class CreateReplies < ActiveRecord::Migration[6.0]
       t.string :content
       t.string :creator
       t.string :comment_id
-      t.string :parent_id
+      t.string :reply_id
 
       t.timestamps
     end
