@@ -1,0 +1,22 @@
+<%= form_with(model: replyChild, local: true, url: replyrecursive_reply_path, method: :post) do |form| %>
+  <% if replyChild.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(replyChild.errors.count, "error") %> prohibited this reply from being saved:</h2>
+
+      <ul>
+        <% replyChild.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.text_area(:content, size: '60x6') %>
+  </div>
+  <%= form.hidden_field :parent_id, :value => reply.id %>
+  <%= reply.id %>
+  <div class="actions">
+    <%= form.submit "reply"%>
+  </div>
+<% end %>
