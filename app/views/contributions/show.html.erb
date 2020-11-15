@@ -56,7 +56,15 @@
             </div>
             <div><small>
               <div class="pad-comment">
-                <%= link_to 'Reply', new_reply_path(:comment_id => comment.id) %></small>
+                <%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
+              </div>
+              <div>
+                 <% comment.replies.each do |rep| %>
+                   <div class="reply">
+                     <%= rep.content %>
+                     <%= link_to 'Reply', rep %>
+                   </div>
+                 <% end %>
               </div>
             </div>
             <br>

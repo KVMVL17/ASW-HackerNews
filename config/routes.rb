@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   
   
-  resources :replies
+  resources :replies do
+    member do
+      post 'replyrecursive'
+    end
+  end
+  
   resources :comments
   
   root 'contributions#index'
