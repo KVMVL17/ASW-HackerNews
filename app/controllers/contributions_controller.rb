@@ -18,7 +18,6 @@ class ContributionsController < ApplicationController
     @contribution = Contribution.find(params[:id])
     @comment = Comment.new
     @coments = Comment.where(contribution_id: @contribution.id)
-    @replies = Reply.all
     
     @like = Like.new
     @likes = Like.new

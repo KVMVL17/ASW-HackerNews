@@ -33,7 +33,7 @@ class CommentsController < ApplicationController
         format.html { redirect_back(fallback_location: root_path)}
         #format.json { render :show, status: :created, location: @comment }
       else
-        format.html { render :new }
+        format.html { render show_contribution_url(params[:contribution_id]) }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
