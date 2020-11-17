@@ -34,7 +34,7 @@
 
 <div class="content">
     <p id="notice"><%= notice %></p>
-    <div class="marginleft20">
+    <div class="marginleft15">
         <div class="inline">
           <small>
             <% if !current_user.nil? %>
@@ -54,7 +54,7 @@
           </a>
         </div>
         <div>
-          <small>
+          <small class="leftmar">
             <%=@contribution.points%> points by <%=@contribution.creator%> 
             <%= render 'timer', contribution: @contribution %> 
             |

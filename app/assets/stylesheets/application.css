@@ -43,10 +43,13 @@ table, .content{
     margin-bottom: 0px;
 }
 
-.marginleft20{
-    margin-left: 20px;
+.marginleft15{
+    margin-left: 15px;
 }
 
+.leftmar{
+    margin-left: 13px;
+}
 
 /* HEADER */
 .header a{
