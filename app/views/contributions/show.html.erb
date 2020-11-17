@@ -64,8 +64,17 @@
         <div style="margin-top: 10px;">
           
           <% @coments.each do |comment| %>
-             <div> 
-               <small> <%= link_to '▲' %>
+            <div> 
+             <small> 
+               <% if !current_user.nil? %>
+                <% if @likes.find_by_contribution_id(@contribution.id).blank?%>
+                  <%= link_to '▲','/like/'+ comment.id.to_s, method: :put%>
+                <%else %> 
+                  <%= link_to '▼','/dislike/'+ comment.id.to_s, method: :put%>
+                <%end%>
+               <%else%>
+                <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+               <%end%>
                  <a><%= comment.creator %></a>
                  <%= render 'comments/timer', comment: comment %> 
                </small>

@@ -32,6 +32,7 @@ class ContributionsController < ApplicationController
       redirect_to user_google_oauth2_omniauth_authorize_path
     else
       @contribution = Contribution.new
+      @comment = Comment.new
     end 
   end
   
@@ -54,9 +55,19 @@ class ContributionsController < ApplicationController
     if Contribution.find_by_url(contribution_params[:url]).nil? || contribution_params[:url].blank?
       @contribution = Contribution.new(contribution_params)
       @contribution.creator = current_user.email
-  
+      if !contribution_params[:url].blank? && !contribution_params[:text].blank?
+        @contribution.text = ""
+        @comment = Comment.new
+        @comment.content = contribution_params[:text]
+        @comment.creator = @contribution.creator
+      end
+      
       respond_to do |format|
         if @contribution.save
+          if !contribution_params[:url].blank? && !contribution_params[:text].blank?
+            @comment.contribution_id = @contribution.id
+            @comment.save
+          end
           format.html { redirect_to :newest }
           format.html { notice 'Contribution was successfully created.' }
         else
@@ -66,7 +77,7 @@ class ContributionsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to :submit, notice: 'Url already exists' }
+        format.html { redirect_to Contribution.find_by_url(contribution_params[:url]), notice: 'URL already exists' }
         format.json { render json: @contribution.errors, status: :unprocessable_entity }
       end
     end
@@ -90,6 +101,7 @@ class ContributionsController < ApplicationController
   # DELETE /contributions/1.json
   def destroy
     @contribution.destroy
+    puts root_path
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
       format.html { notice 'Contribution was successfully destroyed.' }
