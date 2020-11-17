@@ -10,23 +10,31 @@ class RepliesController < ApplicationController
   # GET /replies/1
   # GET /replies/1.json
   def show
-    @replyChild = Reply.new
-    @like = Like.new
-    @likes = Like.new
-    if !current_user.nil?
-      @likes = Like.where(user_id: current_user.id)
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @replyChild = Reply.new
+      @like = Like.new
+      @likes = Like.new
+      if !current_user.nil?
+        @likes = Like.where(user_id: current_user.id)
+      end
     end
   end
 
   # GET /replies/new
   def new
-    @reply = Reply.new
-    @comment = Comment.find(params[:comment_id])
-    @contribution = Contribution.find(params[:contribution_id])
-    @like = Like.new
-    @likes = Like.new
-    if !current_user.nil?
-      @likes = Like.where(user_id: current_user.id)
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @reply = Reply.new
+      @comment = Comment.find(params[:comment_id])
+      @contribution = Contribution.find(params[:contribution_id])
+      @like = Like.new
+      @likes = Like.new
+      if !current_user.nil?
+        @likes = Like.where(user_id: current_user.id)
+      end
     end
   end
 
