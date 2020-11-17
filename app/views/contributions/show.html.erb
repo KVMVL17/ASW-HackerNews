@@ -4,7 +4,7 @@
   <div>
     <small>                
       <% if !current_user.nil? %>
-        <% if @likes.find_by_contribution_id(reply.id).blank?%>
+        <% if @likes.find_by_reply_id(reply.id).blank?%>
           <%= link_to '▲','replies/like/'+ reply.id.to_s, method: :put%>
         <%else %>
           <%= link_to '▼','replies/dislike/'+ reply.id.to_s, method: :put%>
@@ -78,7 +78,7 @@
             <div> 
              <small> 
                <% if !current_user.nil? %>
-                <% if @likes.find_by_contribution_id(comment.id).blank?%>
+                <% if @likes.find_by_comment_id(comment.id).blank?%>
                   <%= link_to '▲','comments/like/'+ comment.id.to_s, method: :put%>
                 <%else %> 
                   <%= link_to '▼','comments/dislike/'+ comment.id.to_s, method: :put%>

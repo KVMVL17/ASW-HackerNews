@@ -80,6 +80,39 @@ class RepliesController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def like
+    @reply = Reply.find(params[:id])
+    @like = Like.where(reply_id: @reply.id, user_id: current_user.id).first
+    if @like.nil?
+      @like = Like.new
+      @like.reply_id = params[:id]
+      @like.user_id = current_user.id
+      @reply.points += 1
+      @reply.save
+      @like.save
+    end
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path) }
+      format.html { notice 'Contribution was successfully liked' }
+      format.json { head :no_content }
+    end
+  end
+  
+  def dislike
+    @reply = Reply.find(params[:id])
+    @like = Like.where(reply_id: @reply.id, user_id: current_user.id).first
+    if !@like.nil?
+      @like.delete
+      @reply.points -= 1
+      @reply.save
+    end
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path) }
+      format.html { notice 'Contribution was successfully disliked' }
+      format.json { head :no_content }
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
