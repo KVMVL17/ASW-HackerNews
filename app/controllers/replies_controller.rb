@@ -11,6 +11,11 @@ class RepliesController < ApplicationController
   # GET /replies/1.json
   def show
     @replyChild = Reply.new
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
   end
 
   # GET /replies/new
@@ -18,6 +23,11 @@ class RepliesController < ApplicationController
     @reply = Reply.new
     @comment = Comment.find(params[:comment_id])
     @contribution = Contribution.find(params[:contribution_id])
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
   end
 
   # GET /replies/1/edit
@@ -32,7 +42,7 @@ class RepliesController < ApplicationController
     
     respond_to do |format|
       if @reply.save
-        format.html { redirect_to @reply, notice: 'Reply was successfully created.' }
+        format.html { redirect_to "/"+ @reply.findContribution(@reply.id)}
         format.json { render :show, status: :created, location: @reply }
       else
         format.html { render :new }
@@ -45,10 +55,9 @@ class RepliesController < ApplicationController
   def create
     @reply = Reply.new(reply_params)
     @reply.creator = current_user.email
-    
     respond_to do |format|
       if @reply.save
-        format.html { redirect_to @reply, notice: 'Reply was successfully created.' }
+        format.html { redirect_to "/"+ @reply.comment.contribution.id.to_s }
         format.json { render :show, status: :created, location: @reply }
       else
         format.html { render :new }

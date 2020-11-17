@@ -2,6 +2,28 @@
 
 <div class="content">
     <p id="notice"><%= notice %></p>
-    <%= @reply.content %>
-    <%= render 'form2', reply: @reply, replyChild: @replyChild %>
+    <div class="marginleft20">
+        <div class="inline">
+          <small>
+            <% if !current_user.nil? %>
+              <% if @likes.find_by_reply_id(@reply.id).blank?%>
+                <%= link_to '▲','like/'+ @reply.id.to_s, method: :put%>
+              <%else %> 
+                <%= link_to '▼','dislike/'+ @reply.id.to_s, method: :put%>
+              <%end%>
+            <%else%>
+              <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+            <%end%>
+            <%=@reply.points%> points by <%=@reply.creator%> 
+            <%= render 'comments/timer', comment: @reply %> |
+            <%= link_to 'parent' %> | on: 
+            <%= link_to Contribution.find(@reply.findContribution(@reply.id)).title, 
+                Contribution.find(@reply.findContribution(@reply.id)) %>
+          </small>
+          <br>
+          <%= @reply.content %>
+          <%= render 'form2', reply: @reply, replyChild: @replyChild %>
+        </div>
+    </div>
+        
 </div>
