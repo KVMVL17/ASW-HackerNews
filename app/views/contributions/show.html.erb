@@ -5,9 +5,9 @@
     <small>                
       <% if !current_user.nil? %>
         <% if @likes.find_by_contribution_id(reply.id).blank?%>
-          <%= link_to '▲','/like/'+ reply.id.to_s, method: :put%>
+          <%= link_to '▲','replies/like/'+ reply.id.to_s, method: :put%>
         <%else %>
-          <%= link_to '▼','/dislike/'+ reply.id.to_s, method: :put%>
+          <%= link_to '▼','replies/dislike/'+ reply.id.to_s, method: :put%>
         <%end%>
       <%else%>
         <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
@@ -79,9 +79,9 @@
              <small> 
                <% if !current_user.nil? %>
                 <% if @likes.find_by_contribution_id(comment.id).blank?%>
-                  <%= link_to '▲','/like/'+ comment.id.to_s, method: :put%>
+                  <%= link_to '▲','comments/like/'+ comment.id.to_s, method: :put%>
                 <%else %> 
-                  <%= link_to '▼','/dislike/'+ comment.id.to_s, method: :put%>
+                  <%= link_to '▼','comments/dislike/'+ comment.id.to_s, method: :put%>
                 <%end%>
                <%else%>
                 <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>

@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 2020_11_15_165129) do
     t.string "content"
     t.string "creator"
     t.string "contribution_id"
+    t.integer "points", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -40,6 +41,7 @@ ActiveRecord::Schema.define(version: 2020_11_15_165129) do
     t.string "creator"
     t.string "comment_id"
     t.string "reply_id"
+    t.integer "points", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

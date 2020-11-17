@@ -5,6 +5,7 @@ class CreateReplies < ActiveRecord::Migration[6.0]
       t.string :creator
       t.string :comment_id
       t.string :reply_id
+      t.integer :points, default:0
 
       t.timestamps
     end
