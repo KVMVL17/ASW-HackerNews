@@ -1,3 +1,24 @@
+<% def show_replies(rep)
+    rep.replies.each do |reply| %>
+<div>
+  <div>
+    <small> <%= link_to '▲' %> <a><%= reply.creator %></a> <%= render 'comments/timer', comment: reply %> </small>
+  </div>
+  <div class="pad-comment">
+    <%= reply.content%>
+  </div>
+  <div>
+    <div class="pad-comment">
+      <small><%= link_to 'Reply', reply %></small>
+    </div>
+  </div>
+</div>
+
+  <% if reply.replies.any? %>
+    <ul><% show_replies(reply) %></ul>
+<% end %>
+<% end; nil end %>
+
 <%= render "layouts/header" %>
 
 <div class="content">
@@ -16,7 +37,9 @@
             <%end%>
           </small>
           <a href="<%= @contribution.url %>"><%= @contribution.title %>
-            <small>(<%= @contribution.url %>)</small>
+            <% if !@contribution.url.blank? %>
+              <small>(<%= @contribution.url %>)</small>
+            <% end %>
           </a>
         </div>
         <div>
@@ -33,16 +56,13 @@
             <% end %>
           </small>
         </div>
-        <%= @contribution.text %>
+          <%= @contribution.text %>
         <div>
           <%= render "comments/form" %>
         </div>
-        <br>
-        <p>
-          <strong>Comment:</strong>
-        </p>
         
         <div style="margin-top: 10px;">
+          
           <% @coments.each do |comment| %>
              <div> 
                <small> <%= link_to '▲' %>
@@ -52,27 +72,13 @@
              </div>
             <div class="pad-comment">
               <%= comment.content%>
-              
             </div>
             <div><small>
               <div class="pad-comment">
                 <%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
               </div>
               <div>
-                 <% comment.replies.each do |rep| %>
-                   <div class="reply">
-                     <%= rep.content %>
-                     <%= link_to 'Reply', rep %>
-                     <div>
-                       <% rep.replies.each do |repChild| %>
-                         <div class="reply">
-                           <%= repChild.content %>
-                           <%= link_to 'Reply', repChild %>
-                         </div>
-                       <% end %>
-                     </div>
-                   </div>
-                 <% end %>
+               <ul><%= show_replies(comment) %></ul>
               </div>
             </div>
             <br>
