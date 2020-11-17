@@ -1,0 +1,21 @@
+<%= form_with(model: reply, local: true) do |form| %>
+  <% if reply.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(reply.errors.count, "error") %> prohibited this reply from being saved:</h2>
+
+      <ul>
+        <% reply.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.text_area(:content, size: '60x6') %>
+  </div>
+  <%= form.hidden_field :comment_id, :value => @comment.id %>
+  <div class="actions">
+    <%= form.submit "reply"%>
+  </div>
+<% end %>

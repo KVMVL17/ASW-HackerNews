@@ -1,0 +1,7 @@
+<%= render "layouts/header" %>
+
+<div class="content">
+    <p id="notice"><%= notice %></p>
+    <%= @reply.content %>
+    <%= render 'form2', reply: @reply, replyChild: @replyChild %>
+</div>

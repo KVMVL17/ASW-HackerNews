@@ -25,17 +25,15 @@ class CommentsController < ApplicationController
   # POST /comments.json
   def create
     @comment = Comment.new(create_new_params)
-    @comment.creator = current_user.id
-    logger.debug "este es el user: #{current_user.email.inspect}"
-    puts "------------------------------------------------------"
+    @comment.creator = current_user.email
     
     respond_to do |format|
       if @comment.save
         logger.debug "este es el comment: #{@comment.inspect}"
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-        format.json { render :show, status: :created, location: @comment }
+        format.html { redirect_back(fallback_location: root_path)}
+        #format.json { render :show, status: :created, location: @comment }
       else
-        format.html { render :new }
+        format.html { render show_contribution_url(params[:contribution_id]) }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
@@ -61,6 +59,40 @@ class CommentsController < ApplicationController
     @comment.destroy
     respond_to do |format|
       format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+  
+  def like
+    @comment = Comment.find(params[:id])
+    @like = Like.where(comment_id: @comment.id, user_id: current_user.id).first
+    if @like.nil?
+      @like = Like.new
+      @like.comment_id = params[:id]
+      @like.user_id = current_user.id
+      @comment.points += 1
+      @comment.save
+      @like.save
+    end
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path) }
+      format.html { notice 'Contribution was successfully liked' }
+      format.json { head :no_content }
+    end
+  end
+  
+  
+  def dislike
+    @comment = Comment.find(params[:id])
+    @like = Like.where(comment_id: @comment.id, user_id: current_user.id).first
+    if !@like.nil?
+      @like.delete
+      @comment.points -= 1
+      @comment.save
+    end
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path) }
+      format.html { notice 'Contribution was successfully disliked' }
       format.json { head :no_content }
     end
   end

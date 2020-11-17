@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   
   
+  resources :replies do
+    member do
+      post 'replyrecursive'
+    end
+  end
+  
   resources :comments
   
   root 'contributions#index'
@@ -18,6 +24,11 @@ Rails.application.routes.draw do
   get 'submit', to: 'contributions#new', as: 'submit'
   put 'like/:id', to: 'contributions#like', as: 'like'
   put 'dislike/:id', to: 'contributions#dislike', as: 'dislike'
+  put 'comments/like/:id', to: 'comments#like', as: 'like_comment'
+  put 'comments/dislike/:id', to: 'comments#dislike', as: 'dislike_comment'
+  put 'replies/like/:id', to: 'replies#like', as: 'like_reply'
+  put 'replies/dislike/:id', to: 'replies#dislike', as: 'dislike_reply'
+
   resources :contributions, :path => "/"
   resources :users
   
