@@ -26,15 +26,12 @@
         <div>
             <small class="leftmar">
               <%=contribution.points%> points by
-              <% if !current_user.nil? %>
-                <%if current_user.email == contribution.creator%>
+              <% if !current_user.nil? && current_user.email == contribution.creator %>
                   <%=link_to contribution.creator, myprofile_path%> 
-                <%else%>
-                  <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%> 
-                <%end%>
               <%else%>
-                <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%>
+                  <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%> 
               <%end%>
+              
               <%= render 'timer', contribution: contribution %> 
               |
               <%= link_to contribution.numberOfComments(contribution.comments, 0).to_s+' comments', contribution%>
