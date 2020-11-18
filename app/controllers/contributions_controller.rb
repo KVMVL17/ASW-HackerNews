@@ -44,9 +44,55 @@ class ContributionsController < ApplicationController
       @likes = Like.where(user_id: current_user.id)
     end
   end
+  
+  def ask
+    @contributions = Contribution.where(url: "").order(points: :desc)
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
+  end
+  
+  def threads
+      @user = User.find(params[:id])
+      @comments = Comment.where(creator: @user.email).order(points: :desc)
+      @like = Like.new
+      @likes = Like.none
+      if !current_user.nil?
+        @likes = Like.where(user_id: current_user.id)
+      end
+  end
+  
+  def upvoted_comments
+    @like = Like.where(user_id: params[:id], contribution_id: nil, reply_id: nil)
+    @User = User.find(params[:id])
+    @comments = Comment.none.to_a
+    @like.each do |like|
+      @comments.push Comment.find(like.comment_id)
+    end
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
+  end
+  
+  def upvoted_submissions
+    @like = Like.where(user_id: params[:id], comment_id: nil, reply_id: nil)
+    @User = User.find(params[:id])
+    @contributions = Contribution.none.to_a
+    @like.each do |like|
+      @contributions.push Contribution.find(like.contribution_id)
+    end
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
+  end
 
   # GET /contributions/1/edit
   def edit
+    @ask = params[:ask]
   end
 
   # POST /contributions
@@ -71,7 +117,7 @@ class ContributionsController < ApplicationController
           format.html { redirect_to :newest }
           format.html { notice 'Contribution was successfully created.' }
         else
-          format.html { render :new }
+          format.html { redirect_to new_contribution_path, notice: "URL not valid" }
           format.json { render json: @contribution.errors, status: :unprocessable_entity }
         end
       end
@@ -88,7 +134,8 @@ class ContributionsController < ApplicationController
   def update
     respond_to do |format|
       if @contribution.update(contribution_params)
-        format.html { redirect_to @contribution, notice: 'Contribution was successfully updated.' }
+        contribution_params[:text] = ""
+        format.html { redirect_to :newest }
         format.json { render :show, status: :ok, location: @contribution }
       else
         format.html { render :edit }
@@ -103,7 +150,7 @@ class ContributionsController < ApplicationController
     @contribution.destroy
     puts root_path
     respond_to do |format|
-      format.html { redirect_back(fallback_location: root_path) }
+      format.html { redirect_to :newest }
       format.html { notice 'Contribution was successfully destroyed.' }
       format.json { head :no_content }
     end
@@ -119,6 +166,9 @@ class ContributionsController < ApplicationController
       @contribution.points += 1
       @contribution.save
       @like.save
+      @user = User.find_by_email(@contribution.creator)
+      @user.karma += 1
+      @user.save
     end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
@@ -135,12 +185,29 @@ class ContributionsController < ApplicationController
       @like.delete
       @contribution.points -= 1
       @contribution.save
+      @user = User.find_by_email(@contribution.creator)
+      @user.karma -= 1
+      @user.save
     end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
       format.html { notice 'Contribution was successfully disliked' }
       format.json { head :no_content }
     end
+  end
+  
+  
+  def showcontributionsofuser
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
+    @User = User.find(params[:id])
+    @contributions = Contribution.where(creator: @User.email)
+    respond_to do |format|
+      format.html { render "contributionsofuser" }
+    end 
   end
     
 

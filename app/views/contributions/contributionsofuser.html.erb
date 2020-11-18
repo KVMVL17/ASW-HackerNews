@@ -1,4 +1,4 @@
-<%= render "layouts/header" %>
+<%= render "layouts/header2", username: @User.email%>
 
 <div class="content">
 
@@ -18,20 +18,27 @@
             <%else%>
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
-           </small>
-           <a href="<%= contribution.url %>"><%= contribution.title %>
-            <small>(<%= contribution.url %>)</small>
-           </a>
+            </small>
+            <% if contribution.text_is_blank? %>
+              <a href="<%= contribution.url %>"><%= contribution.title %>
+                <small>(<%= contribution.url %>)</small>
+              </a>
+            <% else %>
+              <%= link_to contribution.title, contribution%>
+            <% end %>
         </div>
         <div>
-            <small class="leftmar">
+            <small>
               <%=contribution.points%> points by
-              <% if !current_user.nil? && current_user.email == contribution.creator %>
+              <% if !current_user.nil? %>
+                <%if current_user.email == contribution.creator%>
                   <%=link_to contribution.creator, myprofile_path%> 
-              <%else%>
+                <%else%>
                   <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%> 
+                <%end%>
+              <%else%>
+                <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%>
               <%end%>
-              
               <%= render 'timer', contribution: contribution %> 
               |
               <%= link_to contribution.numberOfComments(contribution.comments, 0).to_s+' comments', contribution%>
@@ -47,3 +54,4 @@
       <% end %>
   </ol>
 </div>
+

@@ -10,14 +10,32 @@ class RepliesController < ApplicationController
   # GET /replies/1
   # GET /replies/1.json
   def show
-    @replyChild = Reply.new
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @replyChild = Reply.new
+      @like = Like.new
+      @likes = Like.new
+      if !current_user.nil?
+        @likes = Like.where(user_id: current_user.id)
+      end
+    end
   end
 
   # GET /replies/new
   def new
-    @reply = Reply.new
-    @comment = Comment.find(params[:comment_id])
-    @contribution = Contribution.find(params[:contribution_id])
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @reply = Reply.new
+      @comment = Comment.find(params[:comment_id])
+      @contribution = Contribution.find(params[:contribution_id])
+      @like = Like.new
+      @likes = Like.new
+      if !current_user.nil?
+        @likes = Like.where(user_id: current_user.id)
+      end
+    end
   end
 
   # GET /replies/1/edit
@@ -27,32 +45,39 @@ class RepliesController < ApplicationController
   # POST /replies
   # POST /replies.json
   def replyrecursive
-    @reply = Reply.new(reply_params)
-    @reply.creator = current_user.email
-    
-    respond_to do |format|
-      if @reply.save
-        format.html { redirect_to @reply, notice: 'Reply was successfully created.' }
-        format.json { render :show, status: :created, location: @reply }
-      else
-        format.html { render :new }
-        format.json { render json: @reply.errors, status: :unprocessable_entity }
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @reply = Reply.new(reply_params)
+      @reply.creator = current_user.email
+      
+      respond_to do |format|
+        if @reply.save
+          format.html { redirect_to "/"+ @reply.findContribution(@reply.id)}
+          format.json { render :show, status: :created, location: @reply }
+        else
+          format.html { redirect_to Reply.find(@reply.reply_id), notice: "Reply can't be blank" }
+          format.json { render json: @reply.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
   
   
   def create
-    @reply = Reply.new(reply_params)
-    @reply.creator = current_user.email
-    
-    respond_to do |format|
-      if @reply.save
-        format.html { redirect_to @reply, notice: 'Reply was successfully created.' }
-        format.json { render :show, status: :created, location: @reply }
-      else
-        format.html { render :new }
-        format.json { render json: @reply.errors, status: :unprocessable_entity }
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @reply = Reply.new(reply_params)
+      @reply.creator = current_user.email
+      respond_to do |format|
+        if @reply.save
+          format.html { redirect_to "/"+ @reply.comment.contribution.id.to_s }
+          format.json { render :show, status: :created, location: @reply }
+        else
+          format.html { redirect_to @reply.comment, notice: "Reply can't be blank" }
+          format.json { render json: @reply.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -76,7 +101,7 @@ class RepliesController < ApplicationController
   def destroy
     @reply.destroy
     respond_to do |format|
-      format.html { redirect_to replies_url, notice: 'Reply was successfully destroyed.' }
+      format.html { redirect_back(fallback_location: root_path) }
       format.json { head :no_content }
     end
   end
@@ -91,6 +116,9 @@ class RepliesController < ApplicationController
       @reply.points += 1
       @reply.save
       @like.save
+      @user = User.find_by_email(@reply.creator)
+      @user.karma += 1
+      @user.save
     end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
@@ -106,6 +134,9 @@ class RepliesController < ApplicationController
       @like.delete
       @reply.points -= 1
       @reply.save
+      @user = User.find_by_email(@reply.creator)
+      @user.karma -= 1
+      @user.save
     end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }

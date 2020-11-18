@@ -1,0 +1,51 @@
+<%= render "layouts/header4", username: @User.email%>
+
+<div class="content">
+
+  <p id="notice"><%= notice %></p>
+  
+  <ol class="inline gap">
+    <% @comments.each do |comment| %>
+      <li>
+        <div class="url-link">
+           <small>
+            <% if !current_user.nil? %>
+              <% if @likes.find_by_comment_id(comment.id).blank?%>
+                <%= link_to '▲','/like/'+comment.id.to_s, method: :put%>
+              <%else %> 
+                <%= link_to '▼','/dislike/'+comment.id.to_s, method: :put%>
+              <%end%>
+            <%else%>
+              <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+            <%end%>
+            </small>
+            <%=comment.content%>
+        </div>
+        <div>
+            <small>
+              <%=comment.points%> points by
+              <% if !current_user.nil? %>
+                <%if current_user.email == comment.creator%>
+                  <%=link_to comment.creator, myprofile_path%> 
+                <%else%>
+                  <%=link_to comment.creator, userprofile_path(:user_id => comment.creator)%> 
+                <%end%>
+              <%else%>
+                <%=link_to comment.creator, userprofile_path(:user_id => comment.creator)%>
+              <%end%>
+              <%= render 'comments/timer', comment: comment %> 
+              |
+              <%= link_to 'comments', comment%>
+              <% if !current_user.nil? && comment.checkIfMine(current_user.email) %>
+                 |
+                 <%= link_to 'edit', edit_comment_path(comment)%></td> 
+                 |
+                 <%= link_to 'delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <% end %>
+            </small>
+        </div>
+      </li>
+      <% end %>
+  </ol>
+</div>
+

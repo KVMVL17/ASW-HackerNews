@@ -18,10 +18,19 @@ Rails.application.routes.draw do
   devise_scope :user do
     get 'sign_in', to: 'users/sessions#new', as: :new_user_session
     get 'sign_out', to: 'users/sessions#destroy', as: :destroy_user_session
+    get 'userprofile', to: 'users#userprofile'
+    get 'myprofile', to: 'users#myprofile'
+    put 'updateprofile', to: 'users#updateprofile'
   end
   
   get 'newest', to: 'contributions#newest', as: 'newest'
   get 'submit', to: 'contributions#new', as: 'submit'
+  get 'ask', to: 'contributions#ask', as: 'ask'
+  get 'threads/:id', to: 'contributions#threads', as: 'threads'
+  get 'contributions/user/:id', to: 'contributions#showcontributionsofuser'
+  get 'upvoted/submissions/:id', to: 'contributions#upvoted_submissions'
+  get 'upvoted/comments/:id', to: 'contributions#upvoted_comments'
+
   put 'like/:id', to: 'contributions#like', as: 'like'
   put 'dislike/:id', to: 'contributions#dislike', as: 'dislike'
   put 'comments/like/:id', to: 'comments#like', as: 'like_comment'
@@ -30,6 +39,7 @@ Rails.application.routes.draw do
   put 'replies/dislike/:id', to: 'replies#dislike', as: 'dislike_reply'
 
   resources :contributions, :path => "/"
-  resources :users
   
+  resources :users 
+    
 end

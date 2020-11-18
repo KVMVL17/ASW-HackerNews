@@ -10,11 +10,21 @@ class CommentsController < ApplicationController
   # GET /comments/1
   # GET /comments/1.json
   def show
+    @reply = Reply.new
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
   end
 
   # GET /comments/new
   def new
-    @comment = Comment.new
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @comment = Comment.new
+    end 
   end
 
   # GET /comments/1/edit
@@ -24,17 +34,20 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
-    @comment = Comment.new(create_new_params)
-    @comment.creator = current_user.email
-    
-    respond_to do |format|
-      if @comment.save
-        logger.debug "este es el comment: #{@comment.inspect}"
-        format.html { redirect_back(fallback_location: root_path)}
-        #format.json { render :show, status: :created, location: @comment }
-      else
-        format.html { render show_contribution_url(params[:contribution_id]) }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @comment = Comment.new(create_new_params)
+      @comment.creator = current_user.email
+      @contribution = @comment.contribution
+      
+      respond_to do |format|
+        if @comment.save
+          format.html { redirect_back(fallback_location: root_path) }
+        else
+          format.html { redirect_to @contribution, notice: "Comment can't be blank" }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -58,7 +71,7 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy
     respond_to do |format|
-      format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
+      format.html { redirect_back(fallback_location: root_path) }
       format.json { head :no_content }
     end
   end
@@ -73,6 +86,9 @@ class CommentsController < ApplicationController
       @comment.points += 1
       @comment.save
       @like.save
+      @user = User.find_by_email(@comment.creator)
+      @user.karma += 1
+      @user.save
     end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
@@ -81,7 +97,6 @@ class CommentsController < ApplicationController
     end
   end
   
-  
   def dislike
     @comment = Comment.find(params[:id])
     @like = Like.where(comment_id: @comment.id, user_id: current_user.id).first
@@ -89,6 +104,9 @@ class CommentsController < ApplicationController
       @like.delete
       @comment.points -= 1
       @comment.save
+      @user = User.find_by_email(@comment.creator)
+      @user.karma -= 1
+      @user.save
     end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }

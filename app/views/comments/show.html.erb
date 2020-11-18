@@ -1,9 +1,66 @@
-<p id="notice"><%= notice %></p>
+<%= render "layouts/header" %>
 
-<p>
-  <strong>Creator:</strong>
-  <%= @comment.creator %>
-</p>
+<% def show_replies(rep)
+    rep.replies.each do |reply| %>
+<div>
+  <div>
+    <small>                
+      <% if !current_user.nil? %>
+        <% if @likes.find_by_reply_id(reply.id).blank?%>
+          <%= link_to '▲','/replies/like/'+ reply.id.to_s, method: :put%>
+        <%else %>
+          <%= link_to '▼','/replies/dislike/'+ reply.id.to_s, method: :put%>
+        <%end%>
+      <%else%>
+        <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+      <%end%>
+      <%=reply.points%> points by <a><%= reply.creator %></a>
+      <%= render 'comments/timer', comment: reply %> | 
+      <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
+        <%= link_to 'edit', edit_reply_path(reply)%></td> 
+        |
+        <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </small>
+  </div>
+  <div class="pad-comment">
+    <%= reply.content%>
+  </div>
+  <div>
+    <div class="pad-comment">
+      <small><%= link_to 'Reply', reply %></small>
+    </div>
+  </div>
+</div>
 
-<%= link_to 'Edit', edit_comment_path(@comment) %> |
-<%= link_to 'Back', comments_path %>
+  <% if reply.replies.any? %>
+    <ul><% show_replies(reply) %></ul>
+<% end %>
+<% end; nil end %>
+
+<div class="content">
+    <p id="notice"><%= notice %></p>
+    <div class="marginleft15">
+        <div class="inline">
+          <small>
+            <% if !current_user.nil? %>
+              <% if @likes.find_by_comment_id(@comment.id).blank?%>
+                <%= link_to '▲','like/'+ @comment.id.to_s, method: :put%>
+              <%else %> 
+                <%= link_to '▼','dislike/'+ @comment.id.to_s, method: :put%>
+              <%end%>
+            <%else%>
+              <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+            <%end%>
+            <%=@comment.points%> points by <%=@comment.creator%> 
+            <%= render 'comments/timer', comment: @comment %> |
+            <%= link_to 'parent', @comment.contribution %> | on: 
+            <%= link_to @comment.contribution.title, @comment.contribution %>
+          </small>
+          <br>
+          <%= @comment.content %>
+          <%= render 'replies/form', reply: @reply %>
+        </div>
+    </div>
+    <ul><%= show_replies(@comment) %></ul>
+</div>

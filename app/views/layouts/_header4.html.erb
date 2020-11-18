@@ -9,14 +9,16 @@
     <% else %>
       <%= link_to 'threads', "/threads/"+current_user.id.to_s %> |
     <% end %>
-    <%= link_to 'submit', "/submit" %>
-    <div class="right">
-      <% if current_user.nil? %>
-         <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
-      <% else %>
-         <%= link_to current_user.email, myprofile_path %>(<%= current_user.karma %>) |
-         <%= link_to "sign out", "/sign_out" %>
-      <% end %>
+    <%= link_to 'submit', "/submit" %> | 
+    <h> <%= username  %>'s upvoted comments </h>
+       <div class="right">
+         <% if current_user.nil? %>
+           <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
+          <% else %>
+            <%= link_to current_user.email, myprofile_path %>(<%= current_user.karma %>) |
+            <%= link_to "sign out", "/sign_out" %>
+          <% end %>
+       </div>
     </div>
   </div>
 </div>

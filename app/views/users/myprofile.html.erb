@@ -1,0 +1,42 @@
+<%= form_with(model: @updateduser , local: true, url: updateprofile_path , method: :put) do |form| %>
+<%= render "layouts/header" %>
+<div class="content">
+  <div>
+    user:&emsp;&emsp;&emsp;
+    <%=link_to @user.email ,myprofile_path , class:"owner"%>
+  </div>
+  <div>
+    created:&emsp;&nbsp;
+    <%= @user.created_at.strftime("%B, %d, %Y")%>
+  </div>
+  <div>
+    karma:&emsp;&nbsp;&nbsp;
+    <%= @user.karma %>
+  </div>
+  <div>
+    about:&emsp;&emsp;
+    <%= form.text_area(:about ,size: '60x6', :value => @user.about) %>
+  </div>
+  <div>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+    <%= link_to 'submissions', "/contributions/user/"+ @user.id.to_s  %>
+  </div>
+  <div>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+    <%= link_to 'comments', "/threads/"+@user.id.to_s%>
+  </div>
+  <div>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+    <%= link_to 'upvoted submissions', "/upvoted/submissions/"+@user.id.to_s%>
+  </div>
+  <div>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+    <%= link_to 'upvoted comments', "/upvoted/comments/"+@user.id.to_s%>
+  </div>
+  <div class="actions">
+    <%= form.submit "update" %>
+  </div>
+</div>
+<% end %>
+  
+

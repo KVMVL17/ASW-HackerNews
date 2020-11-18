@@ -3,7 +3,7 @@
 <div class="content">
 
   <p id="notice"><%= notice %></p>
-  
+
   <ol class="inline gap">
     <% @contributions.each do |contribution| %>
       <li>
@@ -19,9 +19,7 @@
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
            </small>
-           <a href="<%= contribution.url %>"><%= contribution.title %>
-            <small>(<%= contribution.url %>)</small>
-           </a>
+           <%= link_to contribution.title, contribution%>
         </div>
         <div>
             <small class="leftmar">
@@ -31,7 +29,6 @@
               <%else%>
                   <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%> 
               <%end%>
-              
               <%= render 'timer', contribution: contribution %> 
               |
               <%= link_to contribution.numberOfComments(contribution.comments, 0).to_s+' comments', contribution%>
@@ -44,6 +41,6 @@
             </small>
         </div>
       </li>
-      <% end %>
+    <% end %>
   </ol>
 </div>

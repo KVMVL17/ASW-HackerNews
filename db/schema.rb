@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 2020_11_15_165129) do
 
   create_table "likes", force: :cascade do |t|
     t.integer "contribution_id"
+    t.integer "comment_id"
+    t.integer "reply_id"
     t.integer "user_id"
   end
 
