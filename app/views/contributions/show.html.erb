@@ -47,14 +47,14 @@
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
           </small>
-          <a href="<%= @contribution.url %>"><%= @contribution.title %>
+          <a id="esl" href="<%= @contribution.url %>"><%= @contribution.title %>
             <% if !@contribution.url.blank? %>
               <small>(<%= @contribution.url %>)</small>
             <% end %>
           </a>
         </div>
-        <div>
-          <small class="leftmar">
+        <div class="leftmar">
+          <small>
             <%=@contribution.points%> points by <%=@contribution.creator%> 
             <%= render 'timer', contribution: @contribution %> 
             |
@@ -66,43 +66,44 @@
                <%= link_to 'delete', @contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
             <% end %>
           </small>
+          <p><%= @contribution.text %></p>
         </div>
-          <%= @contribution.text %>
-        <div>
+        <div class="leftmar">
           <%= render "comments/form" %>
         </div>
-        
+        <br>
         <div style="margin-top: 10px;">
           
           <% @coments.each do |comment| %>
-            <div> 
-             <small> 
-               <% if !current_user.nil? %>
-                <% if @likes.find_by_comment_id(comment.id).blank?%>
-                  <%= link_to '▲','comments/like/'+ comment.id.to_s, method: :put%>
-                <%else %> 
-                  <%= link_to '▼','comments/dislike/'+ comment.id.to_s, method: :put%>
-                <%end%>
-               <%else%>
-                <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
-               <%end%>
-                 <%=comment.points%> points by <a><%= comment.creator %></a>
-                 <%= render 'comments/timer', comment: comment %> 
-               </small>
-             </div>
-            <div class="pad-comment">
-              <%= comment.content%>
-            </div>
-            <div><small>
-              <div class="pad-comment">
-                <%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
+            <div>
+              <div style="margin-bottom: 2px"> 
+               <small> 
+                 <% if !current_user.nil? %>
+                  <% if @likes.find_by_comment_id(comment.id).blank?%>
+                    <%= link_to '▲','comments/like/'+ comment.id.to_s, method: :put%>
+                  <%else %> 
+                    <%= link_to '▼','comments/dislike/'+ comment.id.to_s, method: :put%>
+                  <%end%>
+                 <%else%>
+                  <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+                 <%end%>
+                   <%=comment.points%> points by <a><%= comment.creator %></a>
+                   <%= render 'comments/timer', comment: comment %> 
+                 </small>
+               </div>
+              <div class="pad-comment" style="margin-bottom: 3px">
+                <%= comment.content%>
               </div>
               <div>
-               <ul><%= show_replies(comment) %></ul>
+                <div class="pad-comment">
+                  <small><%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
+                </div>
+                <div>
+                 <ul><%= show_replies(comment) %></ul>
+                </div>
               </div>
             </div>
-            <br>
-        <% end %>
-      </div>
+          <% end %>
+        </div>
     </div>
 </div>
