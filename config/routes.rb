@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   
   get 'newest', to: 'contributions#newest', as: 'newest'
   get 'submit', to: 'contributions#new', as: 'submit'
+  get 'ask', to: 'contributions#ask', as: 'ask'
+  get 'threads', to: 'contributions#threads', as: 'threads'
   put 'like/:id', to: 'contributions#like', as: 'like'
   put 'dislike/:id', to: 'contributions#dislike', as: 'dislike'
   put 'comments/like/:id', to: 'comments#like', as: 'like_comment'
