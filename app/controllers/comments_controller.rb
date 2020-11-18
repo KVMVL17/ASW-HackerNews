@@ -87,6 +87,9 @@ class CommentsController < ApplicationController
       @comment.points += 1
       @comment.save
       @like.save
+      @user = User.find_by_email(@comment.creator)
+      @user.karma += 1
+      @user.save
     end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }
@@ -103,6 +106,9 @@ class CommentsController < ApplicationController
       @like.delete
       @comment.points -= 1
       @comment.save
+      @user = User.find_by_email(@comment.creator)
+      @user.karma -= 1
+      @user.save
     end
     respond_to do |format|
       format.html { redirect_back(fallback_location: root_path) }

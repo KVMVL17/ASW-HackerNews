@@ -18,10 +18,14 @@
             <%else%>
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
-           </small>
-           <a href="<%= contribution.url %>"><%= contribution.title %>
-            <small>(<%= contribution.url %>)</small>
-           </a>
+            </small>
+            <% if contribution.text_is_blank? %>
+              <a href="<%= contribution.url %>"><%= contribution.title %>
+                <small>(<%= contribution.url %>)</small>
+              </a>
+            <% else %>
+              <%= link_to contribution.title, contribution%>
+            <% end %>
         </div>
         <div>
             <small>
@@ -33,7 +37,6 @@
                   <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%> 
                 <%end%>
               <%else%>
-                <% puts " elseeee" %>
                 <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%>
               <%end%>
               <%= render 'timer', contribution: contribution %> 
@@ -41,7 +44,7 @@
               <%= link_to contribution.numberOfComments(contribution.comments, 0).to_s+' comments', contribution%>
               |
               <% if !current_user.nil? && contribution.checkIfMine(current_user.email) %>
-                 <%= link_to 'Edit', edit_contribution_path(contribution)%></td> 
+                 <%= link_to 'edit', edit_contribution_path(contribution)%></td> 
                  |
                  <%= link_to 'delete', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
               <% end %>

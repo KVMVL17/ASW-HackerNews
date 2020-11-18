@@ -27,7 +27,7 @@
         <% if !edit %>
           <%= form.text_field :url,  size: 60 %>
         <% else %>
-          <%= @contribution.url %>
+          <%= link_to @contribution.url, @contribution.url %>
         <% end %>
       </div>
 

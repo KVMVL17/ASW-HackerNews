@@ -14,7 +14,12 @@
       <%else%>
         <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
       <%end%>
-      <%=reply.points%> points by <a><%= reply.creator %></a>
+      <%=reply.points%> points by 
+      <% if !current_user.nil? && current_user.email == reply.creator %>
+        <%=link_to reply.creator, myprofile_path%> 
+      <%else%>
+        <%=link_to reply.creator, userprofile_path(:user_id => reply.creator)%> 
+      <%end%>
       <%= render 'comments/timer', comment: reply %> | 
       <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
         <%= link_to 'edit', edit_reply_path(reply)%></td> 
@@ -51,7 +56,12 @@
             <%else%>
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
-            <%=@reply.points%> points by <%=@reply.creator%> 
+            <%=@reply.points%> points by 
+            <% if !current_user.nil? && current_user.email == @reply.creator %>
+              <%=link_to @reply.creator, myprofile_path%> 
+            <%else%>
+              <%=link_to @reply.creator, userprofile_path(:user_id => @reply.creator)%> 
+            <%end%>
             <%= render 'comments/timer', comment: @reply %> |
             <% if @reply.comment_id.nil? %>
               <%= link_to 'parent', Reply.find(@reply.reply_id) %> | on: 

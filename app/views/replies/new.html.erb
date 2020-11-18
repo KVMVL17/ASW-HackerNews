@@ -14,7 +14,12 @@
             <%else%>
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
-            <%=@comment.points%> points by <%=@comment.creator%> 
+            <%=@comment.points%> points by 
+            <% if !current_user.nil? && current_user.email == @comment.creator %>
+              <%=link_to @comment.creator, myprofile_path%> 
+            <%else%>
+              <%=link_to @comment.creator, userprofile_path(:user_id => @comment.creator)%> 
+            <%end%>
             <%= render 'comments/timer', comment: @comment %> |
             <%= link_to 'parent', @contribution %> | on: 
             <%= link_to @contribution.title, @contribution %>

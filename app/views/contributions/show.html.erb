@@ -13,7 +13,12 @@
           <%else%>
             <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
           <%end%>
-          <%=reply.points%> points by <a><%= reply.creator %></a>
+          <%=reply.points%> points by 
+          <% if !current_user.nil? && current_user.email == reply.creator %>
+            <%=link_to reply.creator, myprofile_path%> 
+          <%else%>
+            <%=link_to reply.creator, userprofile_path(:user_id => reply.creator)%> 
+          <%end%>
           <%= render 'comments/timer', comment: reply %> | 
           <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
             <%= link_to 'edit', edit_reply_path(reply)%></td> 
@@ -62,7 +67,12 @@
         </div>
         <div class="leftmar">
           <small>
-            <%=@contribution.points%> points by <%=@contribution.creator%> 
+            <%=@contribution.points%> points by 
+            <% if !current_user.nil? && current_user.email == @contribution.creator %>
+              <%=link_to @contribution.creator, myprofile_path%> 
+            <%else%>
+              <%=link_to @contribution.creator, userprofile_path(:user_id => @contribution.creator)%> 
+            <%end%>
             <%= render 'timer', contribution: @contribution %> 
             |
             <%= link_to 'comments', @contribution%>
@@ -94,17 +104,22 @@
                 <%else %> 
                   <%= link_to '▼','comments/dislike/'+ comment.id.to_s, method: :put%>
                 <%end%>
-               <%else%>
-                <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
-               <%end%>
-                 <%=comment.points%> points by <a><%= comment.creator %></a>
-                 <%= render 'comments/timer', comment: comment %> | 
-                 <% if !current_user.nil? && comment.checkIfMine(current_user.email) %>
-                    <%= link_to 'edit', edit_comment_path(comment)%></td> 
-                    |
-                    <%= link_to 'delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-               <% end %>
-             </small>
+                <%else%>
+                  <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+                <%end%>
+                <%=comment.points%> points by
+                <% if !current_user.nil? && current_user.email == comment.creator %>
+                  <%=link_to comment.creator, myprofile_path%> 
+                <%else%>
+                  <%=link_to comment.creator, userprofile_path(:user_id => comment.creator)%> 
+                <%end%>
+                <%= render 'comments/timer', comment: comment %> | 
+                <% if !current_user.nil? && comment.checkIfMine(current_user.email) %>
+                  <%= link_to 'edit', edit_comment_path(comment)%></td> 
+                  |
+                  <%= link_to 'delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                <% end %>
+              </small>
             </div>
             <div class="pad-comment" style="margin-bottom: 3px">
               <%= comment.content%>
