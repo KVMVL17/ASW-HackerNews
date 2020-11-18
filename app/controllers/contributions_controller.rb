@@ -166,6 +166,20 @@ class ContributionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  
+  def showcontributionsofuser
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
+    @User = User.find(params[:id])
+    @contributions = Contribution.where(creator: @User.email)
+    respond_to do |format|
+      format.html { render "contributionsofuser" }
+    end 
+  end
     
 
   private

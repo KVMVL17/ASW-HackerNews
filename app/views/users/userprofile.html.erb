@@ -1,0 +1,32 @@
+<%= render "layouts/header" %>
+<div class="content">
+  <div>
+    user:&emsp;&nbsp;&nbsp;
+    <%= @user.email%>
+  </div>
+  <div>
+    created:
+    <%= @user.created_at.strftime("%B, %d, %Y")%>
+  </div>
+  <div>
+    karma:&nbsp;
+    <%= @user.karma %>
+  </div>
+  <div>
+    about:&nbsp;&nbsp;
+    <%= @user.about %>
+  </div>
+  <div>
+    &emsp;&emsp;&emsp;&emsp;
+    <%= link_to 'submissions',"/contributions/user/"+ @user.id.to_s %>
+  </div>
+      
+  <div>
+    &emsp;&emsp;&emsp;&emsp;
+    <%= link_to 'comments' %>
+  </div>
+
+
+
+
+

@@ -1,4 +1,4 @@
-<%= render "layouts/header" %>
+<%= render "layouts/header2", username: @User.email%>
 
 <div class="content">
 
@@ -24,7 +24,7 @@
            </a>
         </div>
         <div>
-            <small class="leftmar">
+            <small>
               <%=contribution.points%> points by
               <% if !current_user.nil? %>
                 <%if current_user.email == contribution.creator%>
@@ -33,6 +33,7 @@
                   <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%> 
                 <%end%>
               <%else%>
+                <% puts " elseeee" %>
                 <%=link_to contribution.creator, userprofile_path(:user_id => contribution.creator)%>
               <%end%>
               <%= render 'timer', contribution: contribution %> 
@@ -40,7 +41,7 @@
               <%= link_to contribution.numberOfComments(contribution.comments, 0).to_s+' comments', contribution%>
               |
               <% if !current_user.nil? && contribution.checkIfMine(current_user.email) %>
-                 <%= link_to 'edit', edit_contribution_path(contribution)%></td> 
+                 <%= link_to 'Edit', edit_contribution_path(contribution)%></td> 
                  |
                  <%= link_to 'delete', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
               <% end %>
@@ -50,3 +51,4 @@
       <% end %>
   </ol>
 </div>
+
