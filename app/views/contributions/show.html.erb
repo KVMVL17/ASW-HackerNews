@@ -107,14 +107,11 @@
             <div class="pad-comment" style="margin-bottom: 3px">
               <%= comment.content%>
             </div>
-            <div><small>
+            <div>
               <div class="pad-comment">
-                <%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
+               <small><%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
               </div>
               <div>
-                <div class="pad-comment">
-                  <small><%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
-                </div>
                 <div>
                  <ul style="margin-top: 3px"><%= show_replies(comment) %></ul>
                 </div>
