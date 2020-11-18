@@ -55,17 +55,13 @@ class ContributionsController < ApplicationController
   end
   
   def threads
-    if current_user.nil?
-      redirect_to user_google_oauth2_omniauth_authorize_path
-    else
       @user = User.find(params[:id])
       @comments = Comment.where(creator: @user.email).order(points: :desc)
       @like = Like.new
-      @likes = Like.new
+      @likes = Like.none
       if !current_user.nil?
         @likes = Like.where(user_id: current_user.id)
       end
-    end
   end
   
   def upvoted_comments
