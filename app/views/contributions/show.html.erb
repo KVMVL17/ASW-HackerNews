@@ -1,32 +1,32 @@
 <% def show_replies(rep)
     rep.replies.each do |reply| %>
-<div>
-  <div>
-    <small>                
-      <% if !current_user.nil? %>
-        <% if @likes.find_by_reply_id(reply.id).blank?%>
-          <%= link_to '▲','replies/like/'+ reply.id.to_s, method: :put%>
-        <%else %>
-          <%= link_to '▼','replies/dislike/'+ reply.id.to_s, method: :put%>
-        <%end%>
-      <%else%>
-        <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
-      <%end%>
-      <%=reply.points%> points by <a><%= reply.creator %></a>
-      <%= render 'comments/timer', comment: reply %>  </small>
-  </div>
-  <div class="pad-comment">
-    <%= reply.content%>
-  </div>
-  <div>
-    <div class="pad-comment">
-      <small><%= link_to 'Reply', reply %></small>
+    <div>
+      <div style="margin-bottom: 2px">
+        <small>                
+          <% if !current_user.nil? %>
+            <% if @likes.find_by_reply_id(reply.id).blank?%>
+              <%= link_to '▲','replies/like/'+ reply.id.to_s, method: :put%>
+            <%else %>
+              <%= link_to '▼','replies/dislike/'+ reply.id.to_s, method: :put%>
+            <%end%>
+          <%else%>
+            <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+          <%end%>
+          <%=reply.points%> points by <a><%= reply.creator %></a>
+          <%= render 'comments/timer', comment: reply %>  </small>
+      </div>
+      <div class="pad-comment" style="margin-bottom: 3px">
+        <%= reply.content%>
+      </div>
+      <div>
+        <div class="pad-comment">
+          <small><%= link_to 'Reply', reply %></small>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-  <% if reply.replies.any? %>
-    <ul><% show_replies(reply) %></ul>
+<% if reply.replies.any? %>
+  <ul><% show_replies(reply) %></ul>
 <% end %>
 <% end; nil end %>
 
@@ -72,10 +72,9 @@
           <%= render "comments/form" %>
         </div>
         <br>
-        <div style="margin-top: 10px;">
-          
+        <div>
           <% @coments.each do |comment| %>
-            <div>
+            <div style="margin-top: 15px">
               <div style="margin-bottom: 2px"> 
                <small> 
                  <% if !current_user.nil? %>
@@ -99,7 +98,7 @@
                   <small><%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
                 </div>
                 <div>
-                 <ul><%= show_replies(comment) %></ul>
+                 <ul style="margin-top: 3px"><%= show_replies(comment) %></ul>
                 </div>
               </div>
             </div>

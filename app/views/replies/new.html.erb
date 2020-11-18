@@ -19,10 +19,10 @@
             <%= link_to 'parent', @contribution %> | on: 
             <%= link_to @contribution.title, @contribution %>
           </small>
-          <br>
-          <%= @comment.content %>
-          <%= render 'form', reply: @reply %>
         </div>
+        <div class="leftmar">
+            <p style="margin-top: 5px"><%= @comment.content %></p>
+            <%= render 'form', reply: @reply %>
+         </div>
     </div>
-        
 </div>
