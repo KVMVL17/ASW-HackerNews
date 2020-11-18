@@ -1,5 +1,42 @@
 <%= render "layouts/header" %>
 
+<% def show_replies(rep)
+    rep.replies.each do |reply| %>
+<div>
+  <div>
+    <small>                
+      <% if !current_user.nil? %>
+        <% if @likes.find_by_reply_id(reply.id).blank?%>
+          <%= link_to '▲','like/'+ reply.id.to_s, method: :put%>
+        <%else %>
+          <%= link_to '▼','dislike/'+ reply.id.to_s, method: :put%>
+        <%end%>
+      <%else%>
+        <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+      <%end%>
+      <%=reply.points%> points by <a><%= reply.creator %></a>
+      <%= render 'comments/timer', comment: reply %> | 
+      <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
+        <%= link_to 'edit', edit_reply_path(reply)%></td> 
+        |
+        <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>  </small>
+  </div>
+  <div class="pad-comment">
+    <%= reply.content%>
+  </div>
+  <div>
+    <div class="pad-comment">
+      <small><%= link_to 'Reply', reply %></small>
+    </div>
+  </div>
+</div>
+
+  <% if reply.replies.any? %>
+    <ul><% show_replies(reply) %></ul>
+<% end %>
+<% end; nil end %>
+
 <div class="content">
     <p id="notice"><%= notice %></p>
     <div class="marginleft15">
@@ -16,7 +53,11 @@
             <%end%>
             <%=@reply.points%> points by <%=@reply.creator%> 
             <%= render 'comments/timer', comment: @reply %> |
-            <%= link_to 'parent' %> | on: 
+            <% if @reply.comment_id.nil? %>
+              <%= link_to 'parent', Reply.find(@reply.reply_id) %> | on: 
+            <% else %>
+              <%= link_to 'parent', @reply.comment %> | on: 
+            <% end %>
             <%= link_to Contribution.find(@reply.findContribution(@reply.id)).title, 
                 Contribution.find(@reply.findContribution(@reply.id)) %>
           </small>
@@ -25,5 +66,7 @@
           <%= render 'form2', reply: @reply, replyChild: @replyChild %>
         </div>
     </div>
-        
+    
+    <ul><%= show_replies(@reply) %></ul>
+
 </div>

@@ -9,4 +9,8 @@ class Reply < ApplicationRecord
     end
     return reply.comment.contribution_id
   end
+  
+  def checkIfMine(username)
+    username == creator
+  end
 end

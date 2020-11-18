@@ -19,13 +19,7 @@
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
            </small>
-           <% if contribution.text_is_blank? %>
-             <a href="<%= contribution.url %>"><%= contribution.title %>
-              <small>(<%= contribution.url %>)</small>
-             </a>
-           <% else %>
-             <%= link_to contribution.title, contribution%>
-           <% end %>
+           <%= link_to contribution.title, contribution%>
         </div>
         <div>
             <small class="leftmar">

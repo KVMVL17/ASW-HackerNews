@@ -4,6 +4,8 @@
   <div class="links">
     <a href="/newest">new</a></span> |
     <a href="/submit">submit</a></span> |
+    <a href="/ask">ask</a></span> | 
+    <a href="/threads">threads</a></span> |
     <% if current_user.nil? %>
       <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
     <% else %>

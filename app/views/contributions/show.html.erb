@@ -13,7 +13,13 @@
         <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
       <%end%>
       <%=reply.points%> points by <a><%= reply.creator %></a>
-      <%= render 'comments/timer', comment: reply %>  </small>
+      <%= render 'comments/timer', comment: reply %> | 
+      <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
+        <%= link_to 'edit', edit_reply_path(reply)%></td> 
+        |
+        <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+      </small>
   </div>
   <div class="pad-comment">
     <%= reply.content%>
@@ -61,7 +67,11 @@
             <%= link_to 'comments', @contribution%>
             <% if !current_user.nil? && @contribution.checkIfMine(current_user.email) %>
                |
-               <%= link_to 'edit', edit_contribution_path(@contribution)%></td> 
+               <% if @contribution.text_is_blank? %>
+                 <%= link_to 'edit', edit_contribution_path(@contribution, has_url: true)%></td>
+                <% else %>
+                 <%= link_to 'edit', edit_contribution_path(@contribution, has_url: false)%></td>
+                <% end %> 
                |
                <%= link_to 'delete', @contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
             <% end %>
@@ -87,7 +97,12 @@
                 <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
                <%end%>
                  <%=comment.points%> points by <a><%= comment.creator %></a>
-                 <%= render 'comments/timer', comment: comment %> 
+                 <%= render 'comments/timer', comment: comment %> | 
+                 <% if !current_user.nil? && comment.checkIfMine(current_user.email) %>
+                    <%= link_to 'edit', edit_comment_path(comment)%></td> 
+                    |
+                    <%= link_to 'delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                 <% end %>
                </small>
              </div>
             <div class="pad-comment">
