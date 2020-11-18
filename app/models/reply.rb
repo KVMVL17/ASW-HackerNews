@@ -1,4 +1,5 @@
 class Reply < ApplicationRecord
+  validates_presence_of :content
   belongs_to  :comment, optional: true
   has_many :replies, dependent: :destroy
   has_many :likes, dependent: :destroy

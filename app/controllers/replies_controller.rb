@@ -56,7 +56,7 @@ class RepliesController < ApplicationController
           format.html { redirect_to "/"+ @reply.findContribution(@reply.id)}
           format.json { render :show, status: :created, location: @reply }
         else
-          format.html { render :new }
+          format.html { redirect_to Reply.find(@reply.reply_id), notice: "Reply can't be blank" }
           format.json { render json: @reply.errors, status: :unprocessable_entity }
         end
       end
@@ -75,7 +75,7 @@ class RepliesController < ApplicationController
           format.html { redirect_to "/"+ @reply.comment.contribution.id.to_s }
           format.json { render :show, status: :created, location: @reply }
         else
-          format.html { render :new }
+          format.html { redirect_to @reply.comment, notice: "Reply can't be blank" }
           format.json { render json: @reply.errors, status: :unprocessable_entity }
         end
       end
