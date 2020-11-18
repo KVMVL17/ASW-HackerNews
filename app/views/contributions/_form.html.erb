@@ -4,7 +4,6 @@
     <% if contribution.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(contribution.errors.count, "error") %> prohibited this contribution from being saved:</h2>
-  
         <ul>
           <% contribution.errors.full_messages.each do |message| %>
             <li><%= message %></li>
@@ -24,24 +23,32 @@
         <div class="label-container">
           <%= form.label :url %>
         </div>
-        <%= form.text_field :url,  size: 60 %>
+        
+        <% if !edit %>
+          <%= form.text_field :url,  size: 60 %>
+        <% else %>
+          <%= @contribution.url %>
+        <% end %>
       </div>
-      
-      <p class="note"><b>or</b></p>
-      
-      <div class="field">
-        <div class="content-title">
-          <%= form.label :text %>
+
+      <% if @contribution.url.blank? || !edit %>
+        <p class="note"><b>or</b></p>
+        <div class="field">
+          <div class="content-title">
+            <%= form.label :text %>
+          </div>
+          <div class="content-text"><%= form.text_area :text, cols: "60", rows: "5" %></div>
         </div>
-        <div class="content-text"><%= form.text_area :text, cols: "60", rows: "5" %></div>
-      </div>
+      <% end %>
+        
       
       <div class="actions button-container">
         <%= form.submit %>
       </div>
-
-      <p class="note">Leave url blank to submit a question for discussion. If there is no url, the text (if any) will appear at the top of the thread.</p>
       
+      <% if !edit %>
+        <p class="note">Leave url blank to submit a question for discussion. If there is no url, the text (if any) will appear at the top of the thread.</p>
+      <% end %>
   <% end %>
   
 </div>

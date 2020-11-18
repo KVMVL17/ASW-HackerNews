@@ -28,16 +28,16 @@
            <% end %>
         </div>
         <div>
-            <small>
+            <small class="leftmar">
               <%=contribution.points%> points by <%=contribution.creator%> 
               <%= render 'timer', contribution: contribution %> 
               |
               <%= link_to contribution.numberOfComments(contribution.comments, 0).to_s+' comments', contribution%>
               |
               <% if !current_user.nil? && contribution.checkIfMine(current_user.email) %>
-                 <%= link_to 'Edit', edit_contribution_path(contribution)%></td> 
+                 <%= link_to 'edit', edit_contribution_path(contribution)%></td> 
                  |
-                 <%= link_to 'Destroy', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                 <%= link_to 'delete', contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
               <% end %>
             </small>
         </div>

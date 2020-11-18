@@ -44,9 +44,32 @@ class ContributionsController < ApplicationController
       @likes = Like.where(user_id: current_user.id)
     end
   end
+  
+  def ask
+    @contributions = Contribution.where(url: "").order(points: :desc)
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
+  end
+  
+  def threads
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @comments = Comment.where(creator: current_user.email).order(points: :desc)
+      @like = Like.new
+      @likes = Like.new
+      if !current_user.nil?
+        @likes = Like.where(user_id: current_user.id)
+      end
+    end
+  end
 
   # GET /contributions/1/edit
   def edit
+    @ask = params[:ask]
   end
 
   # POST /contributions
@@ -88,7 +111,8 @@ class ContributionsController < ApplicationController
   def update
     respond_to do |format|
       if @contribution.update(contribution_params)
-        format.html { redirect_to @contribution, notice: 'Contribution was successfully updated.' }
+        contribution_params[:text] = ""
+        format.html { redirect_to :newest }
         format.json { render :show, status: :ok, location: @contribution }
       else
         format.html { render :edit }
@@ -103,7 +127,7 @@ class ContributionsController < ApplicationController
     @contribution.destroy
     puts root_path
     respond_to do |format|
-      format.html { redirect_back(fallback_location: root_path) }
+      format.html { redirect_to :newest }
       format.html { notice 'Contribution was successfully destroyed.' }
       format.json { head :no_content }
     end
