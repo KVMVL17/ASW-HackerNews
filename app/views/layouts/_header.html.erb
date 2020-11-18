@@ -4,14 +4,16 @@
   <div class="links">
     <a href="/newest">new</a></span> |
     <a href="/submit">submit</a></span> |
-    <% if current_user.nil? %>
-      <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
-    <% else %>
-       <%= link_to "sign out", "/sign_out" %> |
-       <div class="right">
-         <%= current_user.email %>(<%= current_user.karma %>)
-       </div>
-    <% end %>
+    
+     <div class="right">
+       <% if current_user.nil? %>
+          <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
+       <% else %>
+         <%= link_to current_user.email, myprofile_path %>(<%= current_user.karma %>) |
+         <%= link_to "sign out", "/sign_out" %>
+       <% end %>
+     </div
+    
     </div>
   </div>
 </div>

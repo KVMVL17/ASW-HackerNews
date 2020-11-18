@@ -1,0 +1,18 @@
+<div class="header">
+  <div class="links"></div>
+  <a href="/">  <img src="https://news.ycombinator.com/y18.gif" alt="logo"/><h1>Hacker News</h1></a>
+  <div class="links">
+    <a href="/newest">new</a></span> |
+    <a href="/submit">submit</a></span> |
+    <h> <%= username  %>'s submissions </h>
+       <div class="right">
+         <% if current_user.nil? %>
+           <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
+          <% else %>
+            <%= link_to current_user.email, myprofile_path %>(<%= current_user.karma %>) |
+            <%= link_to "sign out", "/sign_out" %>
+          <% end %>
+       </div>
+    </div>
+  </div>
+</div>
