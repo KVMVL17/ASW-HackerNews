@@ -39,14 +39,13 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new(create_new_params)
       @comment.creator = current_user.email
+      @contribution = @comment.contribution
       
       respond_to do |format|
         if @comment.save
-          logger.debug "este es el comment: #{@comment.inspect}"
-          format.html { redirect_back(fallback_location: root_path)}
-          #format.json { render :show, status: :created, location: @comment }
+          format.html { redirect_back(fallback_location: root_path) }
         else
-          format.html { render show_contribution_url(params[:contribution_id]) }
+          format.html { redirect_to @contribution, notice: "Comment can't be blank" }
           format.json { render json: @comment.errors, status: :unprocessable_entity }
         end
       end

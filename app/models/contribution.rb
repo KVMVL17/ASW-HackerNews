@@ -2,7 +2,8 @@ require 'uri'
 
 class Contribution < ApplicationRecord
   validates_presence_of :title
-  validates :url_valid, presence: true
+  validates_presence_of :url_and_text
+  validates :url_is, presence: true
   belongs_to :user, optional: true
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
@@ -10,6 +11,10 @@ class Contribution < ApplicationRecord
   
   def text_is_blank?
     text.blank?
+  end
+  
+  def url_and_text
+    !(url.blank? && text.blank?)
   end
   
   def checkIfMine(username)
@@ -26,7 +31,7 @@ class Contribution < ApplicationRecord
     return suma
   end
   
-  def url_valid
+  def url_is
     url =~ /\A#{URI::regexp(['http', 'https'])}\z/ || url.blank?
   end
 

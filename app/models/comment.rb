@@ -3,6 +3,7 @@ class Comment < ApplicationRecord
   belongs_to  :contribution, optional: true
   has_many :replies, dependent: :destroy
   has_many :likes, dependent: :destroy
+  validates_presence_of :content
     
   def checkIfMine(username)
     username == creator

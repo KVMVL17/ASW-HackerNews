@@ -117,7 +117,7 @@ class ContributionsController < ApplicationController
           format.html { redirect_to :newest }
           format.html { notice 'Contribution was successfully created.' }
         else
-          format.html { render :new }
+          format.html { redirect_to new_contribution_path, notice: "URL not valid" }
           format.json { render json: @contribution.errors, status: :unprocessable_entity }
         end
       end

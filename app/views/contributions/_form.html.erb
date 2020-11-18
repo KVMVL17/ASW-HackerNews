@@ -20,7 +20,6 @@
         <div class="label-container">
           <%= form.label :url %>
         </div>
-        
         <% if !edit %>
           <%= form.text_field :url,  size: 60 %>
         <% else %>
@@ -34,12 +33,11 @@
           <div class="content-title">
             <%= form.label :text %>
           </div>
-          <div class="content-text"><%= form.text_area :text, cols: "60", rows: "5" %></div>
+          <div style="margin-left: 18px" class="content-text"><%= form.text_area :text, cols: "60", rows: "5" %></div>
         </div>
       <% end %>
-        
       
-      <div class="actions button-container">
+      <div style="margin-left: 50px" class="actions">
         <%= form.submit %>
       </div>
       

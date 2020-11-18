@@ -45,31 +45,39 @@ class RepliesController < ApplicationController
   # POST /replies
   # POST /replies.json
   def replyrecursive
-    @reply = Reply.new(reply_params)
-    @reply.creator = current_user.email
-    
-    respond_to do |format|
-      if @reply.save
-        format.html { redirect_to "/"+ @reply.findContribution(@reply.id)}
-        format.json { render :show, status: :created, location: @reply }
-      else
-        format.html { render :new }
-        format.json { render json: @reply.errors, status: :unprocessable_entity }
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @reply = Reply.new(reply_params)
+      @reply.creator = current_user.email
+      
+      respond_to do |format|
+        if @reply.save
+          format.html { redirect_to "/"+ @reply.findContribution(@reply.id)}
+          format.json { render :show, status: :created, location: @reply }
+        else
+          format.html { render :new }
+          format.json { render json: @reply.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
   
   
   def create
-    @reply = Reply.new(reply_params)
-    @reply.creator = current_user.email
-    respond_to do |format|
-      if @reply.save
-        format.html { redirect_to "/"+ @reply.comment.contribution.id.to_s }
-        format.json { render :show, status: :created, location: @reply }
-      else
-        format.html { render :new }
-        format.json { render json: @reply.errors, status: :unprocessable_entity }
+    if current_user.nil?
+      redirect_to user_google_oauth2_omniauth_authorize_path
+    else
+      @reply = Reply.new(reply_params)
+      @reply.creator = current_user.email
+      respond_to do |format|
+        if @reply.save
+          format.html { redirect_to "/"+ @reply.comment.contribution.id.to_s }
+          format.json { render :show, status: :created, location: @reply }
+        else
+          format.html { render :new }
+          format.json { render json: @reply.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
