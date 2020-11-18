@@ -1,7 +1,8 @@
 <% def show_replies(rep)
     rep.replies.each do |reply| %>
+
 <div>
-  <div>
+  <div style="margin-bottom: 2px">
     <small>                
       <% if !current_user.nil? %>
         <% if @likes.find_by_reply_id(reply.id).blank?%>
@@ -21,18 +22,16 @@
       <% end %>
       </small>
   </div>
-  <div class="pad-comment">
+  <div class="pad-comment" style="margin-bottom: 3px">
     <%= reply.content%>
   </div>
   <div>
     <div class="pad-comment">
       <small><%= link_to 'Reply', reply %></small>
-    </div>
-  </div>
 </div>
 
-  <% if reply.replies.any? %>
-    <ul><% show_replies(reply) %></ul>
+<% if reply.replies.any? %>
+  <ul><% show_replies(reply) %></ul>
 <% end %>
 <% end; nil end %>
 
@@ -53,14 +52,14 @@
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
           </small>
-          <a href="<%= @contribution.url %>"><%= @contribution.title %>
+          <a id="esl" href="<%= @contribution.url %>"><%= @contribution.title %>
             <% if !@contribution.url.blank? %>
               <small>(<%= @contribution.url %>)</small>
             <% end %>
           </a>
         </div>
-        <div>
-          <small class="leftmar">
+        <div class="leftmar">
+          <small>
             <%=@contribution.points%> points by <%=@contribution.creator%> 
             <%= render 'timer', contribution: @contribution %> 
             |
@@ -76,16 +75,16 @@
                <%= link_to 'delete', @contribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
             <% end %>
           </small>
+          <p><%= @contribution.text %></p>
         </div>
-          <%= @contribution.text %>
-        <div>
+        <div class="leftmar">
           <%= render "comments/form" %>
         </div>
-        
-        <div style="margin-top: 10px;">
-          
+        <br>
+        <div>
           <% @coments.each do |comment| %>
-            <div> 
+           <div style="margin-top: 15px">
+            <div style="margin-bottom: 2px"> 
              <small> 
                <% if !current_user.nil? %>
                 <% if @likes.find_by_comment_id(comment.id).blank?%>
@@ -105,7 +104,7 @@
                  <% end %>
                </small>
              </div>
-            <div class="pad-comment">
+            <div class="pad-comment" style="margin-bottom: 3px">
               <%= comment.content%>
             </div>
             <div><small>
@@ -113,11 +112,15 @@
                 <%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
               </div>
               <div>
-               <ul><%= show_replies(comment) %></ul>
+                <div class="pad-comment">
+                  <small><%= link_to 'Reply', new_reply_path(:comment_id => comment.id, :contribution_id => @contribution.id) %></small>
+                </div>
+                <div>
+                 <ul style="margin-top: 3px"><%= show_replies(comment) %></ul>
+                </div>
               </div>
             </div>
-            <br>
-        <% end %>
-      </div>
+          <% end %>
+        </div>
     </div>
 </div>

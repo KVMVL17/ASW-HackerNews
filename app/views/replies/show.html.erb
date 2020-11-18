@@ -61,12 +61,12 @@
             <%= link_to Contribution.find(@reply.findContribution(@reply.id)).title, 
                 Contribution.find(@reply.findContribution(@reply.id)) %>
           </small>
-          <br>
-          <%= @reply.content %>
-          <%= render 'form2', reply: @reply, replyChild: @replyChild %>
+        </div>
+        <div class="leftmar">
+            <p style="margin-top: 5px"><%= @reply.content %></p>
+            <%= render 'form2', reply: @reply, replyChild: @replyChild %>
         </div>
     </div>
-    
     <ul><%= show_replies(@reply) %></ul>
-
+  
 </div>
