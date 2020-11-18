@@ -10,9 +10,9 @@
         <div class="url-link">
            <small>
               <% if @likes.find_by_comment_id(comment.id).blank?%>
-                <%= link_to '▲','comments/like/'+comment.id.to_s, method: :put%>
+                <%= link_to '▲','/comments/like/'+comment.id.to_s, method: :put%>
               <%else %> 
-                <%= link_to '▼','comments/dislike/'+comment.id.to_s, method: :put%>
+                <%= link_to '▼','/comments/dislike/'+comment.id.to_s, method: :put%>
               <%end%>
            </small>
            <%= link_to comment.content, comment%>
@@ -23,10 +23,12 @@
               <%= render 'comments/timer', comment: comment %> 
               |
               <%= link_to 'comments', comment %>
-              |
-              <%= link_to 'edit', edit_comment_path(comment)%></td> 
-              |
-              <%= link_to 'delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <% if !current_user.nil? && comment.checkIfMine(current_user.email) %>
+                 |
+                 <%= link_to 'edit', edit_comment_path(comment)%></td> 
+                 |
+                 <%= link_to 'delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <% end %>
             </small>
         </div>
       </li>

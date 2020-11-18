@@ -23,7 +23,7 @@
   </div>
   <div>
     &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
-    <%= link_to 'comments' %>
+    <%= link_to 'comments', "threads/"+@user.id.to_s%>
   </div>
   <div class="actions">
     <%= form.submit "update" %>

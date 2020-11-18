@@ -19,8 +19,9 @@
           <%else%>
             <%=link_to reply.creator, userprofile_path(:user_id => reply.creator)%> 
           <%end%>
-          <%= render 'comments/timer', comment: reply %> | 
+          <%= render 'comments/timer', comment: reply %>
           <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
+            |
             <%= link_to 'edit', edit_reply_path(reply)%></td> 
             |
             <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -113,8 +114,9 @@
                 <%else%>
                   <%=link_to comment.creator, userprofile_path(:user_id => comment.creator)%> 
                 <%end%>
-                <%= render 'comments/timer', comment: comment %> | 
+                <%= render 'comments/timer', comment: comment %>
                 <% if !current_user.nil? && comment.checkIfMine(current_user.email) %>
+                  |
                   <%= link_to 'edit', edit_comment_path(comment)%></td> 
                   |
                   <%= link_to 'delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>

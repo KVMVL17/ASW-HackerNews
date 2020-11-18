@@ -58,7 +58,8 @@ class ContributionsController < ApplicationController
     if current_user.nil?
       redirect_to user_google_oauth2_omniauth_authorize_path
     else
-      @comments = Comment.where(creator: current_user.email).order(points: :desc)
+      @user = User.find(params[:id])
+      @comments = Comment.where(creator: @user.email).order(points: :desc)
       @like = Like.new
       @likes = Like.new
       if !current_user.nil?
