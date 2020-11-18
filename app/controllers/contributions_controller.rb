@@ -67,6 +67,32 @@ class ContributionsController < ApplicationController
       end
     end
   end
+  
+  def upvoted_comments
+    @like = Like.where(user_id: params[:id], contribution_id: nil, reply_id: nil)
+    @User = User.find(params[:id])
+    @comments = Comment.none.to_a
+    @like.each do |like|
+      @comments.push Comment.find(like.comment_id)
+    end
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
+  end
+  
+  def upvoted_submissions
+    @like = Like.where(user_id: params[:id], comment_id: nil, reply_id: nil)
+    @User = User.find(params[:id])
+    @contributions = Contribution.none.to_a
+    @like.each do |like|
+      @contributions.push Contribution.find(like.contribution_id)
+    end
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
+  end
 
   # GET /contributions/1/edit
   def edit

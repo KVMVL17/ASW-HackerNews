@@ -13,14 +13,11 @@ class UsersController < ApplicationController
     render "userprofile"
   end
   
-  
-  
   def myprofile
     @updateduser = User.new
     @user = User.find(current_user.id)
     render "myprofile"
   end
-
 
   def updateprofile
     @updateduser = User.new(userupdated_params)
@@ -31,12 +28,8 @@ class UsersController < ApplicationController
       format.html { redirect_back(fallback_location: root_path) }
       format.json { head :no_content }
     end
-    
   end
-  
-  
-  
-  
+
   def userupdated_params
       params.require(:user).permit(:about)
   end

@@ -1,6 +1,8 @@
 class Reply < ApplicationRecord
   belongs_to  :comment, optional: true
   has_many :replies, dependent: :destroy
+  has_many :likes, dependent: :destroy
+
   
   def findContribution(id)
     reply = Reply.find(id)

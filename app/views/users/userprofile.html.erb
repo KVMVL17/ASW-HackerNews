@@ -25,6 +25,16 @@
     &emsp;&emsp;&emsp;&emsp;
     <%= link_to 'comments', "threads/"+@user.id.to_s%>
   </div>
+  
+  <div>
+    &emsp;&emsp;&emsp;&emsp;
+    <%= link_to 'upvoted submissions', "upvoted/submissions/"+@user.id.to_s%>
+  </div>
+  
+  <div>
+    &emsp;&emsp;&emsp;&emsp;
+    <%= link_to 'upvoted comments', "upvoted/comments/"+@user.id.to_s%>
+  </div>
 
 
 

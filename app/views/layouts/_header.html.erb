@@ -4,7 +4,11 @@
   <div class="links">
     <%= link_to 'new', "/newest" %> | 
     <%= link_to 'ask', "/ask" %> | 
-    <%= link_to 'threads', "/threads/"+current_user.id.to_s %> |
+    <% if current_user.nil? %>
+      <%= link_to 'threads', user_google_oauth2_omniauth_authorize_path %> | 
+    <% else %>
+      <%= link_to 'threads', "/threads/"+current_user.id.to_s %> |
+    <% end %>
     <%= link_to 'submit', "/submit" %>
     <div class="right">
       <% if current_user.nil? %>

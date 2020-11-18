@@ -98,7 +98,6 @@ class CommentsController < ApplicationController
     end
   end
   
-  
   def dislike
     @comment = Comment.find(params[:id])
     @like = Like.where(comment_id: @comment.id, user_id: current_user.id).first

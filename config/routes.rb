@@ -27,13 +27,16 @@ Rails.application.routes.draw do
   get 'submit', to: 'contributions#new', as: 'submit'
   get 'ask', to: 'contributions#ask', as: 'ask'
   get 'threads/:id', to: 'contributions#threads', as: 'threads'
+  get 'contributions/user/:id', to: 'contributions#showcontributionsofuser'
+  get 'upvoted/submissions/:id', to: 'contributions#upvoted_submissions'
+  get 'upvoted/comments/:id', to: 'contributions#upvoted_comments'
+
   put 'like/:id', to: 'contributions#like', as: 'like'
   put 'dislike/:id', to: 'contributions#dislike', as: 'dislike'
   put 'comments/like/:id', to: 'comments#like', as: 'like_comment'
   put 'comments/dislike/:id', to: 'comments#dislike', as: 'dislike_comment'
   put 'replies/like/:id', to: 'replies#like', as: 'like_reply'
   put 'replies/dislike/:id', to: 'replies#dislike', as: 'dislike_reply'
-  get 'contributions/user/:id', to: 'contributions#showcontributionsofuser'
 
   resources :contributions, :path => "/"
   

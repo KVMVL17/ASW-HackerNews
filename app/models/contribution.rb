@@ -4,7 +4,9 @@ class Contribution < ApplicationRecord
   validates_presence_of :title
   validates :url_valid, presence: true
   belongs_to :user, optional: true
-  has_many :comments
+  has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
+
   
   def text_is_blank?
     text.blank?

@@ -25,6 +25,14 @@
     &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
     <%= link_to 'comments', "threads/"+@user.id.to_s%>
   </div>
+  <div>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+    <%= link_to 'upvoted submissions', "upvoted/submissions/"+@user.id.to_s%>
+  </div>
+  <div>
+    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
+    <%= link_to 'upvoted comments', "upvoted/comments/"+@user.id.to_s%>
+  </div>
   <div class="actions">
     <%= form.submit "update" %>
   </div>
