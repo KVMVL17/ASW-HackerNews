@@ -6,3 +6,5 @@ Projecte ASW FIB UPC, HackerNews RoR
   - Anas Infad
   - Isaac Muñoz
   - Kamal El Hachmi
+## Heroku
+  https://asw-hackernews-kaai12.herokuapp.com/
