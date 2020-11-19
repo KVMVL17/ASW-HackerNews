@@ -114,6 +114,13 @@ table, .content{
     display:block;float:right;margin-left:10px;
 }
 
+.label-submit {
+    width: 20px;
+    padding-right: 26px;
+    display: inline-block;
+    color: black;
+}
+
 .label-container {
     width: 60px;
     display: inline-block;
@@ -148,4 +155,9 @@ table, .content{
 
 .pad-comment{
     padding-left: 15px;
+}
+
+.wow{
+    text-decoration: underline;
+    font-weight: bolder;
 }

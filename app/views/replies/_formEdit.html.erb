@@ -1,20 +1,22 @@
-<%= form_with(model: reply, local: true) do |form| %>
-  <% if reply.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(reply.errors.count, "error") %> prohibited this reply from being saved:</h2>
-
-      <ul>
-        <% reply.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<div style="padding: 15px 15px 15px 27px">
+  
+  <%= form_with(model: reply, local: true) do |form| %>
+    <% if reply.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(reply.errors.count, "error") %> prohibited this reply from being saved:</h2>
+        
+        <ul>
+          <% reply.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="field" style="margin-bottom:15px">
+      <%= form.text_area(:content, size: '60x5') %>
+    </div>
+    <div class="actions">
+      <%= form.submit "Update reply" %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.text_area(:content, size: '60x6') %>
-  </div>
-  <div class="actions">
-    <%= form.submit "reply"%>
-  </div>
-<% end %>
+</div>

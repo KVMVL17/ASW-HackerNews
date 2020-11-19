@@ -1,10 +1,27 @@
 <%= render "layouts/header" %>
 
 <div class="content">
-  <h1>Editing Comment</h1>
   
+  <h3 style="margin-left:13px">Editing a comment</h3>
+  <small style="margin-left:13px">
+    <% if !current_user.nil? %>
+      <% if @likes.find_by_comment_id(@comment.id).blank?%>
+        <%= link_to '▲', "/comments/like/"+@comment.id.to_s, method: :put%>
+      <%else %> 
+        <%= link_to '▼', "/comments/dislike/"+@comment.id.to_s, method: :put%>
+      <%end%>
+    <%else%>
+      <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+    <%end%>
+    <%=@comment.points%> points by 
+    <% if !current_user.nil? && current_user.email == @comment.creator %>
+      <%=link_to @comment.creator, myprofile_path%> 
+    <%else%>
+      <%=link_to @comment.creator, userprofile_path(:user_id => @comment.creator)%> 
+    <%end%>
+    <%= render 'comments/timer', comment: @comment %> | on: 
+    <%= link_to @comment.contribution.title, @comment.contribution %>
+  </small>
   <%= render 'formEdit', comment: @comment %>
+  
 </div>
-
-
-

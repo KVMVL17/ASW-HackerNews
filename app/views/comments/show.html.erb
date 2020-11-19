@@ -1,46 +1,46 @@
+<% def show_replies(rep)
+  rep.replies.each do |reply| %>
+  
+    <div style="margin-bottom: 7px">
+      <div style="margin-bottom: 2px">
+        <small>                
+          <% if !current_user.nil? %>
+            <% if @likes.find_by_reply_id(reply.id).blank?%>
+              <%= link_to '▲','/replies/like/'+ reply.id.to_s, method: :put%>
+            <%else %>
+              <%= link_to '▼','/replies/dislike/'+ reply.id.to_s, method: :put%>
+            <%end%>
+          <%else%>
+            <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+          <%end%>
+          <%=reply.points%> points by <a><%= reply.creator %></a>
+          <%= render 'comments/timer', comment: reply %> | 
+          <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
+            <%= link_to 'edit', edit_reply_path(reply)%></td> 
+            |
+            <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+        </small>
+      </div>
+      <div class="pad-comment" style="margin-bottom: 3px">
+        <%= reply.content%>
+      </div>
+      <div>
+        <div class="pad-comment">
+          <small><%= link_to 'Reply', reply %></small>
+        </div>
+      </div>
+    </div>
+    
+    <% if reply.replies.any? %>
+      <ul><% show_replies(reply) %></ul>
+    <% end %>
+    <% end; nil end %>
+
 <%= render "layouts/header" %>
 
-<% def show_replies(rep)
-    rep.replies.each do |reply| %>
-<div>
-  <div>
-    <small>                
-      <% if !current_user.nil? %>
-        <% if @likes.find_by_reply_id(reply.id).blank?%>
-          <%= link_to '▲','/replies/like/'+ reply.id.to_s, method: :put%>
-        <%else %>
-          <%= link_to '▼','/replies/dislike/'+ reply.id.to_s, method: :put%>
-        <%end%>
-      <%else%>
-        <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
-      <%end%>
-      <%=reply.points%> points by <a><%= reply.creator %></a>
-      <%= render 'comments/timer', comment: reply %> | 
-      <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
-        <%= link_to 'edit', edit_reply_path(reply)%></td> 
-        |
-        <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      <% end %>
-    </small>
-  </div>
-  <div class="pad-comment">
-    <%= reply.content%>
-  </div>
-  <div>
-    <div class="pad-comment">
-      <small><%= link_to 'Reply', reply %></small>
-    </div>
-  </div>
-</div>
-
-  <% if reply.replies.any? %>
-    <ul><% show_replies(reply) %></ul>
-<% end %>
-<% end; nil end %>
-
 <div class="content">
-    <p id="notice"><%= notice %></p>
-    <div class="marginleft15">
+    <div style="margin-top: 10px; margin-bottom:20px" class="marginleft15">
         <div class="inline">
           <small>
             <% if !current_user.nil? %>
@@ -57,10 +57,15 @@
             <%= link_to 'parent', @comment.contribution %> | on: 
             <%= link_to @comment.contribution.title, @comment.contribution %>
           </small>
-          <br>
-          <%= @comment.content %>
+        </div>
+        <div class="leftmar">
+          <div style="margin-top: 5px; margin-bottom: 10px"><%= @comment.content %></div>
           <%= render 'replies/form', reply: @reply %>
+          <p style="color: red; margin-top: 20px; margin-bottom: 30px"><%= notice %></p>
         </div>
     </div>
-    <ul><%= show_replies(@comment) %></ul>
+    
+    <ul style="padding-left: 15px;"><%= show_replies(@comment) %></ul>
 </div>
+
+

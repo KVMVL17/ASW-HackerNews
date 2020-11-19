@@ -117,7 +117,13 @@ class ContributionsController < ApplicationController
           format.html { redirect_to :newest }
           format.html { notice 'Contribution was successfully created.' }
         else
-          format.html { redirect_to new_contribution_path, notice: "URL not valid" }
+          if contribution_params[:title].blank?
+            format.html { redirect_to new_contribution_path, notice: "Title can't be blank" }
+          elsif contribution_params[:url].blank? && contribution_params[:text].blank?
+            format.html { redirect_to new_contribution_path, notice: "URL and Text can't be blank at the same time" }
+          else
+            format.html { redirect_to new_contribution_path, notice: "URL not valid" }
+          end
           format.json { render json: @contribution.errors, status: :unprocessable_entity }
         end
       end
@@ -138,6 +144,11 @@ class ContributionsController < ApplicationController
         format.html { redirect_to :newest }
         format.json { render :show, status: :ok, location: @contribution }
       else
+        if contribution_params[:title].blank?
+          format.html { redirect_to edit_contribution_path, notice: "Title can't be blank" }
+        elsif @contribution.url.blank? && contribution_params[:text].blank?
+          format.html { redirect_to edit_contribution_path, notice: "Text can't be blank" }
+        end
         format.html { render :edit }
         format.json { render json: @contribution.errors, status: :unprocessable_entity }
       end

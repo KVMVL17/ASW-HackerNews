@@ -1,50 +1,50 @@
+<% def show_replies(rep)
+  rep.replies.each do |reply| %>
+    
+    <div style="margin-bottom: 7px">
+      <div style="margin-bottom: 2px">
+        <small>                
+          <% if !current_user.nil? %>
+            <% if @likes.find_by_reply_id(reply.id).blank?%>
+              <%= link_to '▲','like/'+ reply.id.to_s, method: :put%>
+            <%else %>
+              <%= link_to '▼','dislike/'+ reply.id.to_s, method: :put%>
+            <%end%>
+          <%else%>
+            <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
+          <%end%>
+          <%=reply.points%> points by 
+          <% if !current_user.nil? && current_user.email == reply.creator %>
+            <%=link_to reply.creator, myprofile_path%> 
+          <%else%>
+            <%=link_to reply.creator, userprofile_path(:user_id => reply.creator)%> 
+          <%end%>
+          <%= render 'comments/timer', comment: reply %> | 
+          <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
+            <%= link_to 'edit', edit_reply_path(reply)%></td> 
+            |
+            <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>  </small>
+      </div>
+      <div class="pad-comment" style="margin-bottom: 3px">
+        <%= reply.content%>
+      </div>
+      <div>
+        <div class="pad-comment">
+          <small><%= link_to 'Reply', reply %></small>
+        </div>
+      </div>
+    </div>
+
+    <% if reply.replies.any? %>
+      <ul><% show_replies(reply) %></ul>
+    <% end %>
+    <% end; nil end %>
+
 <%= render "layouts/header" %>
 
-<% def show_replies(rep)
-    rep.replies.each do |reply| %>
-<div>
-  <div>
-    <small>                
-      <% if !current_user.nil? %>
-        <% if @likes.find_by_reply_id(reply.id).blank?%>
-          <%= link_to '▲','like/'+ reply.id.to_s, method: :put%>
-        <%else %>
-          <%= link_to '▼','dislike/'+ reply.id.to_s, method: :put%>
-        <%end%>
-      <%else%>
-        <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
-      <%end%>
-      <%=reply.points%> points by 
-      <% if !current_user.nil? && current_user.email == reply.creator %>
-        <%=link_to reply.creator, myprofile_path%> 
-      <%else%>
-        <%=link_to reply.creator, userprofile_path(:user_id => reply.creator)%> 
-      <%end%>
-      <%= render 'comments/timer', comment: reply %> | 
-      <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
-        <%= link_to 'edit', edit_reply_path(reply)%></td> 
-        |
-        <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      <% end %>  </small>
-  </div>
-  <div class="pad-comment">
-    <%= reply.content%>
-  </div>
-  <div>
-    <div class="pad-comment">
-      <small><%= link_to 'Reply', reply %></small>
-    </div>
-  </div>
-</div>
-
-  <% if reply.replies.any? %>
-    <ul><% show_replies(reply) %></ul>
-<% end %>
-<% end; nil end %>
-
 <div class="content">
-    <p id="notice"><%= notice %></p>
-    <div class="marginleft15">
+    <div style="margin-top: 10px; margin-bottom:20px" class="marginleft15">
         <div class="inline">
           <small>
             <% if !current_user.nil? %>
@@ -73,10 +73,11 @@
           </small>
         </div>
         <div class="leftmar">
-            <p style="margin-top: 5px"><%= @reply.content %></p>
+            <div style="margin-top: 5px; margin-bottom: 10px"><%= @reply.content %></div>
             <%= render 'form2', reply: @reply, replyChild: @replyChild %>
+            <p style="color: red; margin-top: 20px; margin-bottom: 30px"><%= notice %></p>
         </div>
     </div>
-    <ul><%= show_replies(@reply) %></ul>
-  
+    
+    <ul style="padding-left: 15px;"><%= show_replies(@reply) %></ul>
 </div>

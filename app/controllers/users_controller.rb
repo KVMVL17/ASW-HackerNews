@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     @user.about = @updateduser.about
     @user.save
     respond_to do |format|
-      format.html { redirect_back(fallback_location: root_path) }
+      format.html { redirect_to "/myprofile", notice: 'Profile was successfully updated.' }
       format.json { head :no_content }
     end
   end

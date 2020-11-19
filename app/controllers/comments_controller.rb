@@ -29,6 +29,11 @@ class CommentsController < ApplicationController
 
   # GET /comments/1/edit
   def edit
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
   end
 
   # POST /comments
