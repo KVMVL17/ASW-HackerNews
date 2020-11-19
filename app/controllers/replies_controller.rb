@@ -91,12 +91,12 @@ class RepliesController < ApplicationController
   # PATCH/PUT /replies/1.json
   def update
     respond_to do |format|
-      if @reply.update(reply_params)
+      if reply_params[:content].blank?
+        format.html { redirect_to edit_reply_url(@reply), notice: "Reply can't be blank" }
+        format.json { render json: @reply.errors, status: :unprocessable_entity }
+      else @reply.update(reply_params)
         format.html { redirect_to @reply, notice: 'Reply was successfully updated.' }
         format.json { render :show, status: :ok, location: @reply }
-      else
-        format.html { render :edit }
-        format.json { render json: @reply.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -3,6 +3,7 @@
 <div class="content">
   
   <h3 style="margin-left:13px">Editing a comment</h3>
+  <div style="color: red; margin-left: 15px; margin-bottom:13px"><%= notice %></div>
   <small style="margin-left:13px">
     <% if !current_user.nil? %>
       <% if @likes.find_by_comment_id(@comment.id).blank?%>

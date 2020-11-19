@@ -21,14 +21,16 @@ class Contribution < ApplicationRecord
     username == creator
   end
   
-  def numberOfComments(c, suma)
+  def numberOfComments(c)
+    count = 0
     c.each do |r|
       if r.replies.any?
-        suma += numberOfComments(r.replies, suma)
+        auxSuma = numberOfComments(r.replies)
+        count += auxSuma
       end
-      suma += 1
+      count += 1
     end
-    return suma
+    return count
   end
   
   def url_is
