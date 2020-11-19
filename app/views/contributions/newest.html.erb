@@ -6,7 +6,7 @@
 
   <ol class="inline gap">
     <% @contributions.each do |contribution| %>
-      <li>
+      <li style="margin-bottom:3px">
         <div class="url-link">
            <small>
             <% if !current_user.nil? %>
@@ -37,7 +37,7 @@
               <%end%>
               <%= render 'timer', contribution: contribution %> 
               |
-              <%= link_to contribution.numberOfComments(contribution.comments, 0).to_s+' comments', contribution%>
+              <%= link_to contribution.numberOfComments(contribution.comments).to_s+' comments', contribution%>
               <% if !current_user.nil? && contribution.checkIfMine(current_user.email) %>
                  |
                  <%= link_to 'edit', edit_contribution_path(contribution)%></td> 

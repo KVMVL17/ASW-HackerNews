@@ -29,6 +29,11 @@ class CommentsController < ApplicationController
 
   # GET /comments/1/edit
   def edit
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
   end
 
   # POST /comments
@@ -56,12 +61,12 @@ class CommentsController < ApplicationController
   # PATCH/PUT /comments/1.json
   def update
     respond_to do |format|
-      if @comment.update(comment_params)
+      if comment_params[:content].blank?
+          format.html { redirect_to edit_comment_url(@comment), notice: "Comment can't be blank" }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+      else @comment.update(comment_params)
         format.html { redirect_to @comment, notice: 'Comment was successfully updated.' }
         format.json { render :show, status: :ok, location: @comment }
-      else
-        format.html { render :edit }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
   end

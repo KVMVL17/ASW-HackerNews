@@ -6,7 +6,7 @@
 
   <ol class="inline gap">
     <% @comments.each do |comment| %>
-      <li>
+      <li style="margin-bottom:3px">
         <div class="url-link">
            <small>
               <% if @likes.find_by_comment_id(comment.id).blank?%>

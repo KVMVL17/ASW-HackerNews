@@ -2,6 +2,8 @@
 
 <div class="content">
   
-  <h1>Editing Contribution</h1>
-      <%= render 'form', contribution: @contribution, edit: true %>
+  <h3 style="margin-left:13px">Editing a contribution</h3>
+  <div style="color: red; margin-left: 15px; margin-bottom:13px"><%= notice %></div>
+  <%= render 'form', contribution: @contribution, edit: true %>
+  
 </div>

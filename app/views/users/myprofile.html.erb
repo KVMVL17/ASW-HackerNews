@@ -1,42 +1,54 @@
-<%= form_with(model: @updateduser , local: true, url: updateprofile_path , method: :put) do |form| %>
 <%= render "layouts/header" %>
-<div class="content">
-  <div>
-    user:&emsp;&emsp;&emsp;
-    <%=link_to @user.email ,myprofile_path , class:"owner"%>
+
+<%= form_with(model: @updateduser , local: true, url: updateprofile_path , method: :put) do |form| %>
+
+  <div class="content">
+    <div style="margin-left:10px;" >
+       <div style="color: Green; margin-top: 10px"><%= notice %></div>
+        <p>
+          <strong>Username:</strong>&nbsp;&nbsp;
+          <%= @user.email%>
+        </p>
+        <p>
+          <strong>Created:</strong>&emsp;&nbsp;&nbsp;&nbsp;
+          <%= @user.created_at.strftime("%B, %d, %Y")%>
+        </p>
+        <p>
+          <strong>Karma:</strong>&emsp;&emsp;&nbsp;&nbsp;
+          <%= @user.karma %>
+        </p>
+        <p style="padding-bottom:10px">
+          <strong>About:</strong>&emsp;&emsp;&emsp;
+          <%= form.text_area(:about ,size: '60x6', :value => @user.about) %>
+        </p>
+        
+        <p>
+          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;
+          <%= link_to 'submissions',"/contributions/user/"+ @user.id.to_s, class:"wow"%>
+        </p>
+            
+        <p>
+          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;
+          <%= link_to 'comments', "threads/"+@user.id.to_s, class:"wow"%>
+        </p>
+        
+        <p>
+          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;
+          <%= link_to 'upvoted submissions', "/upvoted/submissions/"+@user.id.to_s, class:"wow"%>
+        </p>
+        
+        <p>
+          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;
+          <%= link_to 'upvoted comments', "/upvoted/comments/"+@user.id.to_s, class:"wow"%>
+        </p>
+        <br>
+        <div style="margin-left:90px" class="actions">
+          <%= form.submit " update " %>
+        </div>
+        <br>
+    </div>
   </div>
-  <div>
-    created:&emsp;&nbsp;
-    <%= @user.created_at.strftime("%B, %d, %Y")%>
-  </div>
-  <div>
-    karma:&emsp;&nbsp;&nbsp;
-    <%= @user.karma %>
-  </div>
-  <div>
-    about:&emsp;&emsp;
-    <%= form.text_area(:about ,size: '60x6', :value => @user.about) %>
-  </div>
-  <div>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
-    <%= link_to 'submissions', "/contributions/user/"+ @user.id.to_s  %>
-  </div>
-  <div>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
-    <%= link_to 'comments', "/threads/"+@user.id.to_s%>
-  </div>
-  <div>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
-    <%= link_to 'upvoted submissions', "/upvoted/submissions/"+@user.id.to_s%>
-  </div>
-  <div>
-    &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
-    <%= link_to 'upvoted comments', "/upvoted/comments/"+@user.id.to_s%>
-  </div>
-  <div class="actions">
-    <%= form.submit "update" %>
-  </div>
-</div>
+  
 <% end %>
   
 
