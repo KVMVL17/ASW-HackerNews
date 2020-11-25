@@ -3,15 +3,22 @@ class Api::ContributionsController < ApplicationController
   # GET /api/v1/contributions
   # GET /api/v1/contributions.json
   def index
-    @api_v1_contributions = Api::Contribution.all
+    @contributions = Contribution.where(text:"").order(points: :desc)
+    respond_to do |format|
+      format.json { render json: @contributions}
+    end
   end
 
   # GET /api/v1/contributions/1
   # GET /api/v1/contributions/1.json
   def show
-    @contribution = Contribution.find(params[:id])
+    @aux = Contribution.exists?(params[:id])
     respond_to do |format|
-      format.json { render json: @contribution}
+      if @aux
+        format.json { render json: @contribution}
+      else
+        format.json { render json:{status:"error", code:404, message: "Contribution with ID '" + params[:id].to_s + "' not found"}, status: :not_found}
+      end
     end
   end
 

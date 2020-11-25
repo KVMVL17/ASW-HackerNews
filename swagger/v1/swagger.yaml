@@ -7,8 +7,27 @@ info:
 
 servers:
 - url: http://3.89.132.201:8080/api
- 
+- url: http://100.26.227.189:8080/api
+- url: http://3.235.121.254:8080/api
+- url: http://3.235.67.131:8080/api
+
 paths:
+  /contributions:
+    get:
+      tags: 
+        - contributions
+      summary: Returns all URL tpye contributions
+      operationId: index
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                title: ArrayOfContributions
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution' 
   /newest:
     get:
       tags: 
