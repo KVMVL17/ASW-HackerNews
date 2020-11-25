@@ -25,7 +25,11 @@ Rails.application.routes.draw do
     put 'updateprofile', to: 'users#updateprofile'
   end
 
-  get 'api/newest', to: 'api/contributions#newest', as: 'newestapi'
+  scope "/api",defaults: {format: 'json'} do
+    get 'newest', to: 'api/contributions#newest', as: 'newest_api'
+    get 'ask', to: 'api/contributions#ask', as: 'ask_api'
+    get 'contributions/users/:id', to: 'api/contributions#showcontributionsofuser', as: 'contributionsofuser_api'
+  end
 
   get 'newest', to: 'contributions#newest', as: 'newest'
   get 'submit', to: 'contributions#new', as: 'submit'

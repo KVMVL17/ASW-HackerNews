@@ -11,6 +11,7 @@ gem 'bootsnap',   '1.4.6', require: false
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
+gem 'rack-cors'
 
 group :development, :test do
   gem 'sqlite3', '1.4.2'

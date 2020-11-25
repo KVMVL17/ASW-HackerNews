@@ -17,14 +17,26 @@ class Api::ContributionsController < ApplicationController
     @api_v1_contribution = Api::Contribution.new
   end
   
-  
   def newest
     @contributions = Contribution.all.order(created_at: :desc)
-    @like = Like.new
-    @likes = Like.new
-    if !current_user.nil?
-      @likes = Like.where(user_id: current_user.id)
+    respond_to do |format|
+      format.json { render json: @contributions}
     end
+  end
+  
+  def ask
+    @contributions = Contribution.where(url: "").order(points: :desc)
+    respond_to do |format|
+      format.json { render json: @contributions}
+    end
+  end
+  
+  def showcontributionsofuser
+    @user = User.find(params[:id])
+    @contributions = Contribution.where(creator: @user.email)
+    respond_to do |format|
+      format.json { render json: @contributions }
+    end 
   end
 
   # GET /api/v1/contributions/1/edit
