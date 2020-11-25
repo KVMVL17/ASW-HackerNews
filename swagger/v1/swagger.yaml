@@ -1,0 +1,24 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+servers:
+- url: https://{defaultHost}
+
+paths: 
+  /contributions:
+  post:
+    description: |
+      
+    tags:
+    - contributions
+    parameters:
+    responses:
+     '201':
+          description: Contribucion created
+          schema:
+            $ref: "#/definitions/Contribucion"
+      '400':
+          description: Bad request. Url or text must be set
+

@@ -15,6 +15,7 @@ gem 'omniauth-google-oauth2'
 group :development, :test do
   gem 'sqlite3', '1.4.2'
   gem 'byebug',  '11.1.3', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rspec-rails', '~> 3.5' #for swagger
 end
 
 group :development do
@@ -33,6 +34,9 @@ end
 group :production do
   gem 'pg', '1.2.3'
 end
+
+#swagger gems
+gem 'rswag'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 # Uncomment the following line if you're running Rails
