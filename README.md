@@ -1,5 +1,5 @@
 # ASW-HackerNews
-Projecte ASW FIB UPC, HackerNews RoR
+Projecte ASW FIB UPC, HackerNews RoR xd
 
 ## Membres de l'equip:
   - Alejandro Gallego
