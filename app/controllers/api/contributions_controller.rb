@@ -1,10 +1,10 @@
-class Api::V1::ContributionsController < ApplicationController
+class Api::ContributionsController < ApplicationController
   before_action :set_api_v1_contribution, only: [:show, :edit, :update, :destroy]
 
   # GET /api/v1/contributions
   # GET /api/v1/contributions.json
   def index
-    @api_v1_contributions = Api::V1::Contribution.all
+    @api_v1_contributions = Api::Contribution.all
   end
 
   # GET /api/v1/contributions/1
@@ -14,7 +14,17 @@ class Api::V1::ContributionsController < ApplicationController
 
   # GET /api/v1/contributions/new
   def new
-    @api_v1_contribution = Api::V1::Contribution.new
+    @api_v1_contribution = Api::Contribution.new
+  end
+  
+  
+  def newest
+    @contributions = Contribution.all.order(created_at: :desc)
+    @like = Like.new
+    @likes = Like.new
+    if !current_user.nil?
+      @likes = Like.where(user_id: current_user.id)
+    end
   end
 
   # GET /api/v1/contributions/1/edit
@@ -24,7 +34,7 @@ class Api::V1::ContributionsController < ApplicationController
   # POST /api/v1/contributions
   # POST /api/v1/contributions.json
   def create
-    @api_v1_contribution = Api::V1::Contribution.new(api_v1_contribution_params)
+    @api_v1_contribution = Api::Contribution.new(api_v1_contribution_params)
 
     respond_to do |format|
       if @api_v1_contribution.save
@@ -64,7 +74,7 @@ class Api::V1::ContributionsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v1_contribution
-      @api_v1_contribution = Api::V1::Contribution.find(params[:id])
+      @api_v1_contribution = Api::Contribution.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

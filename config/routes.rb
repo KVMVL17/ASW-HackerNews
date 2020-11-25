@@ -24,7 +24,9 @@ Rails.application.routes.draw do
     get 'myprofile', to: 'users#myprofile'
     put 'updateprofile', to: 'users#updateprofile'
   end
-  
+
+  get 'api/newest', to: 'api/contributions#newest', as: 'newestapi'
+
   get 'newest', to: 'contributions#newest', as: 'newest'
   get 'submit', to: 'contributions#new', as: 'submit'
   get 'ask', to: 'contributions#ask', as: 'ask'
@@ -32,6 +34,7 @@ Rails.application.routes.draw do
   get 'contributions/user/:id', to: 'contributions#showcontributionsofuser'
   get 'upvoted/submissions/:id', to: 'contributions#upvoted_submissions'
   get 'upvoted/comments/:id', to: 'contributions#upvoted_comments'
+  
 
   put 'like/:id', to: 'contributions#like', as: 'like'
   put 'dislike/:id', to: 'contributions#dislike', as: 'dislike'

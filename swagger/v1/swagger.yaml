@@ -1,24 +1,29 @@
----
+
 openapi: 3.0.1
 info:
   title: API V1
   version: v1
-servers:
-- url: https://{defaultHost}
 
-paths: 
-  /contributions:
-  post:
-    description: |
-      
-    tags:
-    - contributions
-    parameters:
+servers:
+- url: https://88b21f4c3a9a410d8922ad98b8f50d72.vfs.cloud9.us-east-1.amazonaws.com/api
+ 
+
+
+  
+paths:
+ /newest:
+   get:
+    description: Get all the contributions
+    tags: 
+      - Contributions
+  
     responses:
-     '201':
-          description: Contribucion created
-          schema:
-            $ref: "#/definitions/Contribucion"
-      '400':
-          description: Bad request. Url or text must be set
+      200:
+        description: Successful request
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
 
