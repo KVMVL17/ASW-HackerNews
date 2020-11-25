@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   
   
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   resources :replies do
     member do
       post 'replyrecursive'
@@ -22,7 +24,13 @@ Rails.application.routes.draw do
     get 'myprofile', to: 'users#myprofile'
     put 'updateprofile', to: 'users#updateprofile'
   end
-  
+
+  scope "/api",defaults: {format: 'json'} do
+    get 'newest', to: 'api/contributions#newest', as: 'newest_api'
+    get 'ask', to: 'api/contributions#ask', as: 'ask_api'
+    get 'contributions/users/:id', to: 'api/contributions#showcontributionsofuser', as: 'contributionsofuser_api'
+  end
+
   get 'newest', to: 'contributions#newest', as: 'newest'
   get 'submit', to: 'contributions#new', as: 'submit'
   get 'ask', to: 'contributions#ask', as: 'ask'
@@ -30,6 +38,7 @@ Rails.application.routes.draw do
   get 'contributions/user/:id', to: 'contributions#showcontributionsofuser'
   get 'upvoted/submissions/:id', to: 'contributions#upvoted_submissions'
   get 'upvoted/comments/:id', to: 'contributions#upvoted_comments'
+  
 
   put 'like/:id', to: 'contributions#like', as: 'like'
   put 'dislike/:id', to: 'contributions#dislike', as: 'dislike'
