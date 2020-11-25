@@ -1,44 +1,23 @@
-class Api::ContributionsController < ApplicationController
+class Api::UsersController < ApplicationController
 
   # GET /api/v1/contributions
   # GET /api/v1/contributions.json
   def index
-    @api_v1_contributions = Api::Contribution.all
+    @users = User.all
   end
 
   # GET /api/v1/contributions/1
   # GET /api/v1/contributions/1.json
   def show
-    @contribution = Contribution.find(params[:id])
+    @user = User.find(params[:id])
     respond_to do |format|
-      format.json { render json: @contribution}
+      format.json { render json: @user}
     end
   end
 
   # GET /api/v1/contributions/new
   def new
-    @api_v1_contribution = Api::Contribution.new
-  end
-  
-  def newest
-    @contributions = Contribution.all.order(created_at: :desc)
-    respond_to do |format|
-      format.json { render json: @contributions}
-    end
-  end
-  
-  def ask
-    @contributions = Contribution.where(url: "").order(points: :desc)
-    respond_to do |format|
-      format.json { render json: @contributions}
-    end
-  end
-  
-  def showcontributionsofuser
-    @contributions = Contribution.where(user_id: params[:id])
-    respond_to do |format|
-      format.json { render json: @contributions }
-    end 
+    @user = User.new
   end
 
   # GET /api/v1/contributions/1/edit
