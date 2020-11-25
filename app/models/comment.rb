@@ -6,7 +6,7 @@ class Comment < ApplicationRecord
   validates_presence_of :content
     
   def checkIfMine(username)
-    username == creator
+    username == user_id
   end
 end
 

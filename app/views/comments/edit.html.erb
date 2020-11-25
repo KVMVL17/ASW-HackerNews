@@ -15,10 +15,10 @@
       <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
     <%end%>
     <%=@comment.points%> points by 
-    <% if !current_user.nil? && current_user.email == @comment.creator %>
-      <%=link_to @comment.creator, myprofile_path%> 
+    <% if !current_user.nil? && current_user.id == @comment.user_id %>
+      <%=link_to @comment.user.email, myprofile_path%> 
     <%else%>
-      <%=link_to @comment.creator, userprofile_path(:user_id => @comment.creator)%> 
+      <%=link_to @comment.user.email, userprofile_path(:user_id => @comment.user_id)%> 
     <%end%>
     <%= render 'comments/timer', comment: @comment %> | on: 
     <%= link_to @comment.contribution.title, @comment.contribution %>

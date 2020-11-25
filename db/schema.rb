@@ -14,8 +14,8 @@ ActiveRecord::Schema.define(version: 2020_11_15_165129) do
 
   create_table "comments", force: :cascade do |t|
     t.string "content"
-    t.string "creator"
-    t.string "contribution_id"
+    t.integer "user_id"
+    t.integer "contribution_id"
     t.integer "points", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2020_11_15_165129) do
     t.string "title"
     t.string "url"
     t.string "text"
-    t.string "creator"
+    t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "points", default: 0
@@ -40,9 +40,9 @@ ActiveRecord::Schema.define(version: 2020_11_15_165129) do
 
   create_table "replies", force: :cascade do |t|
     t.string "content"
-    t.string "creator"
-    t.string "comment_id"
-    t.string "reply_id"
+    t.integer "user_id"
+    t.integer "comment_id"
+    t.integer "reply_id"
     t.integer "points", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

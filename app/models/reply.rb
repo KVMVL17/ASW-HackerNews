@@ -1,6 +1,7 @@
 class Reply < ApplicationRecord
   validates_presence_of :content
-  belongs_to  :comment, optional: true
+  belongs_to :comment, optional: true
+  belongs_to :user, optional: true
   has_many :replies, dependent: :destroy
   has_many :likes, dependent: :destroy
 
@@ -14,6 +15,6 @@ class Reply < ApplicationRecord
   end
   
   def checkIfMine(username)
-    username == creator
+    username == user_id
   end
 end

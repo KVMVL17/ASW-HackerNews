@@ -18,7 +18,7 @@ class Contribution < ApplicationRecord
   end
   
   def checkIfMine(username)
-    username == creator
+    username == user_id
   end
   
   def numberOfComments(c)

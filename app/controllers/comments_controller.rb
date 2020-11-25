@@ -43,7 +43,7 @@ class CommentsController < ApplicationController
       redirect_to user_google_oauth2_omniauth_authorize_path
     else
       @comment = Comment.new(create_new_params)
-      @comment.creator = current_user.email
+      @comment.user_id = current_user.id
       @contribution = @comment.contribution
       
       respond_to do |format|
@@ -91,7 +91,7 @@ class CommentsController < ApplicationController
       @comment.points += 1
       @comment.save
       @like.save
-      @user = User.find_by_email(@comment.creator)
+      @user = User.find(@comment.user_id)
       @user.karma += 1
       @user.save
     end
@@ -109,7 +109,7 @@ class CommentsController < ApplicationController
       @like.delete
       @comment.points -= 1
       @comment.save
-      @user = User.find_by_email(@comment.creator)
+      @user = User.find(@comment.user_id)
       @user.karma -= 1
       @user.save
     end

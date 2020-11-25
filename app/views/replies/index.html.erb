@@ -17,7 +17,7 @@
     <% @replies.each do |reply| %>
       <tr>
         <td><%= reply.content %></td>
-        <td><%= reply.creator %></td>
+        <td><%= reply.user.email %></td>
         <td><%= reply.comment_id %></td>
         <td><%= reply.reply_id %></td>
         <td><%= link_to 'Show', reply %></td>

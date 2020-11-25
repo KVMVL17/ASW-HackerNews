@@ -14,13 +14,13 @@
             <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
           <%end%>
           <%=reply.points%> points by 
-          <% if !current_user.nil? && current_user.email == reply.creator %>
-            <%=link_to reply.creator, myprofile_path%> 
+          <% if !current_user.nil? && current_user.id == reply.user_id %>
+            <%=link_to reply.user.email, myprofile_path%> 
           <%else%>
-            <%=link_to reply.creator, userprofile_path(:user_id => reply.creator)%> 
+            <%=link_to reply.user.email, userprofile_path(:user_id => reply.user_id)%> 
           <%end%>
           <%= render 'comments/timer', comment: reply %>
-          <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
+          <% if !current_user.nil? && reply.checkIfMine(current_user.id) %>
             |
             <%= link_to 'edit', edit_reply_path(reply)%></td> 
             |
@@ -68,15 +68,15 @@
         <div class="leftmar">
           <small>
             <%=@contribution.points%> points by 
-            <% if !current_user.nil? && current_user.email == @contribution.creator %>
-              <%=link_to @contribution.creator, myprofile_path%> 
+            <% if !current_user.nil? && current_user.id == @contribution.user_id %>
+              <%=link_to @contribution.user.email, myprofile_path%> 
             <%else%>
-              <%=link_to @contribution.creator, userprofile_path(:user_id => @contribution.creator)%> 
+              <%=link_to @contribution.user.email, userprofile_path(:user_id => @contribution.user_id)%> 
             <%end%>
             <%= render 'timer', contribution: @contribution %> 
             |
             <%= link_to 'comments', @contribution%>
-            <% if !current_user.nil? && @contribution.checkIfMine(current_user.email) %>
+            <% if !current_user.nil? && @contribution.checkIfMine(current_user.id) %>
                |
                <% if @contribution.text_is_blank? %>
                  <%= link_to 'edit', edit_contribution_path(@contribution, has_url: true)%></td>
@@ -108,13 +108,13 @@
                   <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
                 <%end%>
                 <%=comment.points%> points by
-                <% if !current_user.nil? && current_user.email == comment.creator %>
-                  <%=link_to comment.creator, myprofile_path%> 
+                <% if !current_user.nil? && current_user.id == comment.user_id %>
+                  <%=link_to comment.user.email, myprofile_path%> 
                 <%else%>
-                  <%=link_to comment.creator, userprofile_path(:user_id => comment.creator)%> 
+                  <%=link_to comment.user.email, userprofile_path(:user_id => comment.user_id)%> 
                 <%end%>
                 <%= render 'comments/timer', comment: comment %>
-                <% if !current_user.nil? && comment.checkIfMine(current_user.email) %>
+                <% if !current_user.nil? && comment.checkIfMine(current_user.id) %>
                   |
                   <%= link_to 'edit', edit_comment_path(comment)%></td> 
                   |

@@ -14,13 +14,13 @@
             <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
           <%end%>
           <%=reply.points%> points by 
-          <% if !current_user.nil? && current_user.email == reply.creator %>
-            <%=link_to reply.creator, myprofile_path%> 
+          <% if !current_user.nil? && current_user.id == reply.user_id %>
+            <%=link_to reply.user.email, myprofile_path%> 
           <%else%>
-            <%=link_to reply.creator, userprofile_path(:user_id => reply.creator)%> 
+            <%=link_to reply.user.email, userprofile_path(:user_id => reply.user_id)%> 
           <%end%>
           <%= render 'comments/timer', comment: reply %> | 
-          <% if !current_user.nil? && reply.checkIfMine(current_user.email) %>
+          <% if !current_user.nil? && reply.checkIfMine(current_user.id) %>
             <%= link_to 'edit', edit_reply_path(reply)%></td> 
             |
             <%= link_to 'delete', reply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -57,10 +57,10 @@
               <%= link_to '▲',user_google_oauth2_omniauth_authorize_path %>
             <%end%>
             <%=@reply.points%> points by 
-            <% if !current_user.nil? && current_user.email == @reply.creator %>
-              <%=link_to @reply.creator, myprofile_path%> 
+            <% if !current_user.nil? && current_user.id == @reply.user_id %>
+              <%=link_to @reply.user.email, myprofile_path%> 
             <%else%>
-              <%=link_to @reply.creator, userprofile_path(:user_id => @reply.creator)%> 
+              <%=link_to @reply.user.email, userprofile_path(:user_id => @reply.user_id)%> 
             <%end%>
             <%= render 'comments/timer', comment: @reply %> |
             <% if @reply.comment_id.nil? %>

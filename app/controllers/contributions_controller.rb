@@ -56,7 +56,7 @@ class ContributionsController < ApplicationController
   
   def threads
       @user = User.find(params[:id])
-      @comments = Comment.where(creator: @user.email).order(points: :desc)
+      @comments = Comment.where(user_id: @user.id).order(points: :desc)
       @like = Like.new
       @likes = Like.none
       if !current_user.nil?
@@ -100,12 +100,12 @@ class ContributionsController < ApplicationController
   def create
     if Contribution.find_by_url(contribution_params[:url]).nil? || contribution_params[:url].blank?
       @contribution = Contribution.new(contribution_params)
-      @contribution.creator = current_user.email
+      @contribution.user_id = current_user.id
       if !contribution_params[:url].blank? && !contribution_params[:text].blank?
         @contribution.text = ""
         @comment = Comment.new
         @comment.content = contribution_params[:text]
-        @comment.creator = @contribution.creator
+        @comment.user_id = @contribution.user_id
       end
       
       respond_to do |format|
@@ -177,7 +177,7 @@ class ContributionsController < ApplicationController
       @contribution.points += 1
       @contribution.save
       @like.save
-      @user = User.find_by_email(@contribution.creator)
+      @user = User.find(@contribution.user_id)
       @user.karma += 1
       @user.save
     end
@@ -196,7 +196,7 @@ class ContributionsController < ApplicationController
       @like.delete
       @contribution.points -= 1
       @contribution.save
-      @user = User.find_by_email(@contribution.creator)
+      @user = User.find(@contribution.user_id)
       @user.karma -= 1
       @user.save
     end
@@ -215,7 +215,7 @@ class ContributionsController < ApplicationController
       @likes = Like.where(user_id: current_user.id)
     end
     @User = User.find(params[:id])
-    @contributions = Contribution.where(creator: @User.email)
+    @contributions = Contribution.where(user_id: @User.id)
     respond_to do |format|
       format.html { render "contributionsofuser" }
     end 

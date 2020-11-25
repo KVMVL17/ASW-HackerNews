@@ -54,7 +54,7 @@ class RepliesController < ApplicationController
       redirect_to user_google_oauth2_omniauth_authorize_path
     else
       @reply = Reply.new(reply_params)
-      @reply.creator = current_user.email
+      @reply.user_id = current_user.id
       
       respond_to do |format|
         if @reply.save
@@ -74,7 +74,7 @@ class RepliesController < ApplicationController
       redirect_to user_google_oauth2_omniauth_authorize_path
     else
       @reply = Reply.new(reply_params)
-      @reply.creator = current_user.email
+      @reply.user_id = current_user.id
       respond_to do |format|
         if @reply.save
           format.html { redirect_to "/"+ @reply.comment.contribution.id.to_s }
@@ -121,7 +121,7 @@ class RepliesController < ApplicationController
       @reply.points += 1
       @reply.save
       @like.save
-      @user = User.find_by_email(@reply.creator)
+      @user = User.find(@reply.user_id)
       @user.karma += 1
       @user.save
     end
@@ -139,7 +139,7 @@ class RepliesController < ApplicationController
       @like.delete
       @reply.points -= 1
       @reply.save
-      @user = User.find_by_email(@reply.creator)
+      @user = User.find(@reply.user_id)
       @user.karma -= 1
       @user.save
     end
@@ -158,6 +158,6 @@ class RepliesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def reply_params
-      params.require(:reply).permit(:content, :creator, :comment_id, :reply_id)
+      params.require(:reply).permit(:content, :user_id, :comment_id, :reply_id)
     end
 end

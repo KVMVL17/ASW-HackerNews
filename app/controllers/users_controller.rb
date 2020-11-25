@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   end
   
   def userprofile
-    @user = User.where(email: params[:user_id]).first
+    @user = User.where(id: params[:user_id]).first
     render "userprofile"
   end
   
