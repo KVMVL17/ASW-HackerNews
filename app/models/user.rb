@@ -6,7 +6,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   
   def self.from_google(email:, full_name:, uid:, avatar_url:)
-    create_with(uid: uid, name: full_name).find_or_create_by!(email: email[0..email.index('@')-1])
+    create_with(uid: uid, name: full_name, apiKey: SecureRandom.urlsafe_base64).find_or_create_by!(email: email[0..email.index('@')-1])
   end
   
 end

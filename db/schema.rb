@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 2020_11_26_124354) do
     t.string "name"
     t.text "about"
     t.integer "karma", default: 1
-    t.string "appiKey"
+    t.string "apiKey"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
