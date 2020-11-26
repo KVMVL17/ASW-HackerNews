@@ -9,9 +9,13 @@ class Api::UsersController < ApplicationController
   # GET /api/v1/contributions/1
   # GET /api/v1/contributions/1.json
   def show
-    @user = User.find(params[:id])
     respond_to do |format|
-      format.json { render json: @user}
+      if User.exists?(params[:id])
+        @user = User.find(params[:id])
+        format.json { render json: @user, status: :ok}
+      else
+        format.json { render json: {error: "error", code: 404, message: "User with id: " + params[:id].to_s + " does not exist"}, status: :not_found}
+      end
     end
   end
 
@@ -61,6 +65,21 @@ class Api::UsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to api_v1_contributions_url, notice: 'Contribution was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+  
+  def updateprofile
+    
+    @user.about = @updateduser.about
+    @user.save
+    respond_to do |format|
+      if User.exists?(params[:id])
+        @user = User.find(params[:id])
+        format.json { render json: @user, status: :ok}
+      else
+        format.json { render json: {error: "error", code: 404, message: "User with id: " + params[:id].to_s + " does not exist"}, status: :not_found}
+      end
+      
     end
   end
 

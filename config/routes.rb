@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     put 'like/:id', to: 'api/contributions#like', as: 'like_api'
     
     get 'users/:id', to: 'api/users#show', as: 'show_user_api'
+    put 'users/:id', to: 'api/users#updateprofile', as: 'updateUser'
   end
 
   get 'newest', to: 'contributions#newest', as: 'newest'

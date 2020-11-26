@@ -6,10 +6,9 @@ info:
   description: "This is the Open API documentation for the REST API of our beloved application **Hacker News** deployed at <https://asw-hackernews-kaai12.herokuapp.com/>. <br>All operations are executable."
 
 servers:
-- url: http://3.89.132.201:8080/api
-- url: http://100.26.227.189:8080/api
-- url: http://3.235.121.254:8080/api
-- url: http://3.235.67.131:8080/api
+- url: http://3.237.237.195:8080/api
+
+
 
 paths:
   /contributions:
@@ -77,7 +76,7 @@ paths:
             format: int64
       responses:
         200:
-          description: Succesful request
+          description: Successful request
           content:
             application/json:
               schema:
@@ -108,7 +107,7 @@ paths:
             format: int64
       responses:
         200:
-          description: Succesful request
+          description: Successful request
           content:
             application/json:
               schema:
@@ -125,6 +124,39 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error404U'
+                  
+  /contributions/{id}/likes:
+    put:
+      tags:
+        - contributions
+      summary: Vote a contribution
+      operationId: votecontribution
+      parameters:
+        - name: id
+          in: path
+          description: ID of the contribution
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+             schema:
+                $ref: '#/components/schemas/ErrorResult'
+             examples:
+                errorExample:
+                  $ref: '#/components/examples/error404C'
+      
+    
                 
   /users/{id}:
     get:
@@ -136,6 +168,55 @@ paths:
         - name: id
           in: path
           description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Succesfull request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404U'
+    put:
+      tags:
+        - users
+      summary: Updates the user with the information given in the request
+      operationId: updateUser
+      requestBody:
+        description: Provide the new description of the user and the api key
+        content:
+          application/json:
+            schema:
+              required:
+              - ApiKey
+              - About
+              type: object
+              properties:
+                ApiKey:
+                  type: string
+                  minLength: 4
+                  example: 'faskldjhfakljsdhfkljadshfuq'
+                About:
+                  type: string
+                  minLength: 4
+                  maxLength: 280
+                  example: 'Como está mi hente? :D'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user to be updated
           required: true
           schema:
             type: integer
@@ -380,9 +461,3 @@ securitySchemes:
     type: apiKey
     name: X-API-KEY #Custom headers in rails apps must have the X- prefix
     in: header
-        
-          
-      
-            
-            
-
