@@ -1,4 +1,8 @@
 class Api::ContributionsController < ApplicationController
+  
+  def initialize(headers = {})
+    @headers = headers
+  end
 
   # GET /api/v1/contributions
   # GET /api/v1/contributions.json
@@ -15,6 +19,7 @@ class Api::ContributionsController < ApplicationController
     @aux = Contribution.exists?(params[:id])
     respond_to do |format|
       if @aux
+        @contribution = Contribution.find(params[:id])
         format.json { render json: @contribution}
       else
         format.json { render json:{status:"error", code:404, message: "Contribution with ID '" + params[:id].to_s + "' not found"}, status: :not_found}
@@ -93,23 +98,66 @@ class Api::ContributionsController < ApplicationController
   end
   
   def like
-    @contribution = Contribution.find(params[:id])
-    @like = Like.where(contribution_id: @contribution.id, user_id: current_user.id).first
-    if @like.nil?
-      @like = Like.new
-      @like.contribution_id = params[:id]
-      @like.user_id = current_user.id
-      @contribution.points += 1
-      @contribution.save
-      @like.save
-      @user = User.find(@contribution.user_id)
-      @user.karma += 1
-      @user.save
-    end
     respond_to do |format|
-      format.html { redirect_back(fallback_location: root_path) }
-      format.html { notice 'Contribution was successfully liked' }
-      format.json { head :no_content }
+      if request.headers['X-API-KEY'].present?
+        @token = request.headers['X-API-KEY'].to_s
+        @user  = User.find_by_apiKey(@token)
+        if !@user.nil?
+          if Contribution.exists?(params[:id])
+            @contribution = Contribution.find(params[:id])
+            @like = Like.where(contribution_id: @contribution.id, user_id: @user.id).first
+            if @like.nil?
+              @like = Like.new
+              @like.contribution_id = params[:id]
+              @like.user_id = @user.id
+              @contribution.points += 1
+              @contribution.save
+              @like.save
+              @user.karma +=1
+              @user.save
+              format.json { render json: @contribution, status: :created}
+            else
+              format.json { render json:{status:"error", code:208, message: "contribution already voted"}, status: :already_reported}
+            end
+          else
+            format.json { render json:{status:"error", code:404, message: "Contribution with id " + params[:id] + " not found"}, status: :not_found}
+          end
+          
+        else
+          format.json { render json:{status:"error", code:400, message: "token not found"}, status: :bad_request}
+        end
+      end
+    end
+  end
+  
+  
+  def dislike
+    respond_to do |format|
+      if request.headers['X-API-KEY'].present?
+        @token = request.headers['X-API-KEY'].to_s
+        @user  = User.find_by_apiKey(@token)
+        if !@user.nil?
+          if Contribution.exists?(params[:id])
+            @contribution = Contribution.find(params[:id])
+            @like = Like.where(contribution_id: @contribution.id, user_id: @user.id).first
+            if !@like.nil?
+              @like.delete
+              @contribution.points -= 1
+              @contribution.save
+              @user.karma -= 1
+              @user.save
+              format.json { render json:{status:"ok", code:204, message: "contribution unvoted successfully"}, status: :no_content}
+            else
+              format.json { render json:{status:"error", code:404, message: "contribution has not been voted by user"}, status: :not_found}
+            end
+          else
+            format.json { render json:{status:"error", code:404, message: "Contribution with id " + params[:id] + " not found"}, status: :not_found}
+          end
+        else
+          format.json { render json:{status:"error", code:403, message: "Your api key " + @token + " is not valid"}, status: :forbidden}
+        end
+      end
+      format.json { render json:{status:"error", code:401, message: "You provided no api key"}, status: :unauthorized}
     end
   end
   

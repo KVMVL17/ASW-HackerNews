@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     @updateduser = User.new
     @user = User.find(current_user.id)
     render "myprofile"
-  end
+  end 
 
   def updateprofile
     @updateduser = User.new(userupdated_params)

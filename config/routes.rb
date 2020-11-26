@@ -31,7 +31,8 @@ Rails.application.routes.draw do
     get 'ask', to: 'api/contributions#ask', as: 'ask_api'
     get 'contributions/users/:id', to: 'api/contributions#showcontributionsofuser', as: 'contributionsofuser_api'
     get 'contributions/:id', to: 'api/contributions#show', as: 'show_contribution_api'
-    put 'like/:id', to: 'api/contributions#like', as: 'like_api'
+    post '/contributions/:id/likes', to: 'api/contributions#like', as: 'like_api'
+    delete '/contributions/:id/likes', to: 'api/contributions#dislike', as: 'dislike_api'
     
     get 'users/:id', to: 'api/users#show', as: 'show_user_api'
     put 'users/:id', to: 'api/users#updateprofile', as: 'updateUser'

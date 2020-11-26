@@ -69,12 +69,11 @@ class Api::UsersController < ApplicationController
   end
   
   def updateprofile
-    
-    @user.about = @updateduser.about
-    @user.save
     respond_to do |format|
       if User.exists?(params[:id])
         @user = User.find(params[:id])
+        @user.about = params[:About]
+        @user.save
         format.json { render json: @user, status: :ok}
       else
         format.json { render json: {error: "error", code: 404, message: "User with id: " + params[:id].to_s + " does not exist"}, status: :not_found}
