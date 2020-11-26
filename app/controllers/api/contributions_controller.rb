@@ -91,6 +91,31 @@ class Api::ContributionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def like
+    @contribution = Contribution.find(params[:id])
+    @like = Like.where(contribution_id: @contribution.id, user_id: current_user.id).first
+    if @like.nil?
+      @like = Like.new
+      @like.contribution_id = params[:id]
+      @like.user_id = current_user.id
+      @contribution.points += 1
+      @contribution.save
+      @like.save
+      @user = User.find(@contribution.user_id)
+      @user.karma += 1
+      @user.save
+    end
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path) }
+      format.html { notice 'Contribution was successfully liked' }
+      format.json { head :no_content }
+    end
+  end
+  
+  
+  
+  
 
   private
 

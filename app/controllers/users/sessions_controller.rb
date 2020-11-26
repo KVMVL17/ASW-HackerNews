@@ -12,7 +12,8 @@ class Users::SessionsController < Devise::SessionsController
     user           = User.new
     user.id        = user_info["uid"]
     user.name      = user_info["info"]["name"]
-
+    
+    
     session[:user_id] = @user.id
     @current_user = @user_id
     redirect_to root_path
