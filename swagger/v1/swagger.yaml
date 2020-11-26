@@ -178,7 +178,7 @@ components:
           example: https://www.google.es/
         text:
           type: string
-          description: Text of the contribution (converts to comment if URL present)
+          description: Text of the contribution (converts to comment if URL present).
           example: Lorem ipsum dolor sit amet consectetur adipiscing elit, parturient sociis eros semper elementum erat pulvinar at, nunc tortor aliquet arcu pretium ad.
         creator:
           type: string
