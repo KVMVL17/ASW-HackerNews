@@ -7,7 +7,7 @@ info:
 
 servers:
 - url: http://18.206.152.198:8080/api
-
+- url: http://54.158.190.88:8080/api
 
 
 paths:
@@ -54,12 +54,31 @@ paths:
           required: true
         
         responses:
-          201:
-            description: Contribution created
+          200:
+            description: Contribution with the URL that already exists
             content:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Contribution'
+          201:
+            description: Contribution created successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Contribution'
+          400:
+            description: 'Error: Bad Request'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  Error blank Title:
+                    $ref: '#/components/examples/error400TitleBlank'
+                  Error invalid Url:
+                    $ref: '#/components/examples/error400InvalidUrl'
+                  Error Url and Text are blank:
+                    $ref: '#/components/examples/error400UrlAndTextBlank'
         security:
         - ApiKeyAuth: []
       
@@ -190,7 +209,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
                 errorExample:
-                  $ref: '#/components/examples/error400L'
+                  $ref: '#/components/examples/error400InvalidIdContribution'
       security:
       - ApiKeyAuth: []
       
@@ -528,11 +547,26 @@ components:
         message: 
           type: string
   examples:
-    error400:
+    error400InvalidUrl:
       value:
         status: 400
         error: "Bad Request"
         message: "Invalid URL"
+    error400InvalidIdContribution:
+      value:
+        status: 400
+        error: "Bad Request"
+        message: "Invalid contribution ID"
+    error400UrlAndTextBlank:
+      value:
+        status: 400
+        error: "Bad Request"
+        message: "URL and Text can't be blank at the same time"
+    error400TitleBlank:
+      value:
+        status: 400
+        error: "Bad Request"
+        message: "Title can't be blank"
     error401:
       value:
         status: 401
@@ -553,11 +587,6 @@ components:
         status: 404
         error: "Not Found"
         message: "No Contribution with that ID"
-    error400L:
-      value:
-        status: 400
-        error: "Bad Request"
-        message: "Invalid contribution ID"
         
   securitySchemes:
     ApiKeyAuth:

@@ -188,9 +188,9 @@ class Api::ContributionsController < ApplicationController
               end
               format.json { render json: @NContribution, status: :created}
             else #aqui ya existe la url o hay algún fallo
-              if contribution_params[:title].blank?
+              if params[:title].blank?
                 format.json { render json: {status:"error", code:400, message: "Title can't be blank"}, status: :bad_request }
-              elsif contribution_params[:url].blank? && contribution_params[:text].blank?
+              elsif params[:url].blank? && params[:text].blank?
                 format.json { render json: {status:"error", code:400, message: "URL and Text can't be blank at the same time"}, status: :bad_request }
               else
                 format.json { render json: {status:"error", code:400, message: "URL not valid"}, status: :bad_request }
