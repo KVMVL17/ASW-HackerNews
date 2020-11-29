@@ -6,7 +6,7 @@ info:
   description: "This is the Open API documentation for the REST API of our beloved application **Hacker News** deployed at <https://asw-hackernews-kaai12.herokuapp.com/>. <br>All operations are executable."
 
 servers:
-- url: http://35.174.241.18:8080/api
+- url: http://18.206.152.198:8080/api
 
 
 
@@ -26,7 +26,43 @@ paths:
                 title: ArrayOfContributions
                 type: array
                 items:
-                  $ref: '#/components/schemas/Contribution' 
+                  $ref: '#/components/schemas/Contribution'
+                  
+    post:
+        tags:
+          - contributions
+        summary: Create a contribution
+        operationId: contribution_create
+        requestBody:
+          description: Attributes needed to create a contribution.
+          content:
+            application/json:
+              schema:
+                required:
+                - Contribution
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: 'this is a contribution title'
+                  url:
+                    type: string
+                    example: 'https://editor.swagger.io/'
+                  text:
+                    type: string
+                    example: 'if this is not empty, text will be a comment of a post of type url'
+          required: true
+        
+        responses:
+          201:
+            description: Contribution created
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Contribution'
+        security:
+        - ApiKeyAuth: []
+      
   /newest:
     get:
       tags: 
@@ -207,6 +243,7 @@ paths:
         
       security:
       - ApiKeyAuth: []
+      
       
     
                 

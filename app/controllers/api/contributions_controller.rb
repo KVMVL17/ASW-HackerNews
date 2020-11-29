@@ -161,7 +161,51 @@ class Api::ContributionsController < ApplicationController
     end
   end
   
-  
+  def create
+    respond_to do |format|
+      if request.headers['X-API-KEY'].present?
+        @user = User.find_by_apiKey(request.headers['X-API-KEY'].to_s)
+        if @user.nil?
+          format.json { render json:{status:"error", code:403, message: "Your api key " + request.headers['X-API-KEY'].to_s + " is not valid"}, status: :forbidden}
+        else
+          if Contribution.find_by_url(params[:url]).nil? || params[:url].blank?
+            @NContribution = Contribution.new
+            @NContribution.title = params[:title]
+            @NContribution.url = params[:url]
+            @NContribution.text = params[:text]#se puede poner en el else
+            @NContribution.user_id = @user.id
+            if !params[:url].blank? && !params[:text].blank?
+              @NContribution.text = ""
+              @comment = Comment.new
+              @comment.content = params[:text]
+              @comment.user_id = @user.id
+            end
+            
+            if @NContribution.save
+              if !params[:url].blank? && !params[:text].blank?
+                @comment.contribution_id = @NContribution.id
+                @comment.save
+              end
+              format.json { render json: @NContribution, status: :created}
+            else #aqui ya existe la url o hay algún fallo
+              if contribution_params[:title].blank?
+                format.json { render json: {status:"error", code:400, message: "Title can't be blank"}, status: :bad_request }
+              elsif contribution_params[:url].blank? && contribution_params[:text].blank?
+                format.json { render json: {status:"error", code:400, message: "URL and Text can't be blank at the same time"}, status: :bad_request }
+              else
+                format.json { render json: {status:"error", code:400, message: "URL not valid"}, status: :bad_request }
+              end
+              format.json { render json: {status:"error", code:401, message: "You provided no api key"}, status: :unprocessable_entity }
+            end
+          else
+            format.json { render json: Contribution.find_by_url(params[:url]), status: :ok }
+          end
+        end
+      else
+        format.json { render json:{status:"error", code:401, message: "You provided no api key"}, status: :unauthorized}
+      end
+    end
+  end
   
   
 

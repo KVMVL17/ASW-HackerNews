@@ -26,11 +26,16 @@ Rails.application.routes.draw do
   end
 
   scope "/api",defaults: {format: 'json'} do
+    #contributions
     get 'contributions', to: 'api/contributions#index', as: 'index_api'
     get 'newest', to: 'api/contributions#newest', as: 'newest_api'
     get 'ask', to: 'api/contributions#ask', as: 'ask_api'
     get 'contributions/users/:id', to: 'api/contributions#showcontributionsofuser', as: 'contributionsofuser_api'
     get 'contributions/:id', to: 'api/contributions#show', as: 'show_contribution_api'
+    
+    post 'contributions', to: 'api/contributions#create', as: 'contribution_create'
+    
+    #likes
     post '/contributions/:id/likes', to: 'api/contributions#like', as: 'like_api'
     delete '/contributions/:id/likes', to: 'api/contributions#dislike', as: 'dislike_api'
     
