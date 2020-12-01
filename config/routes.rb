@@ -31,10 +31,11 @@ Rails.application.routes.draw do
     get 'newest', to: 'api/contributions#newest', as: 'newest_api'
     get 'ask', to: 'api/contributions#ask', as: 'ask_api'
     get 'contributions/users/:id', to: 'api/contributions#showcontributionsofuser', as: 'contributionsofuser_api'
-    get 'contributions/:id', to: 'api/contributions#show', as: 'show_contribution_api'
     
     post 'contributions', to: 'api/contributions#create', as: 'contribution_create'
+    get 'contributions/:id', to: 'api/contributions#show', as: 'show_contribution_api'
     delete 'contributions/:id', to: 'api/contributions#destroy', as: 'contribution_delete'
+    put 'contributions/:id', to: 'api/contributions#update', as: 'contribution_update'
     
     #likes
     post '/contributions/:id/likes', to: 'api/contributions#like', as: 'like_api'

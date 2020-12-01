@@ -206,6 +206,37 @@ class Api::ContributionsController < ApplicationController
     end
   end
   
+  def update
+    respond_to do |format|
+      if request.headers['X-API-KEY'].present?
+        @user = User.find_by_apiKey(request.headers['X-API-KEY'].to_s)
+        if @user.nil?
+          format.json { render json:{status: "error", code:403, message: "Your api key " + request.headers['X-API-KEY'].to_s + " is not valid"}, status: :forbidden}
+        else
+          if Contribution.exists?(params[:id])
+            @contribution = Contribution.find(params[:id])
+            if @contribution.user_id == @user.id
+              if !params[:title].blank?
+                @contribution.title = params[:title]
+              end
+              if !params[:text].blank?
+                @contribution.text = params[:text]
+              end
+              @contribution.save
+              format.json { render json: { status: "ok", code: 200, message: "Contribution updated" }, status: :ok }
+            else
+              format.json { render json:{status: "error", code:403, message: "This contribution does not belong to you"}, status: :forbidden}
+            end
+          else
+            format.json { render json: { status: "error", code: 404, message: "Contribution with ID: " + params[:id] + " not found" }, status: :not_found }
+          end
+        end
+      else
+        format.json { render json:{status:"error", code:401, message: "You provided no api key"}, status: :unauthorized}
+      end
+    end
+  end
+  
   
 
   private
