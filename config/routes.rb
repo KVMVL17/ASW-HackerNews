@@ -45,7 +45,14 @@ Rails.application.routes.draw do
     put 'users/:id', to: 'api/users#updateprofile', as: 'updateUser'
     
     #comments
+    get 'comments/upvoted', to: 'api/comments#upvoted_comments', as: 'upvoted_comments'
     get 'contributions/:id/comments', to: 'api/contributions#showComments', as: 'comment_api'
+    post 'contributions/:id/comments', to: 'api/comments#create', as: 'comments_create'
+    get 'comments/:id', to: 'api/comments#showComment', as: 'comment_show'
+    delete 'comments/:id', to: 'api/comments#destroy', as: 'comment_delete'
+    put 'comments/:id', to: 'api/comments#update', as: 'comment_update'
+    post 'comments/:id/likes', to: 'api/comments#like', as: 'comment_like'
+    delete 'comments/:id/likes', to: 'api/comments#dislike', as: 'comment_dislike'
     
     #replies
     get 'comments/:id/replies', to: 'api/replies#show', as: 'replies_api'
@@ -53,6 +60,9 @@ Rails.application.routes.draw do
     get 'replies/:id', to: 'api/replies#showReply', as: 'reply_show'
     delete 'replies/:id', to: 'api/replies#destroy', as: 'reply_delete'
     put 'replies/:id', to: 'api/replies#update', as: 'reply_update'
+    post 'replies/:id/likes', to: 'api/replies#like', as: 'reply_like'
+    delete 'replies/:id/likes', to: 'api/replies#dislike', as: 'reply_dislike'
+    post 'replies/:id', to: 'api/replies#create_recursive', as: 'reply_create_recursive'
     
   end
 
