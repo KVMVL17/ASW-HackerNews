@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     get 'contributions/:id', to: 'api/contributions#show', as: 'show_contribution_api'
     
     post 'contributions', to: 'api/contributions#create', as: 'contribution_create'
+    delete 'contributions/:id', to: 'api/contributions#destroy', as: 'contribution_delete'
     
     #likes
     post '/contributions/:id/likes', to: 'api/contributions#like', as: 'like_api'

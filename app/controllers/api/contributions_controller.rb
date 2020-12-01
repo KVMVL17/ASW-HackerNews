@@ -30,7 +30,7 @@ class Api::ContributionsController < ApplicationController
   def showComments
     @aux = Contribution.exists?(params[:id])
     respond_to do |format|
-      if  @aux
+      if @aux
         @contribution = Contribution.find(params[:id])
         @comments = Comment.where(contribution_id: @contribution.id)
         format.json { render json: @comments,status: :ok}
@@ -69,46 +69,6 @@ class Api::ContributionsController < ApplicationController
 
   # GET /api/v1/contributions/1/edit
   def edit
-  end
-
-  # POST /api/v1/contributions
-  # POST /api/v1/contributions.json
-  def create
-    @api_v1_contribution = Api::Contribution.new(api_v1_contribution_params)
-
-    respond_to do |format|
-      if @api_v1_contribution.save
-        format.html { redirect_to @api_v1_contribution, notice: 'Contribution was successfully created.' }
-        format.json { render :show, status: :created, location: @api_v1_contribution }
-      else
-        format.html { render :new }
-        format.json { render json: @api_v1_contribution.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /api/v1/contributions/1
-  # PATCH/PUT /api/v1/contributions/1.json
-  def update
-    respond_to do |format|
-      if @api_v1_contribution.update(api_v1_contribution_params)
-        format.html { redirect_to @api_v1_contribution, notice: 'Contribution was successfully updated.' }
-        format.json { render :show, status: :ok, location: @api_v1_contribution }
-      else
-        format.html { render :edit }
-        format.json { render json: @api_v1_contribution.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /api/v1/contributions/1
-  # DELETE /api/v1/contributions/1.json
-  def destroy
-    @api_v1_contribution.destroy
-    respond_to do |format|
-      format.html { redirect_to api_v1_contributions_url, notice: 'Contribution was successfully destroyed.' }
-      format.json { head :no_content }
-    end
   end
   
   def like
@@ -213,6 +173,31 @@ class Api::ContributionsController < ApplicationController
             end
           else
             format.json { render json: Contribution.find_by_url(params[:url]), status: :ok }
+          end
+        end
+      else
+        format.json { render json:{status:"error", code:401, message: "You provided no api key"}, status: :unauthorized}
+      end
+    end
+  end
+  
+  def destroy
+    respond_to do |format|
+      if request.headers['X-API-KEY'].present?
+        @user = User.find_by_apiKey(request.headers['X-API-KEY'].to_s)
+        if @user.nil?
+          format.json { render json:{status: "error", code:403, message: "Your api key " + request.headers['X-API-KEY'].to_s + " is not valid"}, status: :forbidden}
+        else
+          if Contribution.exists?(params[:id])
+            @contribution = Contribution.find(params[:id])
+            if @contribution.user_id == @user.id
+              @contribution.destroy
+              format.json { render json: { status: "no content", code: 204, message: "Contribution deleted" }, status: :no_content }
+            else
+              format.json { render json:{status: "error", code:403, message: "This contribution does not belong to you"}, status: :forbidden}
+            end
+          else
+            format.json { render json: { status: "error", code: 404, message: "Contribution with ID: " + params[:id] + " not found" }, status: :not_found }
           end
         end
       else
