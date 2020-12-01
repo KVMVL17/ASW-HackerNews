@@ -7,7 +7,7 @@ info:
 
 servers:
 - url: http://18.206.152.198:8080/api
-- url: http://54.158.190.88:8080/api
+- url: http://18.206.202.36:8080/api
 - url: http://3.214.224.98:8080/api
 - url: http://54.224.50.67:8080/api
 
@@ -701,46 +701,57 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error404U'
+  /myprofile:
+    get:
+      tags:
+        - users
+      summary: Return the information of the user with given token
+      operationId: showMyProfile
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyProfile'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ReplyNotFound:
+                  $ref: '#/components/examples/error404UserNotFound'
+      security:
+        - ApiKeyAuth: []
     put:
       tags:
         - users
-      summary: Updates the user with the information given in the request
+      summary: Updates the user profile with the information given in the request
       operationId: updateUser
       requestBody:
-        description: Provide the new description of the user and the api key
+        description: Provide the new description of the user
         content:
           application/json:
             schema:
               required:
-              - ApiKey
               - About
               type: object
               properties:
-                ApiKey:
-                  type: string
-                  minLength: 4
-                  example: 'faskldjhfakljsdhfkljadshfuq'
                 About:
                   type: string
                   minLength: 4
                   maxLength: 280
-                  example: 'Como está mi hente? :D'
+                  example: 'Acabare pronto la carrera?'
         required: true
-      parameters:
-        - name: id
-          in: path
-          description: ID of the user to be updated
-          required: true
-          schema:
-            type: integer
-            format: int64
       responses:
         200:
           description: Succesfull request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/MyProfile'
         404:
           description: 'Error: Not Found'
           content:
@@ -750,7 +761,8 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error404U'
-            
+      security:
+        - ApiKeyAuth: []
           
 components:
   schemas:
@@ -906,33 +918,54 @@ components:
           format: int64
           description: Unique identifier representing the user
           example: 10
-        email:
-          type: string
-          description: Username of the user extracted from the email
-          example: carles.farre
-        name:
+        username:
           type: string
           description: Name of the user
           example: Carles Farré
-        about:
-          type: string
-          description: Little description about the user
-          example: Currently working on ASW
         karma:
           type: integer
           format: int64
           description: Karma of the user
           example: 500
+        about:
+          type: string
+          description: Little description about the user
+          example: Currently working on ASW
         created_at:
           type: string
           format: date-time
           description: Date and time of the user's creation
           example: "2020-11-25 14:04:56"
-        updated_at:
+    MyProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier representing the user
+          example: 10
+        username:
+          type: string
+          description: Name of the user
+          example: Carles Farré
+        karma:
+          type: integer
+          format: int64
+          description: Karma of the user
+          example: 500
+        about:
+          type: string
+          description: Little description about the user
+          example: Currently working on ASW
+        created_at:
           type: string
           format: date-time
-          description: Date and time of the most recent user's update
-          example: "2020-11-25 15:04:56"
+          description: Date and time of the user's creation
+          example: "2020-11-25 14:04:56"
+        apiKey:
+          type: string
+          description: API Key of the user
+          example: "LkHD123DSAKiS4ac"
     VoteContribution:
       type: object
       properties:
@@ -1013,6 +1046,11 @@ components:
         status: 404
         error : "Not Found"
         message : "No Reply with that ID"
+    error404UserNotFound:
+      value:
+        status: 404
+        error : "Not Found"
+        message : "No User with that API Key"
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -42,7 +42,8 @@ Rails.application.routes.draw do
     delete '/contributions/:id/likes', to: 'api/contributions#dislike', as: 'dislike_api'
     
     get 'users/:id', to: 'api/users#show', as: 'show_user_api'
-    put 'users/:id', to: 'api/users#updateprofile', as: 'updateUser'
+    get 'myprofile', to: 'api/users#showMyProfile', as: 'getMyProfile'
+    put 'myprofile', to: 'api/users#updateProfile', as: 'updateMyProfile'
     
     #comments
     get 'contributions/:id/comments', to: 'api/contributions#showComments', as: 'comment_api'
