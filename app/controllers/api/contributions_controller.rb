@@ -26,6 +26,20 @@ class Api::ContributionsController < ApplicationController
       end
     end
   end
+  
+  def showComments
+    @aux = Contribution.exists?(params[:id])
+    respond_to do |format|
+      if  @aux
+        @contribution = Contribution.find(params[:id])
+        @comments = Comment.where(contribution_id: @contribution.id)
+        format.json { render json: @comments,status: :ok}
+      else
+        puts "---------"
+        format.json { render json:{status:"error", code:404, message: "Contribution with ID '" + params[:id].to_s + "' not found"}, status: :not_found}
+      end
+    end
+  end
 
   # GET /api/v1/contributions/new
   def new

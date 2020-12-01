@@ -8,7 +8,7 @@ info:
 servers:
 - url: http://18.206.152.198:8080/api
 - url: http://54.158.190.88:8080/api
-
+- url: http://3.214.224.98:8080/api
 
 paths:
   /contributions:
@@ -212,6 +212,70 @@ paths:
                   $ref: '#/components/examples/error400InvalidIdContribution'
       security:
       - ApiKeyAuth: []
+      
+  /contributions/{id}/comments:
+    get:
+      tags:
+        - comments
+      summary: Comments of a contribution
+      operationId: commentsofacontribution
+      parameters:
+        - name: id
+          in: path
+          description: ID of the contribution
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        404:
+          description: 'Error: Not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404C'
+  
+  /comments/{id}/replies:
+    get:
+      tags:
+        - replies
+      summary: Replies of a comment
+      operationId: repliesofacomment
+      parameters:
+        - name: id
+          in : path
+          description: ID of the comment
+          required: true 
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reply'
+        404:
+          description: 'Error: Not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404COM'
+            
+  
       
     delete:
       tags:
@@ -587,7 +651,11 @@ components:
         status: 404
         error: "Not Found"
         message: "No Contribution with that ID"
-        
+    error404COM:
+      value:
+        status: 404
+        error : "Not Found"
+        message : "No Comment with that ID"
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
