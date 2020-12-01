@@ -264,40 +264,6 @@ paths:
 
       security:
       - ApiKeyAuth: []
-                  
-  /contributions/users/{id}:
-    get:
-      tags:
-        - contributions
-      summary: Return contributions from a user
-      operationId: showcontributoinsofuser
-      parameters:
-        - name: id
-          in: path
-          description: ID of the user
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        200:
-          description: Successful request
-          content:
-            application/json:
-              schema:
-                title: ArrayOfContributions
-                type: array
-                items:
-                  $ref: '#/components/schemas/Contribution'
-        404:
-          description: 'Error: Not Found'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResult'
-              examples:
-                errorExample:
-                  $ref: '#/components/examples/error404U'
                  
   /contributions/{id}/likes:
     post:
@@ -413,6 +379,69 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error404C'
+                  
+                    
+  /contributions/users/{id}:
+    get:
+      tags:
+        - contributions
+      summary: Return contributions from a user
+      operationId: showcontributoinsofuser
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                title: ArrayOfContributions
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404U'
+
+  /contributions/upvoted:
+    get:
+      tags:
+        - contributions
+      summary: Return upvoted contributions of a user
+      operationId: showTheUpvotedContributoinsOfuser
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                title: ArrayOfContributions
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404U'
+      security:
+      - ApiKeyAuth: []
   
   /comments/{id}/replies:
     get:
@@ -714,6 +743,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MyProfile'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error403'
         404:
           description: 'Error: Not Found'
           content:
@@ -752,6 +790,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MyProfile'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error403'
         404:
           description: 'Error: Not Found'
           content:

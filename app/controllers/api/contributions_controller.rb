@@ -61,9 +61,34 @@ class Api::ContributionsController < ApplicationController
   end
   
   def showcontributionsofuser
-    @contributions = Contribution.where(user_id: params[:id])
     respond_to do |format|
-      format.json { render json: @contributions }
+      if User.exists?(params[:id])
+        @contributions = Contribution.where(user_id: params[:id])
+        format.json { render json: @contributions }
+      else
+        format.json { render json:{status:"error", code:404, message: "User with ID '" + params[:id].to_s + "' not found"}, status: :not_found}
+      end
+    end 
+  end
+  
+  def showUpvotedsByUser
+    respond_to do |format|
+      if request.headers['X-API-KEY'].present?
+        @token = request.headers['X-API-KEY'].to_s
+        if User.exists?(apiKey: @token)
+          @user = User.find_by_apiKey(@token)
+          @like = Like.where(user_id: @user.id, comment_id: nil, reply_id: nil)
+          @contributions = Contribution.none.to_a
+          @like.each do |like|
+            @contributions.push Contribution.find(like.contribution_id)
+          end
+          format.json { render json: @contributions }
+        else
+          format.json { render json: {error: "error", code: 404, message: "User with token '" + @token + "' does not exist"}, status: :not_found}
+        end
+      else
+        format.json { render json:{status:"error", code:403, message: "Token is blank"}, status: :forbidden}
+      end
     end 
   end
 
@@ -94,7 +119,7 @@ class Api::ContributionsController < ApplicationController
               format.json { render json:{status:"error", code:208, message: "contribution already voted"}, status: :already_reported}
             end
           else
-            format.json { render json:{status:"error", code:404, message: "Contribution with id " + params[:id] + " not found"}, status: :not_found}
+            format.json { render json:{status:"error", code:404, message: "Contribution with ID '" + params[:id] + "' not found"}, status: :not_found}
           end
           
         else
@@ -125,7 +150,7 @@ class Api::ContributionsController < ApplicationController
               format.json { render json:{status:"error", code:404, message: "contribution has not been voted by user"}, status: :not_found}
             end
           else
-            format.json { render json:{status:"error", code:404, message: "Contribution with id " + params[:id] + " not found"}, status: :not_found}
+            format.json { render json:{status:"error", code:404, message: "Contribution with ID '" + params[:id] + "' not found"}, status: :not_found}
           end
         else
           format.json { render json:{status:"error", code:403, message: "Your api key " + @token + " is not valid"}, status: :forbidden}
@@ -197,7 +222,7 @@ class Api::ContributionsController < ApplicationController
               format.json { render json:{status: "error", code:403, message: "This contribution does not belong to you"}, status: :forbidden}
             end
           else
-            format.json { render json: { status: "error", code: 404, message: "Contribution with ID: " + params[:id] + " not found" }, status: :not_found }
+            format.json { render json: { status: "error", code: 404, message: "Contribution with ID '" + params[:id] + "' not found" }, status: :not_found }
           end
         end
       else
@@ -228,7 +253,7 @@ class Api::ContributionsController < ApplicationController
               format.json { render json:{status: "error", code:403, message: "This contribution does not belong to you"}, status: :forbidden}
             end
           else
-            format.json { render json: { status: "error", code: 404, message: "Contribution with ID: " + params[:id] + " not found" }, status: :not_found }
+            format.json { render json: { status: "error", code: 404, message: "Contribution with ID '" + params[:id] + "' not found" }, status: :not_found }
           end
         end
       else

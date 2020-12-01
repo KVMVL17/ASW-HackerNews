@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     get 'newest', to: 'api/contributions#newest', as: 'newest_api'
     get 'ask', to: 'api/contributions#ask', as: 'ask_api'
     get 'contributions/users/:id', to: 'api/contributions#showcontributionsofuser', as: 'contributionsofuser_api'
+    get 'contributions/upvoted', to: 'api/contributions#showUpvotedsByUser', as: 'contributionsupvoteds_api'
     
     post 'contributions', to: 'api/contributions#create', as: 'contribution_create'
     get 'contributions/:id', to: 'api/contributions#show', as: 'show_contribution_api'

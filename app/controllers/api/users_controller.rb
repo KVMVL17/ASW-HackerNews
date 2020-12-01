@@ -65,7 +65,7 @@ class Api::UsersController < ApplicationController
           format.json { render json: {error: "error", code: 404, message: "User with id: " + @token + " does not exist"}, status: :not_found}
         end
       else
-        format.json { render json:{status:"error", code:400, message: "Token is blank"}, status: :bad_request}
+        format.json { render json:{status:"error", code:403, message: "Token is blank"}, status: :forbidden}
       end
     end
   end
@@ -83,7 +83,7 @@ class Api::UsersController < ApplicationController
           format.json { render json: {error: "error", code: 404, message: "User with id: " + @token + " does not exist"}, status: :not_found}
         end
       else
-        format.json { render json:{status:"error", code:400, message: "Token is blank"}, status: :bad_request}
+        format.json { render json:{status:"error", code:403, message: "Token is blank"}, status: :forbidden}
       end
     end
   end
