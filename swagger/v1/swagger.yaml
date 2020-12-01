@@ -442,8 +442,234 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
-                  $ref: '#/components/examples/error404COM'
+                CommentNotFound:
+                  $ref: '#/components/examples/error404CommentNotFound'
+    post:
+        tags:
+          - replies
+        summary: Create a reply for a comment
+        operationId: reply_create
+        parameters:
+          - name: id
+            in : path
+            description: ID of the comment
+            required: true 
+            schema:
+              type: integer
+              format: int64
+        requestBody:
+          description: Attributes needed to create a reply.
+          content:
+            application/json:
+              schema:
+                required:
+                - Reply
+                type: object
+                properties:
+                  content:
+                    type: string
+                    example: 'This is a content example'
+          required: true
+        
+        responses:
+          201:
+            description: Reply created successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Reply'
+          400:
+            description: 'Error: Bad Request'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  Error blank Content:
+                    $ref: '#/components/examples/error400ContentBlank'
+          404:
+            description: 'Error: Not found'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  CommentNotFound:
+                    $ref: '#/components/examples/error404CommentNotFound'
+          401:
+            description: 'Error: Unauthorized'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  NoApiKey:
+                    $ref: '#/components/examples/error401'
+          403:
+            description: 'Error: Forbidden'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  ApiKeyNotValid:
+                    $ref: '#/components/examples/error403'
+        security:
+        - ApiKeyAuth: []
+        
+  /replies/{id}:
+    get:
+      tags:
+        - replies
+      summary: Return a reply from an ID
+      operationId: showReply
+      parameters:
+        - name: id
+          in: path
+          description: ID of the reply
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reply'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ReplyNotFound:
+                  $ref: '#/components/examples/error404ReplyNotFound'
+    put:
+      tags:
+        - replies
+      summary: Update a reply from an ID
+      operationId: updateReply
+      requestBody:
+        description: Provide the new reply
+        content:
+          application/json:
+            schema:
+              required:
+              - content
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: 'This is a content example'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the reply
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses: 
+        200:
+          description: Reply updated
+          content:
+            application/json: {}
+        400:
+          description: 'Error: Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorBlankContent:
+                  $ref: '#/components/examples/error400ContentBlank'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ContributionNotFound:
+                  $ref: '#/components/examples/error404ReplyNotFound'
+        401:
+          description: 'Error: Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
+                ContributionDoesNotBelong:
+                  $ref: '#/components/examples/error403ContributionDoesNotBelong'
+
+      security:
+      - ApiKeyAuth: []
+    
+    delete:
+      tags:
+        - replies
+      summary: Delete a reply from an ID
+      operationId: deleteReply
+      parameters:
+        - name: id
+          in: path
+          description: ID of the reply
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses: 
+        204:
+          description: Reply deleted
+          content:
+            application/json: {}
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ContributionNotFound:
+                  $ref: '#/components/examples/error404C'
+        401:
+          description: 'Error: Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
+                ContributionDoesNotBelong:
+                  $ref: '#/components/examples/error403ContributionDoesNotBelong'
+
+      security:
+      - ApiKeyAuth: []
                 
   /users/{id}:
     get:
@@ -638,6 +864,7 @@ components:
           type: integer
           format: int64
           description: Unique identifier representing the reply
+          example: 12
         content:
           type: string
           description: Content of the reply
@@ -746,6 +973,11 @@ components:
         status: 400
         error: "Bad Request"
         message: "Title can't be blank"
+    error400ContentBlank:
+      value:
+        status: 400
+        error: "Bad Request"
+        message: "Content can't be blank"
     error401:
       value:
         status: 401
@@ -771,14 +1003,18 @@ components:
         status: 404
         error: "Not Found"
         message: "No Contribution with that ID"
-    error404COM:
+    error404CommentNotFound:
       value:
         status: 404
         error : "Not Found"
         message : "No Comment with that ID"
+    error404ReplyNotFound:
+      value:
+        status: 404
+        error : "Not Found"
+        message : "No Reply with that ID"
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
       name: X-API-KEY #Custom headers in rails apps must have the X- prefix
       in: header
-      

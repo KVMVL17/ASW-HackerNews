@@ -44,9 +44,16 @@ Rails.application.routes.draw do
     get 'users/:id', to: 'api/users#show', as: 'show_user_api'
     put 'users/:id', to: 'api/users#updateprofile', as: 'updateUser'
     
-    #comments & replies
+    #comments
     get 'contributions/:id/comments', to: 'api/contributions#showComments', as: 'comment_api'
+    
+    #replies
     get 'comments/:id/replies', to: 'api/replies#show', as: 'replies_api'
+    post 'comments/:id/replies', to: 'api/replies#create', as: 'replies_create'
+    get 'replies/:id', to: 'api/replies#showReply', as: 'reply_show'
+    delete 'replies/:id', to: 'api/replies#destroy', as: 'reply_delete'
+    put 'replies/:id', to: 'api/replies#update', as: 'reply_update'
+    
   end
 
   get 'newest', to: 'contributions#newest', as: 'newest'
