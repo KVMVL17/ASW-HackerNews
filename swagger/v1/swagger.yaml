@@ -9,7 +9,7 @@ servers:
 - url: http://18.206.152.198:8080/api
 - url: http://54.158.190.88:8080/api
 - url: http://3.214.224.98:8080/api
-- url: http://54.224.50.67:8080/api
+- url: http://54.161.21.143:8080/api
 
 paths:
   /contributions:
@@ -144,8 +144,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
-                  $ref: '#/components/examples/error404C'
+                ContributionNotFound:
+                  $ref: '#/components/examples/error404ContributionNotFound'
     put:
       tags:
         - contributions
@@ -181,6 +181,16 @@ paths:
           description: Contribution updated
           content:
             application/json: {}
+        400:
+          description: 'Error: Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                TextNotEmpty:
+                  $ref: '#/components/examples/error400TextNotEmpty'
+        
         404:
           description: 'Error: Not Found'
           content:
@@ -189,7 +199,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
                 ContributionNotFound:
-                  $ref: '#/components/examples/error404C'
+                  $ref: '#/components/examples/error404ContributionNotFound'
         401:
           description: 'Error: Unauthorized'
           content:
@@ -240,7 +250,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
                 ContributionNotFound:
-                  $ref: '#/components/examples/error404C'
+                  $ref: '#/components/examples/error404ContributionNotFound'
         401:
           description: 'Error: Unauthorized'
           content:
@@ -296,7 +306,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
+                UserNotFound:
                   $ref: '#/components/examples/error404U'
                  
   /contributions/{id}/likes:
@@ -320,15 +330,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VoteContribution'
-        400:
-          description: 'Error: Bad Request'
+        404:
+          description: 'Error: Not Found'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
-                  $ref: '#/components/examples/error400InvalidIdContribution'
+                ContributionNotFound:
+                  $ref: '#/components/examples/error404ContributionNotFound'
+        401:
+          description: 'Error: Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
+        
       security:
       - ApiKeyAuth: []
     
@@ -358,7 +387,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
+                NoApiKey:
                   $ref: '#/components/examples/error401'
         403:
           description: 'Error: Forbidden'
@@ -367,7 +396,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
+                InvalidApiKey:
                   $ref: '#/components/examples/error403'
         404:
           description: 'Error: Not Found'
@@ -376,13 +405,50 @@ paths:
              schema:
                 $ref: '#/components/schemas/ErrorResult'
              examples:
-                errorExample:
-                  $ref: '#/components/examples/error404C'
+                ContributionNotFound:
+                  $ref: '#/components/examples/error404ContributionNotFound'
         
       security:
       - ApiKeyAuth: []
       
+  /comments/upvoted:
+    get:
+      tags:
+        - comments
+      summary: Return your upvoted comments
+      operationId: upvotedComments
+      responses:
+        200:
+            description: Successful request
+            content:
+              application/json:
+                schema:
+                  title: ArrayOfComments
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Comment'
+        401:
+          description: 'Error: Unauthorized request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                InvalidApiKey:
+                  $ref: '#/components/examples/error403'
+      security:
+        - ApiKeyAuth: []
         
+  
   /contributions/{id}/comments:
     get:
       tags:
@@ -411,8 +477,317 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
-                  $ref: '#/components/examples/error404C'
+                ContributionNotFound:
+                  $ref: '#/components/examples/error404ContributionNotFound'
+    post:
+        tags:
+          - comments
+        summary: Create a comment for a contribution
+        operationId: comment_create
+        parameters:
+          - name: id
+            in : path
+            description: ID of the contribution
+            required: true 
+            schema:
+              type: integer
+              format: int64
+        requestBody:
+          description: Attributes needed to create a comment.
+          content:
+            application/json:
+              schema:
+                required:
+                - Comment
+                type: object
+                properties:
+                  content:
+                    type: string
+                    example: 'This is a content example'
+          required: true
+        
+        responses:
+          201:
+            description: Comment created successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Comment'
+          400:
+            description: 'Error: Bad Request'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  Error blank Content:
+                    $ref: '#/components/examples/error400ContentBlank'
+          404:
+            description: 'Error: Not found'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  ContributionNotFound:
+                    $ref: '#/components/examples/error404ContributionNotFound'
+          401:
+            description: 'Error: Unauthorized'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  NoApiKey:
+                    $ref: '#/components/examples/error401'
+          403:
+            description: 'Error: Forbidden'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  ApiKeyNotValid:
+                    $ref: '#/components/examples/error403'
+        security:
+        - ApiKeyAuth: []
+        
+  /comments/{id}:
+    get:
+      tags:
+        - comments
+      summary: Return a comment from an ID
+      operationId: showComment
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                CommentNotFound:
+                  $ref: '#/components/examples/error404CommentNotFound'
+    put:
+      tags:
+        - comments
+      summary: Update a comment from an ID
+      operationId: updateComment
+      requestBody:
+        description: Provide the new comment
+        content:
+          application/json:
+            schema:
+              required:
+              - content
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: 'This is a content example'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses: 
+        200:
+          description: Comment updated
+          content:
+            application/json: {}
+        400:
+          description: 'Error: Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorBlankContent:
+                  $ref: '#/components/examples/error400ContentBlank'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                CommentNotFound:
+                  $ref: '#/components/examples/error404CommentNotFound'
+        401:
+          description: 'Error: Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
+                CommentDoesNotBelong:
+                  $ref: '#/components/examples/error403CommentDoesNotBelong'
+
+      security:
+      - ApiKeyAuth: []
+    
+    delete:
+      tags:
+        - comments
+      summary: Delete a comment from an ID
+      operationId: deleteComment
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses: 
+        204:
+          description: Comment deleted
+          content:
+            application/json: {}
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                CommentNotFound:
+                  $ref: '#/components/examples/error404CommentNotFound'
+        401:
+          description: 'Error: Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
+                CommentDoesNotBelong:
+                  $ref: '#/components/examples/error403CommentDoesNotBelong'
+
+      security:
+      - ApiKeyAuth: []
+    
+  /comments/{id}/likes:
+    post:
+      tags:
+        - comments
+      summary: Vote a comment
+      operationId: voteComment
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        201:
+          description: Comment voted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteComment'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                CommentNotFound:
+                  $ref: '#/components/examples/error404CommentNotFound'
+      security:
+      - ApiKeyAuth: []
+    
+    delete:
+      tags:
+        - comments
+      summary: Unvote a comment
+      operationId: unvoteComment
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Comment unvoted succesfully or not voted previously
+          content:
+            application/json:
+              {}
+        401:
+          description: 'Error: Unauthorized request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
+        404:
+          description: 'Error: Not Found'
+          content: 
+            application/json:
+             schema:
+                $ref: '#/components/schemas/ErrorResult'
+             examples:
+                CommentNotFound:
+                  $ref: '#/components/examples/error404CommentNotFound'
+        
+      security:
+      - ApiKeyAuth: []
   
   /comments/{id}/replies:
     get:
@@ -547,6 +922,79 @@ paths:
               examples:
                 ReplyNotFound:
                   $ref: '#/components/examples/error404ReplyNotFound'
+    post:
+        tags:
+          - replies
+        summary: Create a reply for a reply
+        operationId: reply_create_recursive
+        parameters:
+          - name: id
+            in : path
+            description: ID of the reply
+            required: true 
+            schema:
+              type: integer
+              format: int64
+        requestBody:
+          description: Attributes needed to create a reply.
+          content:
+            application/json:
+              schema:
+                required:
+                - Reply
+                type: object
+                properties:
+                  content:
+                    type: string
+                    example: 'This is a content example'
+          required: true
+        
+        responses:
+          201:
+            description: Reply created successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Reply'
+          400:
+            description: 'Error: Bad Request'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  Error blank Content:
+                    $ref: '#/components/examples/error400ContentBlank'
+          404:
+            description: 'Error: Not found'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  ReplyNotFound:
+                    $ref: '#/components/examples/error404ReplyNotFound'
+          401:
+            description: 'Error: Unauthorized'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  NoApiKey:
+                    $ref: '#/components/examples/error401'
+          403:
+            description: 'Error: Forbidden'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  ApiKeyNotValid:
+                    $ref: '#/components/examples/error403'
+        security:
+        - ApiKeyAuth: []
+        
     put:
       tags:
         - replies
@@ -645,8 +1093,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                ContributionNotFound:
-                  $ref: '#/components/examples/error404C'
+                ReplyNotFound:
+                  $ref: '#/components/examples/error404ReplyNotFound'
         401:
           description: 'Error: Unauthorized'
           content:
@@ -665,9 +1113,92 @@ paths:
               examples:
                 ApiKeyNotValid:
                   $ref: '#/components/examples/error403'
-                ContributionDoesNotBelong:
-                  $ref: '#/components/examples/error403ContributionDoesNotBelong'
+                ReplyDoesNotBelong:
+                  $ref: '#/components/examples/error403ReplyDoesNotBelong'
 
+      security:
+      - ApiKeyAuth: []
+    
+  /replies/{id}/likes:
+    post:
+      tags:
+        - replies
+      summary: Vote a reply
+      operationId: voteReply
+      parameters:
+        - name: id
+          in: path
+          description: ID of the reply
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        201:
+          description: Reply voted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteReply'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ReplyNotFound:
+                  $ref: '#/components/examples/error404ReplyNotFound'
+      security:
+      - ApiKeyAuth: []
+    
+    delete:
+      tags:
+        - replies
+      summary: Unvote a reply
+      operationId: unvoteReply
+      parameters:
+        - name: id
+          in: path
+          description: ID of the reply
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Reply unvoted succesfully or not voted previously
+          content:
+            application/json:
+              {}
+        401:
+          description: 'Error: Unauthorized request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
+        404:
+          description: 'Error: Not Found'
+          content: 
+            application/json:
+             schema:
+                $ref: '#/components/schemas/ErrorResult'
+             examples:
+                ReplyNotFound:
+                  $ref: '#/components/examples/error404ReplyNotFound'
+        
       security:
       - ApiKeyAuth: []
                 
@@ -699,7 +1230,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
+                UserNotFound:
                   $ref: '#/components/examples/error404U'
     put:
       tags:
@@ -748,7 +1279,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
+                UserNotFound:
                   $ref: '#/components/examples/error404U'
             
           
@@ -941,6 +1472,22 @@ components:
         api_key:
           type: string
           example: "MjAyMC0wNC0xOCAxMjoyODo0MSBVVEM=\n"
+    VoteComment:
+      type: object
+      properties:
+        new_like:
+          $ref: '#/components/schemas/Like'
+        api_key:
+          type: string
+          example: "MjAyMC0wNC0xOCAxMjoyODo0MSBVVEM=\n"
+    VoteReply:
+      type: object
+      properties:
+        new_like:
+          $ref: '#/components/schemas/Like'
+        api_key:
+          type: string
+          example: "MjAyMC0wNC0xOCAxMjoyODo0MSBVVEM=\n"
     ErrorResult:
       type: object
       properties:
@@ -978,6 +1525,11 @@ components:
         status: 400
         error: "Bad Request"
         message: "Content can't be blank"
+    error400TextNotEmpty:
+      value:
+        status: 400
+        error: "Bad Request"
+        message: "Contribution is type URL, can not have text"
     error401:
       value:
         status: 401
@@ -993,12 +1545,22 @@ components:
         status: 403
         error: "Forbidden"
         message: "This contribution does not belong to you"
+    error403CommentDoesNotBelong:
+      value:
+        status: 403
+        error: "Forbidden"
+        message: "This comment does not belong to you"
+    error403ReplyDoesNotBelong:
+      value:
+        status: 403
+        error: "Forbidden"
+        message: "This reply does not belong to you"
     error404U:
       value:
         status: 404
         error: "Not Found"
         message: "No User with that ID"
-    error404C:
+    error404ContributionNotFound:
       value:
         status: 404
         error: "Not Found"
