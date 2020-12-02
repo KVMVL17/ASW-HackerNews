@@ -12,7 +12,7 @@ class Api::ContributionsController < ApplicationController
       format.json { render json: @contributions}
     end
   end
-
+  
   # GET /api/v1/contributions/1
   # GET /api/v1/contributions/1.json
   def show
@@ -35,7 +35,6 @@ class Api::ContributionsController < ApplicationController
         @comments = Comment.where(contribution_id: @contribution.id)
         format.json { render json: @comments,status: :ok}
       else
-        puts "---------"
         format.json { render json:{status:"error", code:404, message: "Contribution with ID '" + params[:id].to_s + "' not found"}, status: :not_found}
       end
     end
@@ -116,15 +115,16 @@ class Api::ContributionsController < ApplicationController
               @user.save
               format.json { render json: @contribution, status: :created}
             else
-              format.json { render json:{status:"error", code:208, message: "contribution already voted"}, status: :already_reported}
+              format.json { render json:{status:"error", code:404, message: "Contribution already voted"}, status: :not_found}
             end
           else
             format.json { render json:{status:"error", code:404, message: "Contribution with ID '" + params[:id] + "' not found"}, status: :not_found}
           end
-          
         else
-          format.json { render json:{status:"error", code:400, message: "token not found"}, status: :bad_request}
+          format.json { render json:{status: "error", code:403, message: "Your api key " + request.headers['X-API-KEY'].to_s + " is not valid"}, status: :forbidden}
         end
+      else
+        format.json { render json:{status:"error", code:401, message: "You provided no api key"}, status: :unauthorized}
       end
     end
   end
@@ -171,7 +171,7 @@ class Api::ContributionsController < ApplicationController
             @NContribution = Contribution.new
             @NContribution.title = params[:title]
             @NContribution.url = params[:url]
-            @NContribution.text = params[:text]#se puede poner en el else
+            @NContribution.text = params[:text]
             @NContribution.user_id = @user.id
             if !params[:url].blank? && !params[:text].blank?
               @NContribution.text = ""
@@ -241,14 +241,21 @@ class Api::ContributionsController < ApplicationController
           if Contribution.exists?(params[:id])
             @contribution = Contribution.find(params[:id])
             if @contribution.user_id == @user.id
-              if !params[:title].blank?
-                @contribution.title = params[:title]
+              @contribution.title = params[:title]
+              @contribution.text = params[:text]
+              if !@contribution.url.blank? && !params[:text].blank?
+                format.json { render json: { status: "error", code: 400, message: "Contribution is type URL, can not have text" }, status: :bad_request }
+              else
+                if @contribution.save
+                  format.json { render json: { status: "ok", code: 200, message: "Contribution updated" }, status: :ok }
+                else
+                  if params[:title].blank?
+                    format.json { render json: { status: "error", code: 400, message: "Title can't be blank" }, status: :bad_request }
+                  elsif @contribution.url.blank?
+                    format.json { render json: { status: "error", code: 400, message: "URL and Text can't be blank at the same time" }, status: :bad_request }
+                  end
+                end
               end
-              if !params[:text].blank?
-                @contribution.text = params[:text]
-              end
-              @contribution.save
-              format.json { render json: { status: "ok", code: 200, message: "Contribution updated" }, status: :ok }
             else
               format.json { render json:{status: "error", code:403, message: "This contribution does not belong to you"}, status: :forbidden}
             end
