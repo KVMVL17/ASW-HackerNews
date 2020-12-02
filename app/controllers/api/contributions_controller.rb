@@ -83,10 +83,10 @@ class Api::ContributionsController < ApplicationController
           end
           format.json { render json: @contributions }
         else
-          format.json { render json: {error: "error", code: 404, message: "User with token '" + @token + "' does not exist"}, status: :not_found}
+          format.json { render json: {error: "error", code: 403, message: "Your api key " + @token + " is not valid"}, status: :forbidden}
         end
       else
-        format.json { render json:{status:"error", code:403, message: "Token is blank"}, status: :forbidden}
+        format.json { render json:{status:"error", code:401, message: "You provided no api key"}, status: :unauthorized}
       end
     end 
   end

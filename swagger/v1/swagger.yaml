@@ -9,7 +9,7 @@ servers:
 - url: http://18.206.152.198:8080/api
 - url: http://54.158.190.88:8080/api
 - url: http://3.214.224.98:8080/api
-- url: http://54.161.21.143:8080/api
+- url: http://54.175.165.61:8080/api
 
 paths:
   /contributions:
@@ -132,15 +132,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
-        404:
-          description: 'Error: Not Found'
+        401:
+          description: 'Error: Unauthorized'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                errorExample:
-                  $ref: '#/components/examples/error404U'
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
       security:
       - ApiKeyAuth: []
                   
