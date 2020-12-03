@@ -159,7 +159,6 @@ class ContributionsController < ApplicationController
   # DELETE /contributions/1.json
   def destroy
     @contribution.destroy
-    puts root_path
     respond_to do |format|
       format.html { redirect_to :newest }
       format.html { notice 'Contribution was successfully destroyed.' }
