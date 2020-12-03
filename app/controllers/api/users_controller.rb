@@ -80,7 +80,7 @@ class Api::UsersController < ApplicationController
           @user.save
           format.json { render json: @user, status: :ok}
         else
-          format.json { render json: {error: "error", code: 404, message: "User with id: " + @token + " does not exist"}, status: :not_found}
+          format.json { render json: {error: "error", code: 404, message: "User with token: " + @token + " does not exist"}, status: :not_found}
         end
       else
         format.json { render json:{status:"error", code:403, message: "Token is blank"}, status: :forbidden}
