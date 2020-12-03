@@ -6,7 +6,7 @@ info:
   description: "This is the Open API documentation for the REST API of our beloved application **Hacker News** deployed at <https://asw-hackernews-kaai12.herokuapp.com/>. <br>All operations are executable."
 
 servers:
-- url: https://asw-hackernews-kaai12.herokuapp.com/
+- url: https://asw-hackernews-kaai12.herokuapp.com/api
 
 paths:
   /contributions:
