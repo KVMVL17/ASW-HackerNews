@@ -34,6 +34,8 @@ end
 
 group :production do
   gem 'pg', '1.2.3'
+  gem 'rspec-rails', '~> 3.5' #for swagger
+
 end
 
 #swagger gems
