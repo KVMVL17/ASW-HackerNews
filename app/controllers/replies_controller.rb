@@ -58,7 +58,7 @@ class RepliesController < ApplicationController
       
       respond_to do |format|
         if @reply.save
-          format.html { redirect_to "/"+ @reply.findContribution(@reply.id)}
+          format.html { redirect_to "/"+ @reply.findContribution(@reply.id).to_s}
           format.json { render :show, status: :created, location: @reply }
         else
           format.html { redirect_to Reply.find(@reply.reply_id), notice: "Reply can't be blank" }

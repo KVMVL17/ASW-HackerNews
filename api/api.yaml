@@ -7,7 +7,6 @@ info:
 
 servers:
 - url: https://asw-hackernews-kaai12.herokuapp.com/api
-- url: http://34.239.131.117:8080/api
 
 paths:
   /contributions:
