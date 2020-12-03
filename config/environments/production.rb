@@ -27,6 +27,7 @@ Rails.application.configure do
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = true
+  config.secret_key_base = 'a074369142df5df980e183cd07653794a008b5570b09db01ddee53955e2611c00b73c2c15eb8631fcc7a14551f219bcb40d1ccad51b678925bd82d0202177a5c'
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
