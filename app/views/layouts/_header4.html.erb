@@ -10,6 +10,7 @@
       <%= link_to 'threads', "/threads/"+current_user.id.to_s %> |
     <% end %>
     <%= link_to 'submit', "/submit" %> | 
+    <%= link_to 'api', "/api" %> | 
     <h> <%= username  %>'s upvoted comments </h>
        <div class="right">
          <% if current_user.nil? %>

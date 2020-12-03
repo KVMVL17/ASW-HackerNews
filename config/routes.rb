@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   
+  mount Rswag::Ui::Engine => '/api'
+  mount Rswag::Api::Engine => '/api'
   
-  mount Rswag::Ui::Engine => '/api-docs'
-  mount Rswag::Api::Engine => '/api-docs'
   resources :replies do
     member do
       post 'replyrecursive'

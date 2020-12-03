@@ -6,10 +6,8 @@ info:
   description: "This is the Open API documentation for the REST API of our beloved application **Hacker News** deployed at <https://asw-hackernews-kaai12.herokuapp.com/>. <br>All operations are executable."
 
 servers:
-- url: http://18.206.152.198:8080/api
-- url: http://54.158.190.88:8080/api
-- url: http://3.214.224.98:8080/api
-- url: http://54.175.165.61:8080/api
+- url: http://34.239.131.117:8080/api
+- url: https://d2733ec443444aada60aca8fd1c1a55b.vfs.cloud9.us-east-1.amazonaws.com/api/
 
 paths:
   /contributions:
@@ -80,6 +78,24 @@ paths:
                     $ref: '#/components/examples/error400InvalidUrl'
                   Error Url and Text are blank:
                     $ref: '#/components/examples/error400UrlAndTextBlank'
+          401:
+            description: 'Error: Unauthorized'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  NoApiKey:
+                    $ref: '#/components/examples/error401'
+          403:
+            description: 'Error: Forbidden'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResult'
+                examples:
+                  ApiKeyNotValid:
+                    $ref: '#/components/examples/error403'
         security:
         - ApiKeyAuth: []
       
