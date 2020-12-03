@@ -7,6 +7,7 @@ info:
 
 servers:
 - url: https://asw-hackernews-kaai12.herokuapp.com/api
+- url: http://34.239.131.117:8080/api
 
 paths:
   /contributions:
@@ -788,6 +789,24 @@ paths:
               examples:
                 CommentNotFound:
                   $ref: '#/components/examples/error404CommentNotFound'
+        401:
+          description: 'Error: Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
       security:
       - ApiKeyAuth: []
     
@@ -1094,7 +1113,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
               examples:
-                ContributionNotFound:
+                ReplyNotFound:
                   $ref: '#/components/examples/error404ReplyNotFound'
         401:
           description: 'Error: Unauthorized'
@@ -1114,8 +1133,8 @@ paths:
               examples:
                 ApiKeyNotValid:
                   $ref: '#/components/examples/error403'
-                ContributionDoesNotBelong:
-                  $ref: '#/components/examples/error403ContributionDoesNotBelong'
+                ReplyDoesNotBelong:
+                  $ref: '#/components/examples/error403ReplyDoesNotBelong'
 
       security:
       - ApiKeyAuth: []
@@ -1201,6 +1220,24 @@ paths:
               examples:
                 ReplyNotFound:
                   $ref: '#/components/examples/error404ReplyNotFound'
+        401:
+          description: 'Error: Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
       security:
       - ApiKeyAuth: []
     

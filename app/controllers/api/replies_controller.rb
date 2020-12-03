@@ -95,11 +95,15 @@ class Api::RepliesController < ApplicationController
             format.json { render json: { status: "error", code: 404, message: "Reply with ID: " + params[:id] + " not found"}, status: :not_found }
           else
             @reply = Reply.find(params[:id])
-            @reply.content = params[:content]
-            if @reply.save
-              format.json { render json: @reply, status: :ok }
+            if @reply.user_id == @user.id
+              @reply.content = params[:content]
+              if @reply.save
+                format.json { render json: @reply, status: :ok }
+              else
+                format.json { render json: { status: "error", code: 400, message: "Content can't be blank" }, status: :bad_request }
+              end
             else
-              format.json { render json: { status: "error", code: 400, message: "Content can't be blank" }, status: :bad_request }
+              format.json { render json:{status: "error", code:403, message: "This reply does not belong to you"}, status: :forbidden}
             end
           end
         end

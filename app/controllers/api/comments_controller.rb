@@ -74,11 +74,15 @@ class Api::CommentsController < ApplicationController
             format.json { render json: { status: "error", code: 404, message: "Comment with ID: " + params[:id] + " not found"}, status: :not_found }
           else
             @comment = Comment.find(params[:id])
-            @comment.content = params[:content]
-            if @comment.save
-              format.json { render json: @comment, status: :ok }
+            if @comment.user_id == @user.id
+              @comment.content = params[:content]
+              if @comment.save
+                format.json { render json: @comment, status: :ok }
+              else
+                format.json { render json: { status: "error", code: 400, message: "Content can't be blank" }, status: :bad_request }
+              end
             else
-              format.json { render json: { status: "error", code: 400, message: "Content can't be blank" }, status: :bad_request }
+              format.json { render json:{status: "error", code:403, message: "This comment does not belong to you"}, status: :forbidden}
             end
           end
         end
