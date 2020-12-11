@@ -12,6 +12,18 @@ class Api::RepliesController < ApplicationController
     end
   end
   
+  def show_replies
+    respond_to do |format|
+      if Reply.exists?(params[:id])
+        @reply = Reply.find(params[:id])
+        @replies = Reply.where(reply_id: @reply.id)
+        format.json { render json: @replies}
+      else
+        format.json { render json:{status:"error", code:404, message: "Reply with ID '" + params[:id].to_s + "' not found"}, status: :not_found}
+      end
+    end
+  end
+  
   def showReply
     respond_to do |format|
       if Reply.exists?(params[:id])

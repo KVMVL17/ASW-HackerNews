@@ -7,8 +7,10 @@ info:
 
 servers:
 - url: https://asw-hackernews-kaai12.herokuapp.com/api
+- url: http://54.80.106.182:8080/api
 
 paths:
+
   /contributions:
     get:
       tags: 
@@ -500,7 +502,40 @@ paths:
       security:
         - ApiKeyAuth: []
         
-  
+  /comments/users/{id}:
+    get:
+      tags:
+        - comments
+      summary: Return comments from a user
+      operationId: showcommentsofuser
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                title: ArrayOfComments
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                UserNotFound:
+                  $ref: '#/components/examples/error404U'
+      
   /contributions/{id}/comments:
     get:
       tags:
@@ -858,6 +893,37 @@ paths:
         
       security:
       - ApiKeyAuth: []
+      
+  /replies/{id}/replies:
+    get:
+      tags:
+        - replies
+      summary: Replies of a reply
+      operationId: repliesofareply
+      parameters:
+        - name: id
+          in : path
+          description: ID of the reply
+          required: true 
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reply'
+        404:
+          description: 'Error: Not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ReplyNotFound:
+                  $ref: '#/components/examples/error404ReplyNotFound'
   
   /comments/{id}/replies:
     get:

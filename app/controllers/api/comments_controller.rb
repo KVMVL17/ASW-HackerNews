@@ -12,6 +12,17 @@ class Api::CommentsController < ApplicationController
     end
   end
   
+  def showcommentsofuser
+    respond_to do |format|
+      if User.exists?(params[:id])
+        @comments = Comment.where(user_id: params[:id])
+        format.json { render json: @comments }
+      else
+        format.json { render json:{status:"error", code:404, message: "User with ID '" + params[:id].to_s + "' not found"}, status: :not_found}
+      end
+    end 
+  end
+  
   def upvoted_comments
     respond_to do |format|
       if request.headers['X-API-KEY'].present?
