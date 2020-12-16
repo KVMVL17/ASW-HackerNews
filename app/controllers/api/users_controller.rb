@@ -78,7 +78,7 @@ class Api::UsersController < ApplicationController
           @user  = User.find_by_apiKey(@token)
           @user.about = params[:About]
           @user.save
-          format.json { render json: @user, status: :ok}
+          format.json { render json: {id: @user.id, username: @user.email, karma: @user.karma, about: @user.about, created_at: @user.created_at, apiKey: @user.apiKey}, status: :ok}
         else
           format.json { render json: {error: "error", code: 404, message: "User with token: " + @token + " does not exist"}, status: :not_found}
         end
