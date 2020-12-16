@@ -35,6 +35,26 @@ class Api::RepliesController < ApplicationController
     end
   end
   
+  def upvoted_replies
+    respond_to do |format|
+      if request.headers['X-API-KEY'].present?
+        @user = User.find_by_apiKey(request.headers['X-API-KEY'].to_s)
+        if @user.nil?
+          format.json { render json: { status: "error", code: 403, message: "Your api key " + request.headers['X-API-KEY'].to_s + " is not valid"}, status: :forbidden }
+        else
+          @like = Like.where(user_id: @user.id, contribution_id: nil, comment_id: nil)
+          @replies = Reply.none.to_a
+          @like.each do |like|
+            @replies.push Reply.find(like.reply_id)
+          end
+          format.json { render json: @replies, status: :ok}
+        end
+      else
+        format.json { render json: { status: "error", code: 401, message: "You provided no api key"}, status: :unauthorized }
+      end
+    end
+  end
+  
   def create_recursive
     respond_to do |format|
       if request.headers['X-API-KEY'].present?

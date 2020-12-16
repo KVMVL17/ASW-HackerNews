@@ -66,6 +66,8 @@ Rails.application.routes.draw do
     #replies
     get 'replies/:id/replies', to: 'api/replies#show_replies', as: 'replies_replies_api'
     get 'comments/:id/replies', to: 'api/replies#show', as: 'replies_api'
+    get 'replies/upvoted', to: 'api/replies#upvoted_replies', as: 'upvoted_replies'
+
     post 'comments/:id/replies', to: 'api/replies#create', as: 'replies_create'
     get 'replies/:id', to: 'api/replies#showReply', as: 'reply_show'
     delete 'replies/:id', to: 'api/replies#destroy', as: 'reply_delete'

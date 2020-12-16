@@ -7,7 +7,6 @@ info:
 
 servers:
 - url: https://asw-hackernews-kaai12.herokuapp.com/api
-- url: http://54.80.106.182:8080/api
 
 paths:
 
@@ -891,6 +890,43 @@ paths:
                 CommentNotFound:
                   $ref: '#/components/examples/error404CommentNotFound'
         
+      security:
+      - ApiKeyAuth: []
+      
+  /replies/upvoted:
+    get:
+      tags:
+        - replies
+      summary: Return upvoted replies of a user
+      operationId: showTheUpvotedRepliesOfuser
+      responses:
+        200:
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                title: ArrayOfReplies
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reply'
+        401:
+          description: 'Error: Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                NoApiKey:
+                  $ref: '#/components/examples/error401'
+        403:
+          description: 'Error: Forbidden'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                ApiKeyNotValid:
+                  $ref: '#/components/examples/error403'
       security:
       - ApiKeyAuth: []
       
