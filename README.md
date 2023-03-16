@@ -5,6 +5,6 @@ Projecte ASW FIB UPC, HackerNews RoR xd
   - Alejandro Gallego
   - Anas Infad
   - Isaac Muñoz
-  - Kamal El Hachmi
+  - Kamal
 ## Heroku
   https://asw-hackernews-kaai12.herokuapp.com/
